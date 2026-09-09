@@ -20,6 +20,22 @@ SITE = {
     'formsubmit': 'https://formsubmit.co/info@frest.lv',
 }
 
+# Honest timing — never as a headline promise. Design/permitting and construction ranges are what a client
+# actually experiences; the 16–20 weeks applies only to the factory kit + assembly inside that period.
+TIMING = {
+    'design': T('12 nedēļas – 6 mēneši', '12 weeks – 6 months'),
+    'design_l': T('Projektēšana un saskaņošana', 'Design and permitting'),
+    'design_d': T('no projektēšanas līguma līdz būvatļaujai', 'from the design contract to the building permit'),
+    'build': T('24 nedēļas – 1 gads', '24 weeks – 1 year'),
+    'build_l': T('Būvniecība', 'Construction'),
+    'build_d': T('atkarībā no projekta apjoma un zemesgabala', 'depending on the scope of the project and the plot'),
+    'kit': T('16–20 nedēļas', '16–20 weeks'),
+    'kit_l': T('Komplekts un montāža', 'Kit and assembly'),
+    'kit_d': T('šī laika ietvaros — ražošana rit paralēli pamatiem', 'within that time — production runs in parallel with the foundations'),
+    'note': T('Katrs projekts ir mazliet unikāls: zemesgabals, būvvalde un jūsu izvēles maina grafiku. Gan jūs, gan mēs esam ieinteresēti ātrā realizācijā bez kompromisiem kvalitātē — precīzu grafiku vienojamies kopā ar piedāvājumu.',
+              'Every project is a little different: the plot, the building authority and your choices all move the schedule. You and we share the same interest — fast delivery without compromising quality; the exact schedule is agreed together with the offer.'),
+}
+
 FACADE_COLORS = [
     {'id': 'nordic-gray', 'name': T('Ziemeļu pelēks', 'Nordic Gray'), 'hex': '#9a9ea3'},
     {'id': 'charcoal-black', 'name': T('Ogļu melns', 'Charcoal Black'), 'hex': '#2b2d31'},
@@ -296,13 +312,13 @@ PROCESS = [
     (T('Piedāvājums un konfigurācija', 'Offer and configuration'), T('Reģistrētie klienti katalogā konfigurē māju ar cenām un saņem precizētu piedāvājumu.', 'Registered clients configure the house with prices in the catalogue and receive a detailed offer.')),
     (T('Projekts un atļauja', 'Design and permit'), T('Novietojuma projekts, topogrāfija, ģeotehniskā izpēte un būvatļauja.', 'Site plan, topography, geotechnical survey and building permit.')),
     (T('Ražošana rūpnīcā', 'Factory production'), T('Sienu un jumta paneļi tiek ražoti sausos apstākļos ar milimetru precizitāti.', 'Wall and roof panels are produced indoors with millimetre precision.')),
-    (T('Montāža un atslēgas', 'Assembly and keys'), T('Montāža objektā dažās dienās, apdare un nodošana 16–20 nedēļās no pasūtījuma.', 'Assembly on site in days, finishing and handover within 16–20 weeks of the order.')),
+    (T('Montāža un atslēgas', 'Assembly and keys'), T('Montāža objektā dažās dienās, pēc tam iekšdarbi, inženierkomunikācijas un nodošana ar pieņemšanas aktu.', 'Assembly on site in days, then interior works, services and handover with an acceptance report.')),
 ]
 
 FAQ = [
     (T('Cik ilgā laikā tiek uzbūvēta Frest māja?', 'How long does a Frest home take?'),
-     T('No pasūtījuma apstiprinājuma līdz nodošanai parasti paiet 16–20 nedēļas. Rūpnīcā paneļi tiek ražoti paralēli pamatu darbiem, tāpēc montāža objektā aizņem tikai dažas dienas.',
-       'From order confirmation to handover usually takes 16–20 weeks. Panels are produced in the factory while the foundations are built, so on-site assembly takes only days.')),
+     T('Atkarībā no projekta. Projektēšana un saskaņošana pēc projektēšanas līguma aizņem no 12 nedēļām līdz pusgadam; būvniecība — no 24 nedēļām līdz gadam. Rūpnīcā ražotais komplekts un montāža šajā laikā aizņem 16–20 nedēļas, jo paneļi top paralēli pamatu darbiem. Katrs projekts ir mazliet unikāls, un precīzu grafiku vienojamies kopā ar piedāvājumu.',
+       'It depends on the project. Design and permitting after the design contract take from 12 weeks to six months; construction from 24 weeks to a year. The factory kit and assembly take 16–20 weeks of that, because the panels are produced while the foundations are built. Every project is a little different, and the exact schedule is agreed together with the offer.')),
     (T('Kas ir iekļauts Pamata un Pilnajā paketē?', 'What is in the Base and Complete packages?'),
      T('Pamata pakete ir rūpnīcas komplekts ar montāžu: siltināti sienu paneļi, jumts, logi, ārdurvis un pabeigta fasāde. Pilnā pakete pievieno iekšējo apdari, elektroinstalāciju, santehniku un apkuri. Neviena pakete neietver pamatu darbus, zemi un būvatļauju.',
        'The Base package is the factory kit with assembly: insulated wall panels, roof, windows, exterior doors and a finished facade. The Complete package adds interior finishing, electrical, plumbing and heating. Neither package includes foundation works, land or the building permit.')),

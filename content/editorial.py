@@ -72,7 +72,7 @@ DESC = {
 
 # "Kas jūs esat?" — audience selector (El Soco: Choose who you are)
 AUDIENCES = [
-    ('all', T('Visi', 'Everyone'), T('Māja, kas top rūpnīcā un mājās nonāk 16–20 nedēļās.', 'A house made in a factory that is home within 16–20 weeks.'),
+    ('all', T('Visi', 'Everyone'), T('Skandināvu dizaina māja, ko projektējam un uzbūvējam līdz atslēgām.', 'A Scandinavian-design house we design and build to the keys.'),
      T('Frest ražo sienu un jumta paneļus sausos apstākļos, uzstāda tos objektā dažās dienās un nodod māju ar apdari, elektrību un apkuri. Četri modeļi, divas sērijas, cenas no 92 000 € ar PVN.',
        'Frest builds wall and roof panels indoors, assembles them on site in days and hands over the house with finishes, electrics and heating. Four models, two series, prices from €92,000 incl. VAT.'), 'model/als-110/', T('Sākt ar modeļiem →', 'Start with the models →')),
     ('family', T('Ģimene', 'Family'), T('Trīs guļamistabas, divi sanmezgli, viena atslēga.', 'Three bedrooms, two bathrooms, one key.'),
@@ -84,7 +84,7 @@ AUDIENCES = [
     ('investor', T('Investors', 'Investor'), T('Dvīņu mājas, piebūves, vairāku māju apbūve.', 'Twin houses, annexes, multi-house developments.'),
      T('Aura 70 Urban — divas vienības uz viena zemesgabala. Als 110 Dual Homes. Kettingskovā astoņas Als mājas uzbūvētas vienā sezonā. Cenas un termiņi ir prognozējami, jo ražošana ir rūpnīcā.',
        'Aura 70 Urban — two units on one plot. Als 110 Dual Homes. In Kettingskov eight Als homes were built in one season. Prices and timelines are predictable because production is in the factory.'), 'projects/', T('Realizētie projekti →', 'Completed projects →')),
-    ('plot', T('Zemes īpašnieks', 'Plot owner'), T('Zeme jau ir. Māja — 16–20 nedēļās.', 'You have the land. The house — in 16–20 weeks.'),
+    ('plot', T('Zemes īpašnieks', 'Plot owner'), T('Zeme jau ir. Mēs projektējam, saskaņojam un uzbūvējam.', 'You have the land. We design, permit and build.'),
      T('Sākam ar novietojuma projektu, topogrāfiju un ģeotehnisko izpēti; pamatu plātne ir standarts. Kamēr top pamati, rūpnīcā jau top sienas.',
        'We start with the site plan, topography and geotechnical survey; the concrete slab is standard. While the foundations are built, the walls are already being made in the factory.'), 'resources/', T('Kā tas notiek →', 'How it works →')),
     ('pro', T('Arhitekts · Būvnieks', 'Architect · Builder'), T('Rūpnīcas komplekts ar dokumentāciju.', 'A factory kit with documentation.'),
@@ -101,9 +101,9 @@ SPREADS = {
               'kicker': T('Viena forma. <em>Astoņas mājas.</em> Viena sezona.', 'One form. <em>Eight houses.</em> One season.')},
     'factory': {'img': 'factory-roof-installation', 'folio': (T('Rūpnīca', 'The factory'), T('Sienas · jumts · dažas dienas', 'Walls · roof · a few days')),
                 'kicker': T('Sienas top sausumā. <em>Māja top dažās dienās.</em>', 'Walls are made indoors. <em>The house takes days.</em>'),
-                'text': T('Katrs Frest sienu panelis tiek ražots rūpnīcā ar siltinājumu, tvaika barjeru un apšuvumu jau iekšā. Objektā paliek tikai montāža: celtnis, trīs cilvēki, nedēļa līdz jumtam. Tāpēc termiņš ir 16–20 nedēļas un cena ir zināma pirms pirmā rakuma.',
-                          'Every Frest wall panel is made in the factory with insulation, vapour barrier and cladding already in it. On site only assembly remains: a crane, three people, a week to the roof. That is why the schedule is 16–20 weeks and the price is known before the first dig.'),
-                'stats': [('300 mm', T('Siltinājums sienās', 'Wall insulation')), ('A', T('Energoklase', 'Energy class')), ('16–20', T('Nedēļas līdz atslēgām', 'Weeks to keys')), ('2', T('Valstis: LV · DK', 'Countries: LV · DK')), ('2019', T('Pirmā māja', 'First house')), ('4', T('Standarta modeļi', 'Standard models'))]},
+                'text': T('Katrs Frest sienu panelis tiek ražots rūpnīcā ar siltinājumu, tvaika barjeru un apšuvumu jau iekšā. Objektā paliek tikai montāža: celtnis, trīs cilvēki, nedēļa līdz jumtam. Tāpēc darbs objektā ir īss un cena ir zināma pirms pirmā rakuma.',
+                          'Every Frest wall panel is made in the factory with insulation, vapour barrier and cladding already in it. On site only assembly remains: a crane, three people, a week to the roof. That is why the work on site is short and the price is known before the first dig.'),
+                'stats': [('300 mm', T('Siltinājums sienās', 'Wall insulation')), ('A', T('Energoklase', 'Energy class')), ('1', T('Līgums visam ceļam', 'One contract all the way')), ('2', T('Valstis: LV · DK', 'Countries: LV · DK')), ('2019', T('Pirmā māja', 'First house')), ('4', T('Standarta modeļi', 'Standard models'))]},
     'word': {'img': 'als110-photo-lv-exterior-forest', 'pos': 'b', 'folio': (T('Vārds', 'The word'), 'Frest'),
              'kicker': T('Frest ir <em>fresh</em> un <em>forest</em>.', 'Frest is <em>fresh</em> and <em>forest</em>.'),
              'text': T('Nosaukums savieno svaigu gaisu un mežu — koku, no kura māja ir būvēta, un vietu, kur tā visbiežāk stāv. Frest mājas ir Dānijas dizaina skola, ražota Latvijā.',

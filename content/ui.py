@@ -23,11 +23,11 @@ UI = {
     'm2': 'm²', 'with_vat': T('ar PVN', 'incl. VAT'),
 
     # home
-    'hero_eyebrow': T('Rūpnīcā ražotas mājas', 'Factory-built homes'),
+    'hero_eyebrow': T('Projektējam un uzbūvējam', 'We design and we build'),
     'why_title': T('Kāpēc Frest', 'Why Frest'),
     'why': [
         (T('Rūpnīcas precizitāte', 'Factory precision'), T('Sienu un jumta paneļi tiek ražoti sausos apstākļos un montēti objektā dažās dienās.', 'Wall and roof panels are built indoors and assembled on site in days.')),
-        (T('16–20 nedēļas līdz atslēgām', '16–20 weeks to keys'), T('Skaidrs grafiks no pasūtījuma līdz nodošanai, jo ražošana notiek paralēli pamatiem.', 'A clear schedule from order to handover, because production runs in parallel with the foundations.')),
+        (T('Viens līgums, viena atbildība', 'One contract, one responsibility'), T('Projektēšana, saskaņošana, ražošana un būvniecība — viens partneris un viena tāme visam ceļam.', 'Design, permitting, production and construction — one partner and one estimate for the whole way.')),
         (T('Energoklase A', 'Energy class A'), T('300 mm siltinājums sienās, trīskārši logi un zemas apkures izmaksas.', '300 mm wall insulation, triple glazing and low heating costs.')),
         (T('Uzbūvētas Dānijā un Latvijā', 'Built in Denmark and Latvia'), T('Als un Aura mājas dzīvo Kettingskovā, Stiklingenā un Latvijā kopš 2019. gada.', 'Als and Aura homes stand in Kettingskov, Stiklingen and Latvia since 2019.')),
     ],
