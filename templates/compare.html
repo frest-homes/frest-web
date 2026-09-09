@@ -1,39 +1,22 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_models) }}</span><h1 style="margin-top:8px">{{ t(UI.compare_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.compare_lead) }}</p>
-<div style="margin-top:22px"><label class="switch"><input type="checkbox" id="diffOnly"> {{ t(UI.diff_only) }}</label></div></div></section>
-<section class="section tight"><div class="wrap cmp-wrap">
-{% set rows = [
-  (UI.living_area, MODELS|map(attribute='area')|list, 'm²', 'max'),
-  (UI.total_area, MODELS|map(attribute='total_area')|list, 'm²', None),
-  (UI.rooms, MODELS|map(attribute='rooms')|list, '', None),
-  (UI.bedrooms, MODELS|map(attribute='bedrooms')|list, '', 'max'),
-  (UI.bathrooms, MODELS|map(attribute='bathrooms')|list, '', 'max'),
-  (UI.terrace, MODELS|map(attribute='terrace')|list, 'm²', None),
-  (UI.loft, MODELS|map(attribute='loft')|list, 'm²', None),
-  (UI.ceiling, MODELS|map(attribute='ceiling')|list, 'm', 'max'),
-  (UI.width, MODELS|map(attribute='width')|list, 'm', None),
-  (UI.style, MODELS|map(attribute='style')|list, '', None),
-  (UI.warranty, MODELS|map(attribute='warranty')|list, t(UI.years), 'max'),
-] %}
-<table class="cmp">
-  <thead><tr><th>{{ t(UI.feature) }}</th>{% for m in MODELS %}<th><img src="{{ imgsrc(m.card, 480) }}" alt="" loading="lazy"><div style="font-size:18px;font-weight:500">{{ m.name }}</div><div class="small mute">{{ t(m.tagline) }}</div></th>{% endfor %}</tr></thead>
+<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_models) }} · {{ t(UI.nav_compare) }}</div><h1 style="margin-top:18px">{{ t(UI.compare_title) }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.compare_lead) }}</p><p style="margin-top:22px"><label class="switch"><input type="checkbox" id="diffOnly"> {{ t(UI.diff_only) }}</label></p></div></header>
+<section class="s tight"><div class="wrap">
+{% set rows = [(UI.living_area, MODELS|map(attribute='area')|list, 'm²', 'max'),(UI.total_area, MODELS|map(attribute='total_area')|list, 'm²', None),(UI.rooms, MODELS|map(attribute='rooms')|list, '', None),(UI.bedrooms, MODELS|map(attribute='bedrooms')|list, '', 'max'),(UI.bathrooms, MODELS|map(attribute='bathrooms')|list, '', 'max'),(UI.terrace, MODELS|map(attribute='terrace')|list, 'm²', None),(UI.loft, MODELS|map(attribute='loft')|list, 'm²', None),(UI.ceiling, MODELS|map(attribute='ceiling')|list, 'm', 'max'),(UI.width, MODELS|map(attribute='width')|list, 'm', None),(UI.style, MODELS|map(attribute='style')|list, '', None),(UI.warranty, MODELS|map(attribute='warranty')|list, t(UI.years), 'max')] %}
+<div class="tbl"><table class="cmp">
+  <thead><tr><th>{{ t(UI.feature) }}</th>{% for m in MODELS %}<th><img src="{{ imgsrc(m.card, 480) }}" alt="" loading="lazy"><span class="nm">{{ m.name }}</span>{{ t(m.tagline) }}</th>{% endfor %}</tr></thead>
   <tbody>
-  {% for label, vals, unit, best in rows %}
-    {% set tv = vals|map('string')|list %}
-    {% set same = (tv|unique|list|length == 1) %}
+  {% for label, vals, unit, best in rows %}{% set tv = vals|map('string')|list %}{% set same = (tv|unique|list|length == 1) %}
     <tr class="{{ 'same' if same }}"><td>{{ t(label) }}</td>{% for v in vals %}<td class="{{ 'best' if best=='max' and v==(vals|max) and not same }}">{{ (t(v) if v is mapping else (num(v) if v is not none else '—')) }}{{ (' '+unit) if unit and v is not none and v is not mapping }}</td>{% endfor %}</tr>
   {% endfor %}
-    <tr><td>{{ t(UI.base_price) }}</td>{% for m in MODELS %}<td><b>{{ eur(m.price_base) }}</b></td>{% endfor %}</tr>
-    <tr><td>{{ t(UI.complete_price) }}</td>{% for m in MODELS %}<td><b>{{ eur(m.price_complete) }}</b></td>{% endfor %}</tr>
-    <tr><td>{{ '€ / m² (Pilnā)' if lang=='lv' else '€ / m² (Complete)' }}</td>{% for m in MODELS %}<td>{{ eur((m.price_complete / m.area)|round) }}</td>{% endfor %}</tr>
+    <tr class="total"><td>{{ t(UI.base_price) }}</td>{% for m in MODELS %}<td>{{ eur(m.price_base) }}</td>{% endfor %}</tr>
+    <tr class="total"><td>{{ t(UI.complete_price) }}</td>{% for m in MODELS %}<td>{{ eur(m.price_complete) }}</td>{% endfor %}</tr>
+    <tr><td>€ / m² ({{ t(PACKAGES.complete.name) }})</td>{% for m in MODELS %}<td>{{ eur((m.price_complete / m.area)|round) }}</td>{% endfor %}</tr>
     <tr class="same"><td>{{ t(UI.delivery) }}</td>{% for m in MODELS %}<td>{{ SITE.delivery_weeks }} {{ t(UI.weeks) }}</td>{% endfor %}</tr>
-    <tr><td></td>{% for m in MODELS %}<td><a class="btn btn-outline btn-sm" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }}</a></td>{% endfor %}</tr>
-  </tbody>
-</table>
-<p class="note" style="margin-top:20px">{{ t(PACKAGES.note) }}</p>
+    <tr><td></td>{% for m in MODELS %}<td><a class="pill ok" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }} →</a></td>{% endfor %}</tr>
+  </tbody></table></div>
+<p class="small" style="margin-top:20px;max-width:80ch">{{ t(PACKAGES.note) }}</p>
 </div></section>
-<section class="section surface"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.nav_which) }}</span><h2>{{ t(UI.quiz_title) }}</h2><p class="lead">{{ t(UI.quiz_lead) }}</p></div><a class="btn btn-dark" href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a></div></section>
-<section class="section"><div class="wrap">{{ M.cta_band() }}</div></section>
+<section class="s alt"><div class="wrap"><div class="cols"><div><div class="eyebrow">{{ t(UI.nav_which) }}</div><h2>{{ t(UI.quiz_title) }}</h2></div><div><p class="lede">{{ t(UI.quiz_lead) }}</p><a class="btn dark" href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a></div></div>{{ M.cta_band() }}</div></section>
 {% endblock %}

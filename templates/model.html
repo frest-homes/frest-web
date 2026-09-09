@@ -5,171 +5,113 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Frest {{ m.name }}","description":"{{ t(m.lead) }}","brand":{"@type":"Brand","name":"Frest Homes"},"image":"{{ canonical }}{{ imgsrc(m.hero,1600) }}","offers":{"@type":"AggregateOffer","priceCurrency":"EUR","lowPrice":"{{ m.price_base }}","highPrice":"{{ m.price_complete }}","offerCount":2}}</script>
 {% endblock %}
 {% block content %}
-<section class="mhero">
-  {{ img(m.hero, m.name, '100vw', 'bg', 'eager', 'high')|safe }}
-  <div class="shade"></div>
-  <div class="wrap">
-    <div class="hero-copy">
-      <span class="eyebrow on-dark">{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }}</span>
-      <h1>{{ m.name }}</h1>
-      <div class="sub">{{ t(m.tagline) }}</div>
-      <p class="lead">{{ t(m.lead) }}</p>
-      <div class="btn-row"><a class="btn btn-primary" href="#contact" data-enquire="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn btn-outline on-dark" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
-      <div class="kpis">
-        <div class="kpi"><b>{{ num(m.area) }} m²</b><span>{{ t(UI.living_area) }}</span></div>
-        <div class="kpi"><b>{{ m.bedrooms }} / {{ m.bathrooms }}</b><span>{{ t(UI.bedrooms) }} / {{ t(UI.bathrooms) }}</span></div>
-        <div class="kpi"><b>{{ t(UI.from) }} {{ eur(m.price_base) }}</b><span>{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</span></div>
-        <div class="kpi"><b>{{ SITE.delivery_weeks }}</b><span>{{ t(UI.weeks_delivery) }}</span></div>
-      </div>
+<header class="mhero"><div class="bg">{{ img(m.hero, m.name, '100vw', '', 'eager', 'high')|safe }}</div><div class="tint"></div>
+  <div class="in fadein">
+    <div class="folio"><span>{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }} · {{ t(m.style) }}</span><span>{{ num(m.area) }} m² · {{ m.bedrooms }} {{ t(UI.bedrooms)|lower }} · {{ t(UI.from) }} {{ eur(m.price_base) }}</span></div>
+    <h1>{{ m.name }}</h1>
+    <p class="lede" style="margin-top:18px">{{ t(m.lead) }}</p>
+    <div class="btn-row" style="margin-top:22px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost on-dark" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+    <div class="kpis">
+      <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div></div>
+      <div class="stat"><div class="n">{{ m.bedrooms }} / {{ m.bathrooms }}</div><div class="l">{{ t(UI.bedrooms) }} / {{ t(UI.bathrooms) }}</div></div>
+      <div class="stat"><div class="n">{{ eur(m.price_base) }}</div><div class="l">{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</div></div>
+      <div class="stat"><div class="n">{{ SITE.delivery_weeks }}</div><div class="l">{{ t(UI.weeks_delivery) }}</div></div>
     </div>
   </div>
-</section>
-<nav class="subnav"><div class="wrap">
-  <a href="#about">{{ t(UI.about_model) }}</a><a href="#plan">{{ t(UI.floor_plans) }}</a><a href="#personalise">{{ t(UI.personalise_title) }}</a>{% if m.addons %}<a href="#addons">{{ t(UI.addons_model) }}</a>{% endif %}<a href="#packages">{{ t(UI.packages) }}</a><a href="#gallery">{{ t(UI.model_gallery) }}</a>{% if works %}<a href="#built">{{ t(UI.built_examples) }}</a>{% endif %}
-  <a class="btn btn-primary btn-sm" href="#contact" data-enquire="{{ m.name }}">{{ t(UI.request_short) }}</a>
-</div></nav>
+</header>
+<nav class="subnav"><div class="wrap"><span class="lbl">{{ m.name }}</span><a href="#about">{{ t(UI.about_model) }}</a><a href="#plan">{{ t(UI.floor_plans) }}</a><a href="#personalise">{{ t(UI.personalise_title) }}</a>{% if m.addons %}<a href="#addons">{{ t(UI.addons_model) }}</a>{% endif %}<a href="#packages">{{ t(UI.packages) }}</a><a href="#gallery">{{ t(UI.model_gallery) }}</a>{% if works %}<a href="#built">{{ t(UI.built_examples) }}</a>{% endif %}<a href="#next">{{ 'Nākamie soļi' if lang=='lv' else 'Next steps' }}</a></div></nav>
 
-{# ABOUT + FACTS #}
-<section class="section" id="about">
-  <div class="wrap">
-    <div class="split" style="align-items:start">
-      <div>
-        <span class="eyebrow">{{ t(UI.about_model) }}</span>
-        <h2 style="margin:8px 0 16px">{{ m.name }}</h2>
-        <p class="lead">{{ t(m.about) }}</p>
-        <ul class="feat-list" style="margin-top:24px">{% for f in m.features %}<li>{{ t(f) }}</li>{% endfor %}</ul>
-      </div>
-      <div>
-        <div class="facts-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-          <div class="fact"><b>{{ num(m.area) }} m²</b><span>{{ t(UI.living_area) }}</span></div>
-          <div class="fact"><b>{{ num(m.total_area) }} m²</b><span>{{ t(UI.total_area) }}</span></div>
-          <div class="fact"><b>{{ m.bedrooms }}</b><span>{{ t(UI.bedrooms) }}</span></div>
-          <div class="fact"><b>{{ m.bathrooms }}</b><span>{{ t(UI.bathrooms) }}</span></div>
-          <div class="fact"><b>{{ num(m.terrace) }} m²</b><span>{{ t(UI.terrace) }}</span></div>
-          <div class="fact"><b>{{ num(m.loft) if m.loft else '—' }}{{ ' m²' if m.loft }}</b><span>{{ t(UI.loft) }}</span></div>
-          <div class="fact"><b>{{ num(m.ceiling) }} m</b><span>{{ t(UI.ceiling) }}</span></div>
-          <div class="fact"><b>{{ num(m.width) }} m{% if m.length %} × {{ num(m.length) }} m{% endif %}</b><span>{{ t(UI.width) }}{% if m.length %} × {{ t(UI.length) }}{% endif %}</span></div>
-        </div>
-        {% if m.params %}
-        <h3 style="margin:28px 0 10px;font-size:18px">{{ t(UI.params) }}</h3>
-        <table class="params">{% for k,v in m.params %}<tr><td>{{ t(k) }}</td><td>{{ t(v) }}</td></tr>{% endfor %}</table>
-        {% endif %}
-      </div>
+<section class="s first" id="about"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">01 — {{ t(UI.about_model) }}</div><h2>{{ t(m.tagline) }}</h2></div>
+  <div><p class="lede">{{ t(m.about) }}</p><p class="small" style="color:var(--ink2)">{% for f in m.features %}{{ t(f) }}{{ ' · ' if not loop.last }}{% endfor %}</p></div></div>
+  <div class="cols4" style="margin-top:36px">
+    <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div><div class="d">{{ t(UI.total_area) }} {{ num(m.total_area) }} m²</div></div>
+    <div class="stat"><div class="n">{{ num(m.terrace) }} m²</div><div class="l">{{ t(UI.terrace) }}</div><div class="d">{{ t(UI.loft) }}: {{ (num(m.loft)+' m²') if m.loft else '—' }}</div></div>
+    <div class="stat"><div class="n">{{ num(m.ceiling) }} m</div><div class="l">{{ t(UI.ceiling) }}</div><div class="d">{{ t(UI.width) }} {{ num(m.width) }} m{% if m.length %} × {{ num(m.length) }} m{% endif %}</div></div>
+    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(UI.delivery) }} {{ SITE.delivery_weeks }} {{ t(UI.weeks) }}</div></div>
+  </div>
+  {% if m.params %}
+  <div class="cols" style="margin-top:44px"><div><div class="eyebrow">{{ t(UI.params) }}</div></div><div class="tbl"><table style="min-width:0">{% for k,v in m.params %}<tr><td>{{ t(k) }}</td><td class="num">{{ t(v) }}</td></tr>{% endfor %}</table></div></div>
+  {% endif %}
+</div></section>
+
+<section class="s alt" id="plan"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">02 — {{ t(UI.floor_plans) }}</div><h2>{{ 'Plāns, kas jau ir uzbūvēts.' if lang=='lv' else 'A plan that has already been built.' }}</h2></div>
+  <div><p class="lede">{{ ('Ieeja, sanmezgls, guļamistabas un saimniecības telpa vienā pusē; virtuve‑viesistaba un terase — otrā. Mezanīns pār guļamistabām.' if m.slug=='als-110' else 'Atvērta virtuve‑viesistaba ar vitrīnu uz terasi, guļamistabas klusajā pusē.') if lang=='lv' else ('Entrance, bathroom, bedrooms and utility on one side; kitchen–living and terrace on the other. A mezzanine above the bedrooms.' if m.slug=='als-110' else 'An open kitchen–living with full-height glazing onto the terrace, bedrooms on the quiet side.') }}</p></div></div>
+  <div class="plan" data-plan style="margin-top:36px">
+    <div><div class="tabs">{% for p in m.plans %}<button type="button" data-id="{{ p.id }}">{{ t(p.name) }} · {{ t(UI.view_plan) }}</button>{% if p.view3d %}<button type="button" data-id="{{ p.id }}-3d">{{ t(p.name) }} · {{ t(UI.view_3d) }}</button>{% endif %}{% endfor %}</div>
+      <div class="stage">{% for p in m.plans %}<img data-id="{{ p.id }}" src="{{ imgsrc(p.img, 1600) }}" srcset="{{ srcset(p.img) }}" sizes="(max-width:900px) 100vw, 58vw" alt="{{ m.name }} — {{ t(p.name) }}" loading="lazy">{% if p.view3d %}<img data-id="{{ p.id }}-3d" src="{{ imgsrc(p.view3d, 1600) }}" srcset="{{ srcset(p.view3d) }}" sizes="(max-width:900px) 100vw, 58vw" alt="{{ m.name }} — 3D" loading="lazy">{% endif %}{% endfor %}</div>
+      <p class="cap">{{ m.name }} — {{ 'plāns · mērogs orientējošs' if lang=='lv' else 'plan · scale indicative' }}</p></div>
+    <div>
+      {% if m.rooms_list %}<div class="eyebrow" style="margin-bottom:8px">{{ t(UI.room_legend) }}</div>
+      <div class="tbl"><table class="rooms">{% for n,name,a in m.rooms_list %}<tr><td>{{ n }}</td><td>{{ t(name) }}</td><td>{{ num(a) }} m²</td></tr>{% endfor %}<tr class="total"><td></td><td>{{ t(UI.living_area) }}</td><td>{{ num(m.area) }} m²</td></tr></table></div>
+      {% else %}<div class="tile"><div class="eyebrow">{{ t(UI.room_legend) }}</div><p class="small">{{ 'Detalizēta telpu eksplikācija ar platībām ir katalogā reģistrētiem lietotājiem.' if lang=='lv' else 'A detailed room schedule with areas is in the catalogue for registered users.' }}</p></div>{% endif %}
+      <p class="cap2" style="color:var(--ash);margin-top:18px"><a href="{{ url('catalogue/') }}">{{ t(UI.open_catalogue) }} →</a></p>
     </div>
   </div>
-</section>
+</div></section>
 
-{# PLAN #}
-<section class="section surface" id="plan">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.floor_plans) }}</span><h2>{{ t(UI.floor_plans) }}</h2></div>
-    <div class="plan" data-plan>
-      <div>
-        <div class="tabs">
-          {% for p in m.plans %}<button type="button" data-id="{{ p.id }}">{{ t(p.name) }} · {{ t(UI.view_plan) }}</button>{% if p.view3d %}<button type="button" data-id="{{ p.id }}-3d">{{ t(p.name) }} · {{ t(UI.view_3d) }}</button>{% endif %}{% endfor %}
-        </div>
-        <div class="stage">
-          {% for p in m.plans %}<img data-id="{{ p.id }}" src="{{ imgsrc(p.img, 1600) }}" srcset="{{ srcset(p.img) }}" sizes="(max-width:900px) 100vw, 60vw" alt="{{ m.name }} — {{ t(p.name) }}" loading="lazy">{% if p.view3d %}<img data-id="{{ p.id }}-3d" src="{{ imgsrc(p.view3d, 1600) }}" srcset="{{ srcset(p.view3d) }}" sizes="(max-width:900px) 100vw, 60vw" alt="{{ m.name }} — 3D" loading="lazy">{% endif %}{% endfor %}
-        </div>
-      </div>
-      <div>
-        {% if m.rooms_list %}
-        <h3 style="font-size:18px;margin-bottom:10px">{{ t(UI.room_legend) }}</h3>
-        <table class="rooms">{% for n,name,a in m.rooms_list %}<tr><td>{{ n }}</td><td>{{ t(name) }}</td><td>{{ num(a) }} m²</td></tr>{% endfor %}
-        <tr><td></td><td><b>{{ t(UI.living_area) }}</b></td><td><b>{{ num(m.area) }} m²</b></td></tr></table>
-        {% else %}
-        <div class="note">{{ 'Detalizēta telpu eksplikācija ar platībām ir pieejama katalogā reģistrētiem lietotājiem.' if lang=='lv' else 'A detailed room schedule with areas is available in the catalogue for registered users.' }}</div>
-        {% endif %}
-        <div class="btn-row" style="margin-top:20px"><a class="btn btn-outline" href="{{ url('catalogue/') }}">{{ t(UI.open_catalogue) }}</a></div>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="s" id="personalise"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">03 — {{ t(UI.personalise_title) }}</div><h2>{{ 'Četras krāsas, divi jumti.' if lang=='lv' else 'Four colours, two roofs.' }}</h2></div><div><p class="lede">{{ t(UI.personalise_lead) }}</p></div></div>
+  <div style="margin-top:36px">{{ M.personaliser([m], 'pz-'+m.slug, m.slug, 'charcoal-black' if m.slug=='als-110' else 'nordic-gray', False) }}</div>
+</div></section>
 
-{# PERSONALISE #}
-<section class="section" id="personalise">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.personalise_title) }}</span><h2>{{ t(UI.personalise_title) }} — {{ m.name }}</h2><p class="lead">{{ t(UI.personalise_lead) }}</p></div>
-    {{ M.personaliser([m], 'pz-'+m.slug, m.slug, 'charcoal-black' if m.slug=='als-110' else 'nordic-gray', False) }}
-  </div>
-</section>
-
-{# ADD-ONS (Als 110) #}
 {% if m.addons %}
-<section class="section surface" id="addons">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.addons_model) }}</span><h2>{{ t(UI.addons_model) }}</h2><p class="lead">{{ 'Nojume, dzīvojamā piebūve vai dvīņu māja — izvēlieties un redziet kopējo platību un cenu.' if lang=='lv' else 'A carport, a living annex or a twin house — pick one and see the total area and price.' }}</p></div>
-    <div class="addons" data-addons data-base="{{ m.price_complete }}" data-area="{{ m.area }}">
-      <div class="stage">{% for a in m.addons %}<img data-id="{{ a.id }}" src="{{ imgsrc(a.img, 1600) }}" srcset="{{ srcset(a.img) }}" sizes="(max-width:900px) 100vw, 60vw" alt="{{ t(a.name) }}" loading="lazy">{% endfor %}</div>
-      <div>
-        <div class="addon-list">{% for a in m.addons %}<button type="button" data-id="{{ a.id }}" data-price="{{ a.price }}" data-area="{{ a.area }}"><span><b>{{ t(a.name) }}</b><span>{{ t(a.text) }}{% if a.area %} · +{{ a.area }} m²{% endif %}</span></span><em>{{ '+'+eur(a.price) if a.price else t(UI.base_price)|lower }}</em></button>{% endfor %}</div>
-        <div class="addon-sum"><div><span>{{ t(UI.addon_total) }} · {{ t(UI.complete_price) }}</span><b>—</b></div><div style="text-align:right"><span>{{ t(UI.living_area) }}</span><b data-area style="font-size:18px">—</b></div></div>
-      </div>
-    </div>
+<section class="s alt" id="addons"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.addons_model) }}</div><h2>{{ 'Nojume. Piebūve. Dvīņu māja.' if lang=='lv' else 'Carport. Annex. Twin house.' }}</h2></div><div><p class="lede">{{ 'Izvēlieties un redziet kopējo platību un cenu Pilnajā paketē.' if lang=='lv' else 'Pick one and see the total area and the Complete-package price.' }}</p></div></div>
+  <div class="addons" data-addons data-base="{{ m.price_complete }}" data-area="{{ m.area }}" style="margin-top:36px">
+    <div><div class="stage">{% for a in m.addons %}<img data-id="{{ a.id }}" src="{{ imgsrc(a.img, 1600) }}" srcset="{{ srcset(a.img) }}" sizes="(max-width:900px) 100vw, 58vw" alt="{{ t(a.name) }}" loading="lazy">{% endfor %}</div><p class="cap">{{ 'Vizualizācijas — konceptuālas, novietojums tiek precizēts projektā' if lang=='lv' else 'Visualisations — conceptual, placement refined in the design' }}</p></div>
+    <div><div class="addon-list">{% for a in m.addons %}<button type="button" data-id="{{ a.id }}" data-price="{{ a.price }}" data-area="{{ a.area }}"><span><b>{{ t(a.name) }}</b><span>{{ t(a.text) }}{% if a.area %} · +{{ a.area }} m²{% endif %}</span></span><em>{{ '+'+eur(a.price) if a.price else '—' }}</em></button>{% endfor %}</div>
+      <div class="addon-sum"><div><span>{{ t(UI.addon_total) }} · {{ t(UI.complete_price) }}</span><b>—</b></div><div style="text-align:right"><span>{{ t(UI.living_area) }}</span><b data-area>—</b></div></div></div>
   </div>
-</section>
+</div></section>
 {% endif %}
 
-{# VARIANTS #}
 {% for v in m.variants %}
-<section class="section surface">
-  <div class="wrap">
-    <div class="split rev">
-      <div class="ph">{{ img(v.img, v.name, '(max-width:900px) 100vw, 50vw')|safe }}</div>
-      <div><span class="eyebrow">{{ t(UI.variants) }}</span><h2 style="margin:8px 0 14px">{{ v.name }}</h2><p class="lead">{{ t(v.text) }}</p><ul class="feat-list" style="grid-template-columns:1fr;margin-top:20px">{% for f in v.facts %}<li>{{ t(f) }}</li>{% endfor %}</ul><div class="btn-row" style="margin-top:20px"><a class="btn btn-dark" href="#contact" data-enquire="{{ v.name }}">{{ t(UI.request) }}</a></div></div>
-    </div>
-  </div>
-</section>
+<section class="s alt"><div class="wrap"><div class="cols">
+  <div><div class="eyebrow">{{ t(UI.variants) }}</div><h2>{{ v.name }}</h2><p class="lede">{{ t(v.text) }}</p><p class="small" style="color:var(--ink2)">{% for f in v.facts %}{{ t(f) }}{{ ' · ' if not loop.last }}{% endfor %}</p><p style="margin-top:16px"><a class="btn dark" href="#contact" data-open-contact="{{ v.name }}">{{ t(UI.request) }}</a></p></div>
+  <div data-lb>{{ M.fig(v.img, v.name, 'h', '(max-width:900px) 100vw, 58vw', False) }}</div>
+</div></div></section>
 {% endfor %}
 
-{# PACKAGES #}
-<section class="section" id="packages">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.packages) }}</span><h2>{{ t(UI.packages) }} — {{ m.name }}</h2></div>
-    <div class="grid g2">
-      {% for key in ['base','complete'] %}{% set p = PACKAGES[key] %}
-      <div class="pk {{ 'pop' if p.popular }}">
-        {% if p.popular %}<span class="tag d pop-tag">{{ t(UI.popular) }}</span>{% endif %}
-        <div><span class="eyebrow">{{ t(p.sub) }}</span><h3 style="margin-top:6px">{{ t(p.name) }}</h3></div>
-        <div class="pr">{{ eur(m['price_'+key]) }}<small>{{ t(UI.with_vat) }}</small></div>
-        <div><div class="h">{{ t(UI.includes) }}</div><ul class="inc">{% for i in p.includes %}<li>{{ t(i) }}</li>{% endfor %}</ul></div>
-        <div><div class="h">{{ t(UI.excludes) }}</div><ul class="exc">{% for i in p.excludes %}<li>{{ t(i) }}</li>{% endfor %}</ul></div>
-        <div class="btn-row" style="margin-top:auto"><a class="btn {{ 'btn-primary' if p.popular else 'btn-outline' }}" href="#contact" data-enquire="{{ m.name }}">{{ t(UI.request) }}</a></div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="note" style="margin-top:18px"><b>{{ t(UI.not_in_any) }}:</b> {% for i in PACKAGES.not_in_any %}{{ t(i) }}{{ ', ' if not loop.last }}{% endfor %}. {{ t(PACKAGES.note) }} {{ t(UI.warranty) }}: {{ m.warranty }} {{ t(UI.years) }}.</div>
+<section class="s" id="packages"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ '05' if m.addons else '04' }} — {{ t(UI.packages) }}</div><h2>{{ 'Divas paketes. Viena cena katrai.' if lang=='lv' else 'Two packages. One price for each.' }}</h2></div><div><p class="lede">{{ t(PACKAGES.note) }}</p></div></div>
+  <div class="tbl" style="margin-top:36px"><table>
+    <tr><th></th><th>{{ t(PACKAGES.base.name) }}<br><span style="letter-spacing:0;text-transform:none;font-weight:400">{{ t(PACKAGES.base.sub) }}</span></th><th>{{ t(PACKAGES.complete.name) }}<br><span style="letter-spacing:0;text-transform:none;font-weight:400">{{ t(PACKAGES.complete.sub) }}</span></th></tr>
+    <tr class="total"><td>{{ m.name }} · {{ t(UI.with_vat) }}</td><td>{{ eur(m.price_base) }}</td><td>{{ eur(m.price_complete) }}</td></tr>
+    {% for i in PACKAGES.base.includes %}<tr><td>{{ t(i) }}</td><td><span class="pill ok">{{ t(UI.includes) }}</span></td><td><span class="pill ok">{{ t(UI.includes) }}</span></td></tr>{% endfor %}
+    {% for i in PACKAGES.complete.includes[1:] %}<tr><td>{{ t(i) }}</td><td><span class="pill no">—</span></td><td><span class="pill ok">{{ t(UI.includes) }}</span></td></tr>{% endfor %}
+    {% for i in PACKAGES.complete.excludes %}<tr><td>{{ t(i) }}</td><td><span class="pill no">—</span></td><td><span class="pill no">—</span></td></tr>{% endfor %}
+    {% for i in PACKAGES.not_in_any %}<tr><td>{{ t(i) }}</td><td colspan="2"><span class="pill no">{{ t(UI.not_in_any) }}</span></td></tr>{% endfor %}
+  </table></div>
+  <div class="cols3" style="margin-top:34px">
+    <div class="stat"><div class="n">{{ eur((m.price_complete/m.area)|round) }}</div><div class="l">€ / m² · {{ t(PACKAGES.complete.name) }}</div><div class="d">{{ num(m.area) }} m² {{ t(UI.living_area)|lower }}</div></div>
+    <div class="stat"><div class="n">{{ eur(m.price_complete - m.price_base) }}</div><div class="l">{{ 'Apdare, elektrība, apkure' if lang=='lv' else 'Finishes, electrics, heating' }}</div><div class="d">{{ 'Starpība starp paketēm' if lang=='lv' else 'Difference between packages' }}</div></div>
+    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(UI.delivery) }} {{ SITE.delivery_weeks }} {{ t(UI.weeks) }}</div></div>
   </div>
-</section>
+</div></section>
 
-{# GALLERY STRIP #}
-<section class="section surface" id="gallery">
-  <div class="wrap">
-    <div class="section-head row"><div><span class="eyebrow">{{ t(UI.model_gallery) }}</span><h2 style="margin-top:8px">{{ m.name }} — {{ t(UI.model_gallery) }}</h2></div><a class="btn btn-outline" href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a></div>
-    <div class="strip" data-lb>
-      {% for g in m.gallery %}
-      <figure data-full="{{ imgsrc(g.img) }}" data-cap="{{ t(g.cap) }}">{{ img(g.img, t(g.cap), '(max-width:640px) 90vw, 38vw')|safe }}<figcaption>{{ t(g.cap) }}</figcaption></figure>
-      {% endfor %}
-    </div>
+<section class="s alt" id="gallery"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ '06' if m.addons else '05' }} — {{ t(UI.model_gallery) }}</div><h2>{{ m.name }} {{ 'attēlos.' if lang=='lv' else 'in pictures.' }}</h2></div><div><p class="lede">{{ 'Renderi un fotogrāfijas no uzbūvētām mājām. Katrs attēls ar aprakstu.' if lang=='lv' else 'Renders and photographs of built houses. Every picture with a description.' }}</p></div></div>
+  <div data-lb>
+    <div class="cols eq" style="margin-top:36px">{% for g in m.gallery[:2] %}{{ M.fig(g.img, t(g.cap), 'h') }}{% endfor %}</div>
+    <div class="cols4" style="margin-top:18px">{% for g in m.gallery[2:6] %}{{ M.fig(g.img, t(g.cap), 'sq', '25vw', False) }}{% endfor %}</div>
+    {% if m.gallery|length > 6 %}<div class="cols3" style="margin-top:18px">{% for g in m.gallery[6:12] %}{{ M.fig(g.img, t(g.cap), 'f', '33vw') }}{% endfor %}</div>{% endif %}
   </div>
-</section>
+</div></section>
 
-{# BUILT EXAMPLES #}
 {% if works %}
-<section class="section" id="built">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.built_examples) }}</span><h2>{{ t(UI.built_examples) }}</h2></div>
-    <div class="works">{% for w in works[:3] %}{{ M.work_tile(w, loop.first) }}{% endfor %}</div>
-  </div>
-</section>
+<section class="s" id="built"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ '07' if m.addons else '06' }} — {{ t(UI.built_examples) }}</div><h2>{{ 'Kur šī māja jau stāv.' if lang=='lv' else 'Where this house already stands.' }}</h2></div><div><p class="lede">{% for w in works %}<a href="{{ url('projects/') }}#{{ w.id }}">{{ t(w.title) }}</a> — {{ t(w.location) }}, {{ w.year }}{{ '. ' if not loop.last }}{% endfor %}</p></div></div>
+  <div class="cols3" style="margin-top:36px" data-lb>{% for w in works[:3] %}{{ M.fig(w.images[0][0], t(w.title)+' · '+w.year|string, 'f', '33vw') }}{% endfor %}</div>
+</div></section>
 {% endif %}
 
-{# CTA + OTHERS #}
-<section class="section surface">
-  <div class="wrap">{{ M.cta_band() }}
-    <div class="section-head" style="margin-top:56px"><span class="eyebrow">{{ t(UI.other_models) }}</span></div>
-    <div class="grid g3">{% for o in others %}{{ M.model_card(o) }}{% endfor %}</div>
-  </div>
-</section>
-<div class="sticky-cta"><div><b>{{ m.name }}</b><small>{{ t(UI.from) }} {{ eur(m.price_base) }} · {{ t(UI.with_vat) }}</small></div><a class="btn btn-primary btn-sm" href="#contact" data-enquire="{{ m.name }}">{{ t(UI.request_short) }}</a></div>
+<section class="s alt" id="next"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ 'Nākamie soļi' if lang=='lv' else 'Next steps' }}</div><h2>{{ 'No piedāvājuma līdz atslēgām.' if lang=='lv' else 'From offer to keys.' }}</h2></div>
+  <div><ul class="list">{% for h,p in PROCESS %}<li><span class="no">{{ loop.index }}</span><div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div></li>{% endfor %}</ul></div></div>
+  {{ M.cta_band() }}
+  {% set nx = [] %}{% for o in others[:2] %}{% set _ = nx.append((o.series, o.name+' — '+t(o.tagline), url('model/'+o.slug+'/'))) %}{% endfor %}{{ M.next_cards(nx) }}
+</div></section>
+<div class="sticky-cta"><div><b>{{ m.name }}</b><small>{{ t(UI.from) }} {{ eur(m.price_base) }} · {{ t(UI.with_vat) }}</small></div><a class="btn" style="padding:10px 16px" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request_short) }}</a></div>
 {% endblock %}

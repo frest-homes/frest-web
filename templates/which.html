@@ -1,18 +1,13 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_models) }}</span><h1 style="margin-top:8px">{{ t(UI.quiz_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.quiz_lead) }}</p></div></section>
-<section class="section tight"><div class="wrap">
-  <div class="quiz" data-quiz='{{ quiz_data }}'>
-    <div><span class="eyebrow on-dark">Frest</span><h2 style="margin:10px 0 8px">{{ 'Atbildiet uz trim jautājumiem' if lang=='lv' else 'Answer three questions' }}</h2><p class="lead">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p></div>
-    <div>
-      <div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
-      {% for q in QUIZ.q %}<div class="step"><h3>{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>{% endfor %}
-      <div class="res"><span class="eyebrow on-dark">{{ t(UI.quiz_result) }}</span><h3 style="font-size:32px;margin-top:6px" data-r-name></h3><div class="ph"><img alt="" loading="lazy"></div><p data-r-why class="lead" style="color:rgba(255,255,255,.85)"></p><p class="small" style="margin-top:8px;color:rgba(255,255,255,.6)" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn btn-primary" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn btn-outline on-dark" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
-    </div>
-  </div>
-</div></section>
-<section class="section surface"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.personalise_title) }}</span><h2>{{ t(UI.personalise_title) }}</h2><p class="lead">{{ t(UI.personalise_lead) }}</p></div>{{ M.personaliser(MODELS, 'pz-which', 'aura-70', 'warm-wood') }}</div></section>
-<section class="section"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.nav_models) }}</span><h2>{{ t(UI.models_title) }}</h2></div><div class="grid g4">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div></div></section>
-<section class="section surface"><div class="wrap">{{ M.cta_band() }}</div></section>
+<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_models) }} · {{ t(UI.nav_which) }}</div><h1 style="margin-top:18px">{{ t(UI.quiz_title) }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.quiz_lead) }} {{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together.' }}</p></div></header>
+<section class="s tight"><div class="wrap"><div class="quiz" data-quiz='{{ quiz_data }}'>
+  <div><div class="eyebrow">01 — {{ 'Trīs jautājumi' if lang=='lv' else 'Three questions' }}</div><h2>{{ 'Kas, kāds stils, kāds budžets.' if lang=='lv' else 'Who, which style, what budget.' }}</h2></div>
+  <div><div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
+    {% for q in QUIZ.q %}<div class="step"><h3 style="font-weight:300;font-size:26px">{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>{% endfor %}
+    <div class="res"><div class="eyebrow">{{ t(UI.quiz_result) }}</div><h3 style="font-size:36px;font-weight:300;margin-top:6px" data-r-name></h3><div class="fig h"><img alt="" loading="lazy"></div><p class="lede" data-r-why></p><p class="small" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn ghost" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
+  </div></div></div></section>
+<section class="s alt"><div class="wrap"><div class="cols"><div><div class="eyebrow">02 — {{ t(UI.personalise_title) }}</div><h2>{{ 'Četras krāsas. Divi jumti.' if lang=='lv' else 'Four colours. Two roofs.' }}</h2></div><div><p class="lede">{{ t(UI.personalise_lead) }}</p></div></div><div style="margin-top:36px">{{ M.personaliser(MODELS, 'pz-which', 'aura-70', 'warm-wood') }}</div></div></section>
+<section class="s"><div class="wrap"><div class="cols"><div><div class="eyebrow">03 — {{ t(UI.nav_models) }}</div><h2>{{ t(UI.models_title) }}</h2></div><div><p class="lede">{{ t(UI.models_lead) }}</p></div></div><div class="cols4" style="margin-top:36px">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>{{ M.cta_band() }}</div></section>
 {% endblock %}

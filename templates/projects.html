@@ -2,26 +2,33 @@
 {% import "_macros.html" as M with context %}
 {% set og_image = 'als-kettingskov-aerial' %}
 {% block content %}
-<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_projects) }}</span><h1 style="margin-top:8px">{{ t(UI.projects_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.projects_lead) }}</p>
-<div class="facts-grid" style="margin-top:28px;max-width:760px"><div class="fact"><b>{{ WORKS|length }}</b><span>{{ 'projekti' if lang=='lv' else 'projects' }}</span></div><div class="fact"><b>2</b><span>{{ 'valstis' if lang=='lv' else 'countries' }}</span></div><div class="fact"><b>2019</b><span>{{ 'kopš' if lang=='lv' else 'since' }}</span></div><div class="fact"><b>8+</b><span>{{ 'Als mājas vienā ciematā' if lang=='lv' else 'Als homes in one village' }}</span></div></div>
-</div></section>
-{% for w in WORKS %}
-<section class="section {{ 'surface' if loop.index is even }}" id="{{ w.id }}">
-  <div class="wrap">
-    <div class="split {{ 'rev' if loop.index is even }}" style="align-items:start">
-      <div class="ph" style="aspect-ratio:4/3" data-lb>{% set first = w.images[0] %}<figure style="margin:0;height:100%;cursor:zoom-in" data-full="{{ imgsrc(first[0]) }}" data-cap="{{ t(w.title) }} — {{ t(first[1]) }}">{{ img(first[0], t(w.title), '(max-width:900px) 100vw, 55vw')|safe }}</figure></div>
-      <div>
-        <span class="eyebrow">{{ t(w.location) }} · {{ w.year }}</span>
-        <h2 style="margin:8px 0 14px">{{ t(w.title) }}</h2>
-        <p class="lead">{{ t(w.text) }}</p>
-        <div class="pill-row" style="margin-top:16px">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="tag" href="{{ url('model/'+ ('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') +'/') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }}</a>{% endif %}{% endfor %}</div>
-        <div class="strip" style="grid-auto-columns:minmax(140px,30%);margin-top:20px" data-lb>
-          {% for im,cap in w.images[1:] %}<figure data-full="{{ imgsrc(im) }}" data-cap="{{ t(w.title) }} — {{ t(cap) }}">{{ img(im, t(cap), '30vw')|safe }}<figcaption>{{ t(cap) }}</figcaption></figure>{% endfor %}
-        </div>
-      </div>
-    </div>
+<header class="hero"><div class="wrap fadein">
+  <div class="eyebrow">{{ t(UI.nav_projects) }} · {{ 'Dānija · Latvija · 2019–2024' }}</div>
+  <h1 style="margin-top:18px">{{ ('Reālas mājas.<br>Ne renderi.' if lang=='lv' else 'Real houses.<br>Not renders.')|safe }}</h1>
+  <p class="lede" style="margin-top:22px">{{ t(UI.projects_lead) }} {{ 'Deviņi projekti, katrs ar saviem attēliem un aprakstu — ko redzat, kur tas ir un kāpēc tas ir tā uzbūvēts.' if lang=='lv' else 'Nine projects, each with its own pictures and description — what you see, where it is and why it was built that way.' }}</p>
+  <div class="cols4" style="margin-top:44px">
+    <div class="stat"><div class="n">{{ WORKS|length }}</div><div class="l">{{ 'Projekti' if lang=='lv' else 'Projects' }}</div><div class="d">2019–2024</div></div>
+    <div class="stat"><div class="n">8</div><div class="l">{{ 'Als mājas vienā ciematā' if lang=='lv' else 'Als homes in one village' }}</div><div class="d">Kettingskov, DK</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">{{ 'Valstis' if lang=='lv' else 'Countries' }}</div><div class="d">{{ 'Latvija · Dānija' if lang=='lv' else 'Latvia · Denmark' }}</div></div>
+    <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div><div class="d">{{ '300 mm siltinājums' if lang=='lv' else '300 mm insulation' }}</div></div>
   </div>
-</section>
+  <ul class="toc">{% for w in WORKS %}<li><span class="p">{{ '%02d'|format(loop.index) }}</span><a href="#{{ w.id }}">{{ t(w.title) }}</a><span>{{ t(w.location) }} · {{ w.year }}</span></li>{% endfor %}</ul>
+</div></header>
+
+{% for w in WORKS %}
+{% set first = w.images[0] %}
+<section class="s {{ 'alt' if loop.index is even }}" id="{{ w.id }}"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ '%02d'|format(loop.index) }} — {{ t(w.location) }} · {{ w.year }}</div><h2>{{ t(w.title) }}</h2>
+    <div class="btn-row">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="pill ok" href="{{ url('model/'+ ('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') +'/') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }} →</a>{% endif %}{% endfor %}</div></div>
+  <div><p class="lede">{{ t(w.text) }}</p></div></div>
+  <div data-lb>
+    <div style="margin-top:36px">{{ M.fig(first[0], t(w.title)+' — '+t(first[1]), 'w', '100vw') }}</div>
+    {% set rest = w.images[1:] %}
+    {% if rest|length >= 2 %}<div class="cols eq" style="margin-top:18px">{% for im,cap in rest[:2] %}{{ M.fig(im, t(cap), 'h') }}{% endfor %}</div>{% endif %}
+    {% if rest|length > 2 %}<div class="cols4" style="margin-top:18px">{% for im,cap in rest[2:6] %}{{ M.fig(im, t(cap), 'sq', '25vw') }}{% endfor %}</div>{% endif %}
+    {% if rest|length > 6 %}<div class="cols3" style="margin-top:18px">{% for im,cap in rest[6:9] %}{{ M.fig(im, t(cap), 'f', '33vw') }}{% endfor %}</div>{% endif %}
+  </div>
+</div></section>
 {% endfor %}
-<section class="section"><div class="wrap">{{ M.cta_band() }}</div></section>
+<section class="s"><div class="wrap">{{ M.cta_band() }}{{ M.next_cards([(t(UI.nav_gallery), t(UI.gallery_title)+' — '+ ('visi attēli' if lang=='lv' else 'all pictures'), url('gallery/')), (t(UI.nav_custom), t(UI.custom_title), url('custom-design/'))]) }}</div></section>
 {% endblock %}

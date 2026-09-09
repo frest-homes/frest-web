@@ -1,127 +1,109 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-{# ---------- HERO ---------- #}
-<section class="hero" data-slider>
-  {% for m in MODELS %}
-  <div class="slide {{ 'on' if loop.first }}">{{ img(m.hero, m.name, '100vw', '', 'eager' if loop.first else 'lazy', 'high' if loop.first else None)|safe }}</div>
-  {% endfor %}
-  <div class="shade"></div>
-  <div class="wrap">
-    {% for m in MODELS %}
-    <div class="hero-copy" {% if not loop.first %}hidden{% endif %}>
-      <span class="eyebrow on-dark">{{ t(UI.hero_eyebrow) }} · {{ m.series }}</span>
-      <h1>{{ m.name }}</h1>
-      <div class="sub">{{ t(m.tagline) }}</div>
-      <p class="lead">{{ t(m.lead) }}</p>
-      <div class="btn-row"><a class="btn btn-primary" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }} {{ m.name }}</a><a class="btn btn-outline on-dark" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></div>
-      <div class="kpis">
-        <div class="kpi"><b>{{ num(m.area) }} m²</b><span>{{ t(UI.living_area) }}</span></div>
-        <div class="kpi"><b>{{ t(UI.from) }} {{ eur(m.price_base) }}</b><span>{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</span></div>
-        <div class="kpi"><b>{{ SITE.delivery_weeks }}</b><span>{{ t(UI.weeks_delivery) }}</span></div>
-      </div>
-    </div>
-    {% endfor %}
+{# ---- brand intro (El Soco hero) ---- #}
+<header class="hero"><div class="wrap fadein"><div class="grid">
+  <div>
+    <div class="eyebrow">{{ t(UI.hero_eyebrow) }} · Aura · Als · Latvija · Danmark</div>
+    <h1 style="margin-top:18px">{{ 'Māja, kas top rūpnīcā.' if lang=='lv' else 'A house made in a factory.' }}</h1>
+    <p class="lede" style="margin-top:22px">{{ 'Frest ražo skandināvu dizaina mājas Latvijā: sienu un jumta paneļi top sausumā, objektā tos saliek dažās dienās, un atslēgas ir rokā 16–20 nedēļās. Četri modeļi. Divas sērijas. Uzbūvētas Dānijā un Latvijā kopš 2019. gada.' if lang=='lv' else 'Frest makes Scandinavian-design homes in Latvia: wall and roof panels are built indoors, assembled on site in days, and the keys are in your hand within 16–20 weeks. Four models. Two series. Built in Denmark and Latvia since 2019.' }}</p>
+    <p class="cap">{{ 'Energoklase A · 300 mm siltinājums · betona plātnes pamats · no 92 000 € ar PVN' if lang=='lv' else 'Energy class A · 300 mm insulation · concrete slab foundation · from €92,000 incl. VAT' }}</p>
+    <p style="margin-top:26px"><a class="pill ok" href="#models" style="padding:10px 16px">{{ 'Četri modeļi →' if lang=='lv' else 'The four models →' }}</a> &nbsp; <a class="pill hi" href="{{ url('catalogue/') }}" style="padding:10px 16px">{{ t(UI.nav_catalogue) }} →</a></p>
   </div>
-  <div class="hero-nav"><button class="pv" aria-label="previous">‹</button><button class="nx" aria-label="next">›</button></div>
-  <div class="dots">{% for m in MODELS %}<button aria-label="{{ m.name }}"></button>{% endfor %}</div>
-</section>
+  <div>{{ M.fig('als110-photo-lv-exterior-forest', 'Als 110 · Latvija · 2024', 'p', '(max-width:900px) 100vw, 40vw', False) }}</div>
+</div></div></header>
 
-{# ---------- WHY ---------- #}
-<section class="section tight">
-  <div class="wrap">
-    <div class="grid g4">
-      {% for h,p in UI.why %}
-      <div class="tile rv"><span class="n">{{ loop.index }}</span><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>
-      {% endfor %}
-    </div>
+{# ---- audience selector ---- #}
+<section class="s" id="you"><div class="wrap"><div class="cols">
+  <div><div class="eyebrow">{{ 'Izvēlieties, kas jūs esat' if lang=='lv' else 'Choose who you are' }}</div><h2>{{ ('Viena rūpnīca. <br>Septiņi veidi, kā to lasīt.' if lang=='lv' else 'One factory. <br>Seven ways to read it.')|safe }}</h2><p class="small" style="margin-top:-6px">{{ 'Izvēlieties skatpunktu — teksts zemāk mainās jums.' if lang=='lv' else 'Pick an angle — the text below changes for you.' }}</p></div>
+  <div><div class="aud" id="aud" data-aud='{{ aud_data }}'>{% for k, lab, h, p, href, link in AUDIENCES %}<button type="button" data-aud="{{ k }}" class="{{ 'on' if k=='all' }}">{{ t(lab) }}</button>{% endfor %}</div>
+  <div class="audpanel" id="audpanel"><h3 id="audh"></h3><p id="audp"></p><div class="cap2" id="audl"></div></div></div>
+</div></div></section>
+
+{# ---- cover spread ---- #}
+{% call M.spread(SPREADS.cover, 'l', 'top') %}{% endcall %}
+<section class="s" style="padding-top:44px"><div class="wrap"><div class="cols eq" style="align-items:start">
+  <p class="lede" style="margin:0">{{ 'Kettingskovā, Dienviddānijā, 2022. gadā vienā sezonā uzbūvējām astoņas Als mājas: Als 70 un Als 110 ar melnu, pelēku un koka fasādi. Katrai savs zemesgabals, sava terase pret sauli un tas pats rūpnīcas komplekts.' if lang=='lv' else 'In Kettingskov, southern Denmark, we built eight Als homes in one season of 2022: Als 70 and Als 110 with black, gray and wood facades. Each with its own plot, its own terrace facing the sun and the same factory kit.' }}</p>
+  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Als 70 no 92 000 € · Als 110 no 128 000 € · Aura 70 no 95 000 € · Aura 110 no 125 000 € — rūpnīcas komplekts ar montāžu, ar PVN. Pilnā pakete ar apdari, elektrību un apkuri: +37–51 000 €. Bez pamatu darbiem, zemes un atļaujas. Precīza cena — piedāvājumā.' if lang=='lv' else 'Als 70 from €92,000 · Als 110 from €128,000 · Aura 70 from €95,000 · Aura 110 from €125,000 — factory kit with assembly, incl. VAT. Complete package with finishes, electrics and heating: +€37–51,000. Excluding foundation works, land and permit. The exact price is in the offer.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('projects/') }}#kettingskov">{{ 'Ciemats pilnībā →' if lang=='lv' else 'The village in full →' }}</a></p></div>
+</div></div></section>
+
+{# ---- the four models ---- #}
+<section class="s" id="models"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">01 — {{ t(UI.nav_models) }}</div><h2>{{ t(KICKERS.models)|safe|replace('<em>','')|replace('</em>','') }}</h2></div>
+  <div><p class="lede">{{ t(UI.models_lead) }}</p><p class="small">{{ 'Katrs modelis pieejams kā Pamata pakete (rūpnīcas komplekts ar montāžu) vai Pilnā pakete (atslēgas risinājums). Četras fasādes krāsas un divi jumta tipi bez papildu maksas.' if lang=='lv' else 'Every model comes as a Base package (factory kit with assembly) or a Complete package (turnkey). Four facade colours and two roof types at no extra cost.' }}</p></div></div>
+  <div class="cols4" style="margin-top:36px">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>
+  <div class="trio">
+    <a href="{{ url('compare/') }}"><div class="eyebrow">{{ t(UI.nav_compare) }}</div><span>{{ t(UI.compare_title) }}</span><small>{{ 'Visi četri blakus, tikai atšķirības, €/m²' if lang=='lv' else 'All four side by side, differences only, €/m²' }}</small></a>
+    <a href="{{ url('configure/') }}"><div class="eyebrow">{{ t(UI.nav_which) }}</div><span>{{ t(UI.quiz_title) }}</span><small>{{ t(UI.quiz_lead) }}</small></a>
+    <a href="{{ url('catalogue/') }}"><div class="eyebrow">{{ t(UI.nav_catalogue) }}</div><span>{{ t(UI.cta_title) }}</span><small>{{ 'Katra izvēle ar cenu, konfigurators, piedāvājums' if lang=='lv' else 'Every option priced, configurator, offer' }}</small></a>
   </div>
-</section>
+</div></section>
 
-{# ---------- MODELS ---------- #}
-<section class="section surface" id="models">
-  <div class="wrap">
-    <div class="section-head row"><div><span class="eyebrow">{{ t(UI.nav_models) }}</span><h2 style="margin-top:8px">{{ t(UI.models_title) }}</h2><p class="lead" style="margin-top:12px">{{ t(UI.models_lead) }}</p></div><a class="btn btn-outline" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></div>
-    <div class="grid g4">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>
+{# ---- personalise ---- #}
+<section class="s alt" id="personalise"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">02 — {{ t(UI.personalise_title) }}</div><h2>{{ ('Četras krāsas. Divi jumti. <br>Viens klikšķis.' if lang=='lv' else 'Four colours. Two roofs. <br>One click.')|safe }}</h2></div><div><p class="lede">{{ t(UI.personalise_lead) }}</p></div></div>
+  <div style="margin-top:36px">{{ M.personaliser(MODELS, 'pz-home', 'als-110', 'charcoal-black') }}</div>
+</div></section>
+
+{# ---- factory spread ---- #}
+{% call M.spread(SPREADS.factory, 'flat', '') %}
+  <div class="island" style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:start;margin-top:26px">
+    <div><p class="lede">{{ t(SPREADS.factory.text) }}</p>
+      <div class="facts2">{% for n,l in SPREADS.factory.stats %}<div class="stat"><div class="n">{{ n }}</div><div class="l">{{ t(l) }}</div></div>{% endfor %}</div>
+      <p class="cap2"><a href="{{ url('resources/') }}#process" style="color:var(--acc)">{{ 'Process soli pa solim →' if lang=='lv' else 'The process step by step →' }}</a></p></div>
+    <div class="sidebar"><b>{{ 'Kas ir rūpnīcas komplekts' if lang=='lv' else 'What the factory kit is' }}</b><p class="small">{{ 'Siltināti sienu paneļi ar tvaika barjeru un apšuvumu, jumta konstrukcija un segums, logi un ārdurvis, pabeigta fasāde un montāža objektā. Pamatu plātne — standarts, ko liek vietējais būvnieks pēc mūsu rasējuma.' if lang=='lv' else 'Insulated wall panels with vapour barrier and cladding, roof structure and covering, windows and exterior doors, a finished facade and assembly on site. The concrete slab is the standard, laid by a local builder to our drawing.' }}</p></div>
   </div>
-</section>
+{% endcall %}
 
-{# ---------- QUIZ ---------- #}
-<section class="section">
-  <div class="wrap">
-    <div class="quiz rv" data-quiz='{{ quiz_data }}'>
-      <div>
-        <span class="eyebrow on-dark">{{ t(UI.nav_which) }}</span>
-        <h2 style="margin:10px 0 8px">{{ t(UI.quiz_title) }}</h2>
-        <p class="lead">{{ t(UI.quiz_lead) }}</p>
-        <p class="small" style="margin-top:20px;color:rgba(255,255,255,.55)">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p>
-      </div>
-      <div>
-        <div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
-        {% for q in QUIZ.q %}
-        <div class="step"><h3>{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>
-        {% endfor %}
-        <div class="res"><span class="eyebrow on-dark">{{ t(UI.quiz_result) }}</span><h3 style="font-size:32px;margin-top:6px" data-r-name></h3><div class="ph"><img alt="" loading="lazy"></div><p data-r-why class="lead" style="color:rgba(255,255,255,.85)"></p><p class="small mute" style="margin-top:8px;color:rgba(255,255,255,.6)" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn btn-primary" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn btn-outline on-dark" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-{# ---------- PERSONALISE ---------- #}
-<section class="section surface" id="personalise">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.personalise_title) }}</span><h2>{{ t(UI.personalise_title) }}</h2><p class="lead">{{ t(UI.personalise_lead) }}</p></div>
-    {{ M.personaliser(MODELS, 'pz-home', 'als-110', 'charcoal-black') }}
-  </div>
-</section>
-
-{# ---------- PROCESS ---------- #}
-<section class="section" id="process">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.nav_process) }}</span><h2>{{ t(UI.process_title) }}</h2><p class="lead">{{ t(UI.process_lead) }}</p></div>
-    <div class="steps">
-      {% for h,p in PROCESS %}<div class="step-c rv"><b>0{{ loop.index }}</b><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>{% endfor %}
+{# ---- which house (quiz) ---- #}
+<section class="s" id="which"><div class="wrap">
+  <div class="quiz" data-quiz='{{ quiz_data }}'>
+    <div><div class="eyebrow">03 — {{ t(UI.nav_which) }}</div><h2>{{ t(UI.quiz_title) }}</h2><p class="lede">{{ t(UI.quiz_lead) }}</p><p class="small">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p></div>
+    <div>
+      <div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
+      {% for q in QUIZ.q %}<div class="step"><h3 style="font-weight:300;font-size:26px">{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>{% endfor %}
+      <div class="res"><div class="eyebrow">{{ t(UI.quiz_result) }}</div><h3 style="font-size:36px;font-weight:300;margin-top:6px" data-r-name></h3><div class="fig h"><img alt="" loading="lazy"></div><p class="lede" data-r-why></p><p class="small" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn ghost" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
     </div>
   </div>
-</section>
+</div></section>
 
-{# ---------- WORKS ---------- #}
-<section class="section surface" id="works">
-  <div class="wrap">
-    <div class="section-head row"><div><span class="eyebrow">{{ t(UI.nav_projects) }}</span><h2 style="margin-top:8px">{{ t(UI.works_title) }}</h2><p class="lead" style="margin-top:12px">{{ t(UI.works_lead) }}</p></div><a class="btn btn-outline" href="{{ url('projects/') }}">{{ t(UI.all_works) }}</a></div>
-    <div class="works">
-      {{ M.work_tile(WORKS[0], True) }}{{ M.work_tile(WORKS[1]) }}{{ M.work_tile(WORKS[2]) }}{{ M.work_tile(WORKS[5]) }}{{ M.work_tile(WORKS[7]) }}
-    </div>
+{# ---- completed projects (editorial figures) ---- #}
+<section class="s alt" id="works"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.nav_projects) }}</div><h2>{{ ('Reālas mājas. <br>Ne renderi.' if lang=='lv' else 'Real houses. <br>Not renders.')|safe }}</h2></div><div><p class="lede">{{ t(UI.projects_lead) }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('projects/') }}">{{ t(UI.all_works) }} →</a></p></div></div>
+  <div class="cols eq" style="margin-top:36px" data-lb>
+    {{ M.fig('als110-photo-lv-exterior-forest', 'Als 110 · Latvija · 2024', 'h') }}
+    {{ M.fig('als70-front-dk', 'Als 70 · Kettingskov · 2022', 'h') }}
   </div>
-</section>
-
-{# ---------- ADD-ONS ---------- #}
-<section class="section" id="addons">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ t(UI.nav_addons) }}</span><h2>{{ t(UI.addons_title) }}</h2><p class="lead">{{ t(UI.addons_lead) }}</p></div>
-    <div class="grid g3">
-      {% for a in ADDONS %}
-      <div class="tile rv"><span class="tag y">{{ t(UI.from) }} {{ eur(a.price) }}</span><h3 style="margin-top:14px">{{ t(a.name) }} · {{ a.area }} m²</h3><p>{{ t(a.text) }}</p><ul class="small mute" style="margin:12px 0 0;padding-left:18px">{% for f in a.feats %}<li>{{ t(f) }}</li>{% endfor %}</ul><div style="margin-top:16px"><a class="btn-link" href="#contact" data-enquire="{{ t(a.name) }}">{{ t(UI.request_short) }}</a></div></div>
-      {% endfor %}
-    </div>
-    <div class="grid g4" style="margin-top:24px">
-      {% for h,p in ADDON_WHY %}<div class="fact"><b style="font-size:18px;font-weight:500">{{ t(h) }}</b><span style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink-2)">{{ t(p) }}</span></div>{% endfor %}
-    </div>
+  <div class="cols4" style="margin-top:18px" data-lb>
+    {{ M.fig('als110-plus-latvia-exterior', 'Als 110+ · Latvija', 'sq', '25vw', False) }}
+    {{ M.fig('energy-house-front-deck', 'Energy+ · Stiklingen', 'sq', '25vw', False) }}
+    {{ M.fig('custom-build-exterior-sunset', 'Individuāls · Latvija' if lang=='lv' else 'Custom · Latvia', 'sq', '25vw', False) }}
+    {{ M.fig('als110-photo-lv-kitchen', 'Als 110 · virtuve' if lang=='lv' else 'Als 110 · kitchen', 'sq', '25vw', False) }}
   </div>
-</section>
+</div></section>
 
-{# ---------- FAQ ---------- #}
-<section class="section surface" id="faq">
-  <div class="wrap">
-    <div class="split" style="align-items:start">
-      <div><span class="eyebrow">{{ t(UI.nav_faq) }}</span><h2 style="margin:8px 0 20px">{{ t(UI.faq_title) }}</h2>{{ M.faq_list(FAQ, 4) }}<div style="margin-top:20px"><a class="btn-link" href="{{ url('resources/') }}">{{ t(UI.all_faq) }}</a></div></div>
-      <div class="ph" style="aspect-ratio:3/4">{{ img('als110-photo-lv-staircase', '', '(max-width:900px) 100vw, 40vw')|safe }}</div>
-    </div>
-  </div>
-</section>
+{# ---- the word spread ---- #}
+{% call M.spread(SPREADS.word, 'l', 'mid') %}
+  <div class="sidebar" style="margin-top:26px"><b>{{ 'No kurienes nāk vārds' if lang=='lv' else 'Where the name comes from' }}</b><p class="small">{{ t(SPREADS.word.text) }}</p></div>
+{% endcall %}
 
-{# ---------- CTA ---------- #}
-<section class="section">
-  <div class="wrap">{{ M.cta_band() }}</div>
-</section>
+{# ---- process road ---- #}
+<section class="s" id="process"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">05 — {{ t(UI.nav_process) }}</div><h2>{{ ('Pieci soļi. <br>Sešpadsmit nedēļas.' if lang=='lv' else 'Five steps. <br>Sixteen weeks.')|safe }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
+  <div class="road">{% for h,p in PROCESS %}<div><div class="y">0{{ loop.index }}</div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div>{% endfor %}</div>
+</div></section>
+
+{# ---- modules ---- #}
+<section class="s alt" id="addons"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">06 — {{ t(UI.nav_addons) }}</div><h2>{{ t(UI.addons_title) }}</h2></div><div><p class="lede">{{ t(UI.addons_lead) }}</p></div></div>
+  <div class="cols3" style="margin-top:36px">{% for a in ADDONS %}<div class="tile"><div class="eyebrow">{{ t(UI.from) }} {{ eur(a.price) }} · {{ a.area }} m²</div><h3>{{ t(a.name) }}</h3><p class="small">{{ t(a.text) }}</p><p class="small" style="color:var(--ink2)">{% for f in a.feats %}{{ t(f) }}{{ ' · ' if not loop.last }}{% endfor %}</p><a class="cap2" style="color:var(--acc-ink)" href="#contact" data-open-contact="{{ t(a.name) }}">{{ t(UI.request_short) }} →</a></div>{% endfor %}</div>
+  <div class="cols4" style="margin-top:28px">{% for h,p in ADDON_WHY %}<div class="stat"><div class="l" style="margin-top:0;color:var(--acc-ink)">{{ t(h) }}</div><div class="d">{{ t(p) }}</div></div>{% endfor %}</div>
+</div></section>
+
+{# ---- FAQ + CTA ---- #}
+<section class="s"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">07 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if lang=='lv' else 'The honest version.' }}</h2><p class="small"><a href="{{ url('resources/') }}">{{ t(UI.all_faq) }} →</a></p></div><div>{{ M.faq_list(FAQ, 4) }}</div></div>
+  {{ M.cta_band() }}
+  {{ M.next_cards([(t(UI.nav_projects), t(UI.projects_title), url('projects/')), (t(UI.nav_custom), t(UI.custom_title), url('custom-design/'))]) }}
+</div></section>
 {% endblock %}

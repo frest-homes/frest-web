@@ -11,121 +11,74 @@
 <link rel="alternate" hreflang="en" href="{{ canonical }}{{ BASE }}en/{{ path }}">
 <link rel="alternate" hreflang="x-default" href="{{ canonical }}{{ BASE }}{{ path }}">
 {% endif %}
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ desc }}">
-<meta property="og:type" content="website">
-<meta property="og:image" content="{{ canonical }}{{ imgsrc(og_image|default('als110-hero'), 1600) }}">
-<meta property="og:locale" content="{{ 'lv_LV' if lang=='lv' else 'en_GB' }}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ desc }}"><meta property="og:type" content="website">
+<meta property="og:image" content="{{ canonical }}{{ imgsrc(og_image|default('als-kettingskov-aerial'), 1600) }}"><meta property="og:locale" content="{{ 'lv_LV' if lang=='lv' else 'en_GB' }}">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff">
 <link rel="icon" href="{{ BASE }}static/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap">
-<link rel="stylesheet" href="{{ BASE }}static/site.css">
+<link rel="stylesheet" href="{{ BASE }}static/editorial.css"><link rel="stylesheet" href="{{ BASE }}static/site.css">
 {% block head %}{% endblock %}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Frest Homes","legalName":"SIA Frest","url":"{{ canonical }}{{ BASE }}","email":"{{ SITE.email }}","telephone":"{{ SITE.phone }}","address":{"@type":"PostalAddress","addressLocality":"Riga","addressCountry":"LV"},"sameAs":["{{ SITE.facebook }}","{{ SITE.instagram }}"]}</script>
 </head>
-<body>
+<body data-autocontact="{{ '1' if page=='home' else '0' }}">
 <a class="sr" href="#main">{{ 'Uz saturu' if lang=='lv' else 'Skip to content' }}</a>
-<header class="nav">
-  <div class="wrap">
-    <a class="brand" href="{{ url('') }}" aria-label="Frest Homes"><img src="{{ BASE }}static/logo.png" alt="frest" width="120" height="26"></a>
-    <ul class="nav-links">
-      <li><button class="nl" aria-haspopup="true">{{ t(UI.nav_models) }} ▾</button>
-        <div class="dd wide">
-          {% for m in MODELS %}
-          <a href="{{ url('model/'+m.slug+'/') }}"><img src="{{ imgsrc(m.card, 480) }}" alt="" loading="lazy"><span><b>{{ m.name }}</b><span>{{ num(m.area) }} m² · {{ t(UI.from) }} {{ eur(m.price_base) }}</span></span></a>
-          {% endfor %}
-          <a href="{{ url('compare/') }}"><span><b>{{ t(UI.compare_models) }}</b><span>{{ t(UI.nav_which) }} →</span></span></a>
-          <a href="{{ url('configure/') }}"><span><b>{{ t(UI.quiz_title) }}</b><span>{{ t(UI.quiz_lead) }}</span></span></a>
-        </div></li>
-      <li><a href="{{ url('pricing/') }}" {% if page=='pricing' %}class="active"{% endif %}>{{ t(UI.nav_pricing) }}</a></li>
-      <li><a href="{{ url('projects/') }}" {% if page=='projects' %}class="active"{% endif %}>{{ t(UI.nav_projects) }}</a></li>
-      <li><a href="{{ url('gallery/') }}" {% if page=='gallery' %}class="active"{% endif %}>{{ t(UI.nav_gallery) }}</a></li>
-      <li><a href="{{ url('custom-design/') }}" {% if page=='custom' %}class="active"{% endif %}>{{ t(UI.nav_custom) }}</a></li>
-      <li><button class="nl" aria-haspopup="true">{{ t(UI.nav_resources) }} ▾</button>
-        <div class="dd">
-          <a href="{{ url('resources/') }}"><span><b>{{ t(UI.nav_faq) }}</b><span>{{ t(UI.resources_lead) }}</span></span></a>
-          <a href="{{ url('') }}#process"><span><b>{{ t(UI.nav_process) }}</b><span>{{ t(UI.process_lead) }}</span></span></a>
-          <a href="{{ url('') }}#addons"><span><b>{{ t(UI.nav_addons) }}</b></span></a>
-          <a href="{{ url('team/') }}"><span><b>{{ t(UI.nav_team) }}</b></span></a>
-          <a href="#contact" data-enquire=""><span><b>{{ t(UI.nav_contact) }}</b><span>{{ SITE.phone_display }} · {{ SITE.email }}</span></span></a>
-        </div></li>
-      <li class="nav-lang"><a href="{{ url_other(path) }}" title="{{ t(UI.lang_switch_title) }}" hreflang="{{ other }}">{{ t(UI.lang_switch) }}</a></li>
-    </ul>
-    <a class="btn btn-primary btn-sm nav-cta" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a>
-    <button class="burger" id="burger" aria-label="{{ t(UI.menu) }}">{{ t(UI.menu) }} ☰</button>
-  </div>
-</header>
-<div class="mobile" id="mobile" aria-hidden="true">
-  <div class="top"><a class="brand" href="{{ url('') }}"><img src="{{ BASE }}static/logo.png" alt="frest" width="110" height="24"></a><button data-close-mobile class="burger" style="display:inline-flex">{{ t(UI.close) }} ✕</button></div>
-  <div class="grp">{{ t(UI.nav_models) }}</div>
-  {% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }} <span class="mute small">{{ num(m.area) }} m²</span></a>{% endfor %}
-  <a class="sub" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a>
-  <a class="sub" href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a>
-  <div class="grp">Frest</div>
-  <a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a>
-  <a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a>
-  <a href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a>
-  <a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a>
-  <a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a>
-  <a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a>
-  <a href="{{ url_other(path) }}">{{ t(UI.lang_switch_title) }}</a>
-  <a class="btn btn-primary" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a>
-  <a class="btn btn-outline" href="#contact" data-enquire="" data-close-mobile>{{ t(UI.request) }}</a>
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="{{ url('') }}" aria-label="Frest Homes"><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24"></a>
+  <ul>
+    <li class="dd"><button type="button" class="{{ 'on' if page=='model' }}">{{ t(UI.nav_models) }} <i>▼</i></button>
+      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ t(UI.from) }} {{ eur(m.price_base) }}</small></a>{% endfor %}<a href="{{ url('compare/') }}">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
+    <li><a href="{{ url('projects/') }}" class="{{ 'on' if page=='projects' }}">{{ t(UI.nav_projects) }}</a></li>
+    <li><a href="{{ url('gallery/') }}" class="{{ 'on' if page=='gallery' }}">{{ t(UI.nav_gallery) }}</a></li>
+    <li><a href="{{ url('pricing/') }}" class="{{ 'on' if page=='pricing' }}">{{ t(UI.nav_pricing) }}</a></li>
+    <li><a href="{{ url('custom-design/') }}" class="{{ 'on' if page=='custom' }}">{{ t(UI.nav_custom) }}</a></li>
+    <li class="dd"><button type="button" class="{{ 'on' if page in ['resources','team'] }}">{{ t(UI.nav_resources) }} <i>▼</i></button>
+      <div class="menu"><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('resources/') }}#process">{{ t(UI.nav_process) }}</a><a href="{{ url('') }}#addons">{{ t(UI.nav_addons) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div></li>
+    <li><a href="{{ url('catalogue/') }}" class="pill hi" style="padding:6px 10px">{{ t(UI.nav_catalogue) }}</a></li>
+    <li><a href="#contact" class="ctc" data-open-contact>{{ t(UI.nav_contact) }}</a></li>
+    <li><a href="{{ url_other(path) }}" hreflang="{{ other }}" title="{{ t(UI.lang_switch_title) }}">{{ t(UI.lang_switch) }}</a></li>
+  </ul>
+  <button type="button" class="burger" data-burger data-open="{{ t(UI.menu) }}" data-close="{{ t(UI.close) }}" aria-expanded="false">{{ t(UI.menu) }}</button>
+</div></nav>
+<div class="mnav" id="mnav">
+  <div class="eyebrow">{{ t(UI.nav_models) }}</div>
+  {% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }} <span class="small">{{ num(m.area) }} m²</span></a>{% endfor %}
+  <div class="sub"><a href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a><a href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a></div>
+  <div class="eyebrow">Frest</div>
+  <a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a>
+  <div class="sub"><a href="{{ url_other(path) }}">{{ t(UI.lang_switch_title) }}</a></div>
+  <a href="#contact" class="ctc" data-open-contact>{{ t(UI.nav_contact) }} →</a>
 </div>
 
-<main id="main">
-{% block content %}{% endblock %}
-</main>
+<main id="main">{% block content %}{% endblock %}</main>
 
-<footer>
-  <div class="wrap">
-    <div class="cols">
-      <div>
-        <a class="brand" href="{{ url('') }}"><img src="{{ BASE }}static/logo-white.png" alt="frest" width="110" height="24"></a>
-        <p style="margin-top:14px;max-width:34ch">{{ t(SITE.tagline) }}</p>
-        <div class="contact"><a href="mailto:{{ SITE.email }}">{{ SITE.email }}</a><a href="tel:{{ SITE.phone|replace(' ','') }}">{{ SITE.phone_display }}</a></div>
-        <div class="social"><a href="{{ SITE.facebook }}" target="_blank" rel="noopener" aria-label="Facebook">f</a><a href="{{ SITE.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">ig</a></div>
-      </div>
-      <div><h4>{{ t(UI.footer_models) }}</h4><ul>{% for m in MODELS %}<li><a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }}</a></li>{% endfor %}<li><a href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></li><li><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></li></ul></div>
-      <div><h4>{{ t(UI.footer_company) }}</h4><ul><li><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a></li><li><a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a></li><li><a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a></li><li><a href="{{ url('') }}#process">{{ t(UI.nav_process) }}</a></li></ul></div>
-      <div><h4>{{ t(UI.footer_help) }}</h4><ul><li><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a></li><li><a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a></li><li><a href="#contact" data-enquire="">{{ t(UI.nav_contact) }}</a></li><li><a href="{{ url('privacy/') }}">{{ t(UI.privacy) }}</a></li><li><a href="{{ url('terms/') }}">{{ t(UI.terms) }}</a></li></ul></div>
-    </div>
-    <div class="fine"><span>© {{ year }} {{ SITE.company }}. {{ t(UI.rights) }}</span><span>{{ t(SITE.address) }} · <a href="{{ url_other(path) }}">{{ t(UI.lang_switch_title) }}</a></span></div>
+<footer class="foot"><div class="wrap">
+  <div class="row">
+    <div><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24" style="height:22px;width:auto"><div class="cap">{{ t(SITE.tagline) }} · {{ t(SITE.address) }} · <a href="mailto:{{ SITE.email }}">{{ SITE.email }}</a> · <a href="tel:{{ SITE.phone|replace(' ','') }}">{{ SITE.phone_display }}</a></div></div>
+    <div class="links">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }}</a>{% endfor %}<a href="{{ url('compare/') }}">{{ t(UI.nav_compare) }}</a><a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a><a href="{{ url('privacy/') }}">{{ t(UI.privacy) }}</a><a href="{{ url('terms/') }}">{{ t(UI.terms) }}</a><a href="#contact" data-open-contact>{{ t(UI.nav_contact) }}</a></div>
   </div>
-</footer>
+  <p class="small" style="margin-top:26px;max-width:80ch">{{ t(PACKAGES.note) }} {{ 'Attēli ir renderi vai uzbūvēto māju fotogrāfijas; apdare var atšķirties atkarībā no izvēlētās komplektācijas.' if lang=='lv' else 'Images are renders or photographs of built houses; finishes may differ with the chosen specification.' }} © {{ year }} {{ SITE.company }}. {{ t(UI.rights) }} · <a href="{{ SITE.facebook }}" rel="noopener" target="_blank">Facebook</a> · <a href="{{ SITE.instagram }}" rel="noopener" target="_blank">Instagram</a></p>
+</div></footer>
 
-<div class="modal" id="enquiry" role="dialog" aria-modal="true" aria-labelledby="enq-title">
-  <div class="box">
-    <button class="x" aria-label="{{ t(UI.close) }}">✕</button>
-    <div class="f-body">
-      <span class="eyebrow">Frest</span>
-      <h3 id="enq-title" style="margin-top:6px">{{ t(UI.form_title) }}</h3>
-      <p class="mute small" style="margin-top:6px">{{ t(UI.form_lead) }}</p>
-      <form class="f" action="{{ SITE.formsubmit }}" method="POST">
-        <input type="hidden" name="_subject" value="frest.lv — {{ t(UI.form_title) }}">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="{{ canonical }}{{ url(path) }}?sent=1">
-        <input type="hidden" name="_utm" value="">
-        <input type="hidden" name="_lang" value="{{ lang }}">
-        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
-        <div class="row2">
-          <label>{{ t(UI.f_name) }} *<input name="name" required autocomplete="name"></label>
-          <label>{{ t(UI.f_phone) }}<input name="phone" type="tel" autocomplete="tel"></label>
-        </div>
-        <label>{{ t(UI.f_email) }} *<input name="email" type="email" required autocomplete="email"></label>
-        <label>{{ t(UI.f_model) }}<select name="model"><option value="">{{ t(UI.f_undecided) }}</option>{% for m in MODELS %}<option value="{{ m.name }}">{{ m.name }} — {{ num(m.area) }} m²</option>{% endfor %}<option value="custom">{{ t(UI.f_custom) }}</option></select></label>
-        <div><div class="small mute" style="margin-bottom:6px">{{ t(UI.f_plot) }}</div><div class="radio"><label><input type="radio" name="plot" value="yes"> {{ t(UI.f_plot_yes) }}</label><label><input type="radio" name="plot" value="no"> {{ t(UI.f_plot_no) }}</label></div></div>
-        <label>{{ t(UI.f_message) }}<textarea name="message" rows="3" placeholder="{{ t(UI.f_message_ph) }}"></textarea></label>
-        <label class="chk"><input type="checkbox" name="consent" required value="yes"><span>{{ t(UI.f_consent) }}</span></label>
-        <div class="btn-row"><button class="btn btn-primary" type="submit">{{ t(UI.f_send) }}</button><span class="small mute">{{ t(UI.f_or) }} <a href="tel:{{ SITE.phone|replace(' ','') }}" style="text-decoration:underline">{{ t(UI.f_call) }} {{ SITE.phone_display }}</a></span></div>
-      </form>
-    </div>
-    <div class="f-thanks" hidden><span class="eyebrow">Frest</span><h3 style="margin-top:6px">{{ t(UI.thanks_title) }}</h3><p style="margin-top:10px" class="lead">{{ t(UI.thanks_text) }}</p></div>
+<div class="cmodal" id="contact" role="dialog" aria-modal="true" aria-labelledby="ctitle" data-thanks="{{ t(UI.thanks_text) }}"><div class="cbox">
+  <button class="x" type="button" aria-label="{{ t(UI.close) }}" data-close-contact>×</button>
+  <div class="cimg">{{ img('als110-evening-dk', '', '40vw')|safe }}<div class="cov"></div><div class="ctext"><img class="logo" src="{{ BASE }}static/logo-white.png" alt="frest"><div class="cap" style="color:var(--on-dark2)">{{ t(SITE.tagline) }}</div></div></div>
+  <div class="cform">
+    <div class="f-body"><div class="eyebrow">{{ t(UI.form_title) }}</div><h3 id="ctitle">{{ 'Atstājiet vārdu. Atbildam paši, vienas darba dienas laikā.' if lang=='lv' else 'Leave your name. We write back ourselves, within one working day.' }}</h3>
+    <form action="{{ SITE.formsubmit }}" method="POST">
+      <input type="hidden" name="_subject" value="frest.lv — {{ t(UI.form_title) }}"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="{{ canonical }}{{ url(path) }}?sent=1"><input type="hidden" name="_utm" value=""><input type="hidden" name="_lang" value="{{ lang }}"><input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
+      <label for="c-name">{{ t(UI.f_name) }}</label><input id="c-name" name="name" type="text" required autocomplete="name">
+      <label for="c-mail">{{ t(UI.f_email) }}</label><input id="c-mail" name="email" type="email" required autocomplete="email">
+      <label for="c-tel">{{ t(UI.f_phone) }}</label><input id="c-tel" name="phone" type="tel" autocomplete="tel">
+      <label for="c-model">{{ t(UI.f_model) }}</label><select id="c-model" name="model"><option value="">{{ t(UI.f_undecided) }}</option>{% for m in MODELS %}<option value="{{ m.name }}">{{ m.name }} — {{ num(m.area) }} m²</option>{% endfor %}<option value="custom">{{ t(UI.f_custom) }}</option></select>
+      <label for="c-msg">{{ t(UI.f_message) }}</label><textarea id="c-msg" name="message" rows="3" placeholder="{{ t(UI.f_message_ph) }}"></textarea>
+      <label class="chk"><input type="checkbox" name="consent" value="yes" required><span>{{ t(UI.f_consent) }}</span></label>
+      <button class="send" type="submit">{{ t(UI.f_send) }}</button>
+      <p class="note">{{ 'Bez jaunumu vēstulēm, bez sarakstiem. Ziņa nonāk vienā pastkastē — info@frest.lv — un atbild cilvēks. Datus glabājam tikai, lai atbildētu.' if lang=='lv' else 'No newsletter, no list. Your message goes to one inbox — info@frest.lv — and a person answers it. We keep your details only to reply.' }}</p>
+    </form></div>
+    <div class="f-thanks" hidden><div class="eyebrow">Frest</div><h3>{{ t(UI.thanks_title) }}</h3><p class="lede">{{ t(UI.thanks_text) }}</p></div>
   </div>
-</div>
+</div></div>
 <div class="lb" id="lb" role="dialog" aria-modal="true"><button class="x" aria-label="{{ t(UI.close) }}">✕</button><button class="pv" aria-label="previous">‹</button><img alt=""><div class="cap"></div><button class="nx" aria-label="next">›</button></div>
 <script src="{{ BASE }}static/site.js" defer></script>
 </body>

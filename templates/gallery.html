@@ -1,23 +1,17 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_gallery) }}</span><h1 style="margin-top:8px">{{ t(UI.gallery_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.gallery_lead) }}</p></div></section>
-<section class="section tight"><div class="wrap" data-gallery data-lb>
-  <div class="filters">
-    <button type="button" class="on" data-f="all">{{ t(UI.filter_all) }}</button>
-    <button type="button" data-f="built">{{ t(UI.filter_works) }}</button>
-    {% for m in MODELS %}<button type="button" data-f="{{ m.slug }}">{{ m.name }}</button>{% endfor %}
-    <button type="button" data-f="custom">{{ t(UI.nav_custom) }}</button>
-    <button type="button" data-f="factory">{{ t(UI.filter_factory) }}</button>
-  </div>
+<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_gallery) }}</div><h1 style="margin-top:18px">{{ t(UI.gallery_title) }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.gallery_lead) }} {{ 'Klikšķis uz attēla atver to ar pilnu aprakstu.' if lang=='lv' else 'Click a picture to open it with its full description.' }}</p></div></header>
+<section class="s tight"><div class="wrap" data-gallery data-lb>
+  <div class="filters"><button type="button" class="on" data-f="all">{{ t(UI.filter_all) }}</button><button type="button" data-f="built">{{ t(UI.filter_works) }}</button>{% for m in MODELS %}<button type="button" data-f="{{ m.slug }}">{{ m.name }}</button>{% endfor %}<button type="button" data-f="custom">{{ t(UI.nav_custom) }}</button><button type="button" data-f="factory">{{ t(UI.filter_factory) }}</button></div>
   <div class="masonry">
-    {% for w in WORKS %}{% for im,cap in w.images %}
-    <figure class="gitem" data-tags="built {{ w.tags|join(' ') }} {{ 'als-70' if 'als70' in w.tags }} {{ 'als-110' if 'als110' in w.tags }} {{ 'aura-70 aura-110' if 'aura' in w.tags }}" data-full="{{ imgsrc(im) }}" data-cap="{{ t(w.title) }} — {{ t(cap) }} · {{ t(w.location) }} {{ w.year }}">{{ img(im, t(w.title)+' — '+t(cap), '(max-width:560px) 100vw, (max-width:900px) 50vw, 33vw')|safe }}<figcaption>{{ t(w.title) }} — {{ t(cap) }}</figcaption></figure>
+    {% for w in WORKS %}{% for im,cap in w.images %}{% set d = IMGDESC.get(im) %}
+    <figure class="gitem" data-tags="built {{ w.tags|join(' ') }} {{ 'als-70' if 'als70' in w.tags }} {{ 'als-110' if 'als110' in w.tags }} {{ 'aura-70 aura-110' if 'aura' in w.tags }}" data-full="{{ imgsrc(im) }}" data-cap="{{ t(w.title) }} — {{ t(cap) }} · {{ t(w.location) }} {{ w.year }}" data-desc="{{ t(d) if d else '' }}">{{ img(im, t(w.title)+' — '+t(cap), '(max-width:560px) 100vw, (max-width:900px) 50vw, 33vw')|safe }}<figcaption>{{ t(w.title) }} — {{ t(cap) }}</figcaption></figure>
     {% endfor %}{% endfor %}
-    {% for m in MODELS %}{% for g in m.gallery[:4] %}
-    <figure class="gitem" data-tags="models {{ m.slug }}" data-full="{{ imgsrc(g.img) }}" data-cap="{{ m.name }} — {{ t(g.cap) }}">{{ img(g.img, m.name+' — '+t(g.cap), '(max-width:560px) 100vw, (max-width:900px) 50vw, 33vw')|safe }}<figcaption>{{ m.name }} — {{ t(g.cap) }}</figcaption></figure>
+    {% for m in MODELS %}{% for g in m.gallery[:4] %}{% set d = IMGDESC.get(g.img) %}
+    <figure class="gitem" data-tags="models {{ m.slug }}" data-full="{{ imgsrc(g.img) }}" data-cap="{{ m.name }} — {{ t(g.cap) }}" data-desc="{{ t(d) if d else '' }}">{{ img(g.img, m.name+' — '+t(g.cap), '(max-width:560px) 100vw, (max-width:900px) 50vw, 33vw')|safe }}<figcaption>{{ m.name }} — {{ t(g.cap) }}</figcaption></figure>
     {% endfor %}{% endfor %}
   </div>
 </div></section>
-<section class="section surface"><div class="wrap">{{ M.cta_band() }}</div></section>
+<section class="s alt"><div class="wrap">{{ M.cta_band() }}</div></section>
 {% endblock %}

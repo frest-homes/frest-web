@@ -1,42 +1,26 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-<section class="mhero" style="min-height:min(60vh,560px)">
-  {{ img('als110-interior-living', '', '100vw', 'bg', 'eager', 'high')|safe }}<div class="shade"></div>
-  <div class="wrap"><div class="hero-copy"><span class="eyebrow on-dark">{{ t(UI.nav_catalogue) }}</span><h1>{{ t(UI.cta_title) }}</h1><p class="lead">{{ t(UI.cta_lead) }}</p></div></div>
-</section>
-<section class="section"><div class="wrap">
-  <div class="split" style="align-items:start">
-    <div>
-      <span class="eyebrow">{{ 'Reģistrācija' if lang=='lv' else 'Registration' }}</span>
-      <h2 style="margin:8px 0 14px">{{ 'Pieprasīt piekļuvi' if lang=='lv' else 'Request access' }}</h2>
-      <p class="lead">{{ 'Aizpildiet formu — piekļuves saiti nosūtīsim uz jūsu e‑pastu. Katalogā: Als 70, Als 110, Aura 70 un Aura 110 ar pilnu komplektāciju un cenām.' if lang=='lv' else 'Fill in the form — we send the access link to your e-mail. In the catalogue: Als 70, Als 110, Aura 70 and Aura 110 with the full specification and prices.' }}</p>
-      <div class="note" style="margin-top:16px">{{ t(UI.cta_soon) }}</div>
-      <form class="f" action="{{ SITE.formsubmit }}" method="POST" id="regform">
-        <input type="hidden" name="_subject" value="frest.lv — kataloga piekļuves pieprasījums">
-        <input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_utm" value=""><input type="hidden" name="_lang" value="{{ lang }}">
-        <input type="hidden" name="_next" value="{{ canonical }}{{ url('catalogue/') }}?requested=1">
-        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
-        <div class="row2"><label>{{ t(UI.f_name) }} *<input name="name" required autocomplete="name"></label><label>{{ t(UI.f_phone) }}<input name="phone" type="tel" autocomplete="tel"></label></div>
-        <label>{{ t(UI.f_email) }} *<input name="email" type="email" required autocomplete="email"></label>
-        <label>{{ t(UI.f_model) }}<select name="model">{% for m in MODELS %}<option value="{{ m.name }}">{{ m.name }} — {{ num(m.area) }} m²</option>{% endfor %}<option value="all">{{ 'Visi modeļi' if lang=='lv' else 'All models' }}</option></select></label>
-        <div><div class="small mute" style="margin-bottom:6px">{{ t(UI.f_plot) }}</div><div class="radio"><label><input type="radio" name="plot" value="yes"> {{ t(UI.f_plot_yes) }}</label><label><input type="radio" name="plot" value="no"> {{ t(UI.f_plot_no) }}</label></div></div>
-        <label class="chk"><input type="checkbox" name="consent" required value="yes"><span>{{ t(UI.f_consent) }}</span></label>
-        <div class="btn-row"><button class="btn btn-primary" type="submit">{{ t(UI.register) }}</button></div>
-      </form>
-    </div>
-    <div>
-      <div class="tile" style="background:var(--dark);color:#fff;border:0">
-        <span class="eyebrow on-dark">{{ 'Katalogā' if lang=='lv' else 'In the catalogue' }}</span>
-        <ul style="list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px">
-          {% for x in [('Māja un plāns — telpu eksplikācija, ēkas parametri','House and plan — room schedule, building parameters'),('Personalizācija — fasādes, jumts, apdares ar cenu ietekmi','Personalisation — facades, roof, finishes with price impact'),('Konfigurators 7 grupās: jumts, sienas, grīdas, logi, vannasistabas, durvis, kājlīstes','Configurator in 7 groups: roof, walls, floors, windows, bathrooms, doors, skirting'),('Kopsumma ar PVN un bez PVN, €/m², salīdzinājums ar Frest piedāvājumu','Total with and without VAT, €/m², comparison with the Frest offer'),('Nosūtīt savu konfigurāciju — piedāvājums 30 dienu laikā','Send your configuration — offer within 30 days')] %}
-          <li style="display:flex;gap:10px"><span style="color:var(--cyan)">✓</span><span>{{ x[0] if lang=='lv' else x[1] }}</span></li>
-          {% endfor %}
-        </ul>
+<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_catalogue) }} · Als 70 · Als 110 · Aura 70 · Aura 110</div><h1 style="margin-top:18px">{{ t(UI.cta_title) }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.cta_lead) }}</p></div></header>
+<section class="s"><div class="wrap"><div class="cols">
+  <div><div class="eyebrow">01 — {{ 'Reģistrācija' if lang=='lv' else 'Registration' }}</div><h2>{{ 'Pieprasīt piekļuvi.' if lang=='lv' else 'Request access.' }}</h2><p class="lede">{{ 'Aizpildiet formu — piekļuves saiti nosūtīsim uz jūsu e‑pastu.' if lang=='lv' else 'Fill in the form — we send the access link to your e-mail.' }}</p><p class="small">{{ t(UI.cta_soon) }}</p>
+    <ul class="list" style="margin-top:22px">{% for x in [('Māja un plāns','House and plan','Telpu eksplikācija, ēkas parametri, AR zīmējumi','Room schedule, building parameters, drawings'),('Personalizācija','Personalisation','Fasādes, jumts, apdares — ar cenu ietekmi','Facades, roof, finishes — with price impact'),('Konfigurators 7 grupās','Configurator in 7 groups','Jumts, sienas, grīdas, logi, vannasistabas, durvis, kājlīstes','Roof, walls, floors, windows, bathrooms, doors, skirting'),('Kopsumma un piedāvājums','Total and offer','Ar PVN un bez, €/m², nosūtīt Frest — piedāvājums 30 dienās','With and without VAT, €/m², send to Frest — offer within 30 days')] %}<li><span class="no">{{ loop.index }}</span><div><b>{{ x[0] if lang=='lv' else x[1] }}</b><p>{{ x[2] if lang=='lv' else x[3] }}</p></div></li>{% endfor %}</ul></div>
+  <div class="tile" style="padding:32px">
+    <form class="cform" action="{{ SITE.formsubmit }}" method="POST" id="regform" style="display:block">
+      <input type="hidden" name="_subject" value="frest.lv — kataloga piekļuves pieprasījums"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_utm" value=""><input type="hidden" name="_lang" value="{{ lang }}"><input type="hidden" name="_next" value="{{ canonical }}{{ url('catalogue/') }}?requested=1"><input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
+      <div class="cbox" style="display:block;border:0;background:transparent;max-height:none">
+      <label for="r-name">{{ t(UI.f_name) }}</label><input id="r-name" name="name" required autocomplete="name">
+      <label for="r-mail">{{ t(UI.f_email) }}</label><input id="r-mail" name="email" type="email" required autocomplete="email">
+      <label for="r-tel">{{ t(UI.f_phone) }}</label><input id="r-tel" name="phone" type="tel" autocomplete="tel">
+      <label for="r-model">{{ t(UI.f_model) }}</label><select id="r-model" name="model">{% for m in MODELS %}<option value="{{ m.name }}">{{ m.name }} — {{ num(m.area) }} m²</option>{% endfor %}<option value="all">{{ 'Visi modeļi' if lang=='lv' else 'All models' }}</option></select>
+      <label>{{ t(UI.f_plot) }}</label><div class="btn-row" style="gap:20px;font-size:14px"><label style="display:flex;gap:8px;align-items:center;margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)"><input type="radio" name="plot" value="yes" style="width:auto"> {{ t(UI.f_plot_yes) }}</label><label style="display:flex;gap:8px;align-items:center;margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)"><input type="radio" name="plot" value="no" style="width:auto"> {{ t(UI.f_plot_no) }}</label></div>
+      <label class="chk"><input type="checkbox" name="consent" required value="yes"><span>{{ t(UI.f_consent) }}</span></label>
+      <button class="send" type="submit">{{ t(UI.register) }}</button>
       </div>
-      <div class="ph" style="border-radius:16px;overflow:hidden;margin-top:16px">{{ img('als110-plan-ground', 'Als 110', '40vw')|safe }}</div>
-    </div>
+    </form>
   </div>
+</div>
+<div data-lb style="margin-top:56px" class="cols eq">{{ M.fig('als110-plan-ground', 'Als 110 · plāns' if lang=='lv' else 'Als 110 · plan', 'h', '50vw', False) }}{{ M.fig('als110-interior-living', 'Als 110 · virtuve‑viesistaba' if lang=='lv' else 'Als 110 · kitchen–living', 'h') }}</div>
 </div></section>
-<script>if(location.search.includes('requested=1')){document.addEventListener('DOMContentLoaded',()=>{const f=document.getElementById('regform');f.innerHTML='<div class="note" style="background:var(--cyan-tint)"><b>{{ t(UI.thanks_title) }}</b> {{ t(UI.thanks_text) }}</div>';});}</script>
+<script>if(location.search.includes('requested=1')){document.addEventListener('DOMContentLoaded',()=>{const f=document.getElementById('regform');f.innerHTML='<div class="eyebrow">Frest</div><h3 style="font-weight:300;margin-top:8px">{{ t(UI.thanks_title) }}</h3><p class="lede">{{ t(UI.thanks_text) }}</p>';});}</script>
 {% endblock %}

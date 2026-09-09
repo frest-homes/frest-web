@@ -1,63 +1,53 @@
-{% macro model_card(m, cls='') %}
-<a class="mcard rv {{ cls }}" href="{{ url('model/'+m.slug+'/') }}">
-  <div class="ph">{{ img(m.card, m.name, '(max-width:640px) 100vw, (max-width:1100px) 50vw, 30vw')|safe }}</div>
-  <div class="bd">
-    <div><span class="tag">{{ m.series }}</span></div>
-    <h3>{{ m.name }}</h3>
-    <p class="mute small">{{ t(m.tagline) }}</p>
-    <div class="facts">
-      <div><b>{{ num(m.area) }} m²</b><span>{{ t(UI.living_area) }}</span></div>
-      <div><b>{{ m.bedrooms }}</b><span>{{ t(UI.bedrooms) }}</span></div>
-      <div><b>{{ m.bathrooms }}</b><span>{{ t(UI.bathrooms) }}</span></div>
-    </div>
-    <div class="price"><div><small>{{ t(UI.starting_from) }}</small><b>{{ eur(m.price_base) }}</b></div><span class="btn-link">{{ t(UI.view_model) }}</span></div>
-  </div>
+{# Editorial figure: overlay caption (uppercase) + optional description under it; lightbox-enabled when inside [data-lb] #}
+{% macro fig(name, cap, ratio='h', sizes='(max-width:900px) 100vw, 50vw', desc=True, style='', loading='lazy', prio=None) %}
+{% set d = IMGDESC.get(name) %}
+<figure class="figwrap" style="{{ style }}">
+  <div class="fig {{ ratio }} zoom p-{{ IMGPOS.get(name,'m') }}" data-full="{{ imgsrc(name) }}" data-cap="{{ cap }}" data-desc="{{ t(d) if d else '' }}">{{ img(name, cap, sizes, '', loading, prio)|safe }}<figcaption>{{ cap }}</figcaption></div>
+  {% if desc and d %}<p class="figdesc">{{ t(d) }}</p>{% endif %}
+</figure>
+{% endmacro %}
+
+{% macro model_card(m) %}
+<a class="mcard rv" href="{{ url('model/'+m.slug+'/') }}">
+  <div class="eyebrow">{{ m.series }} · {{ t(m.style) }}</div>
+  <div class="fig f" style="margin-top:12px">{{ img(m.card, m.name, '(max-width:640px) 100vw, 25vw')|safe }}<figcaption>{{ m.name }} · {{ num(m.area) }} m²</figcaption></div>
+  <span class="nm">{{ m.name }}</span><span class="tg">{{ t(m.tagline) }}</span>
+  <div class="row"><span>{{ m.bedrooms }} {{ t(UI.bedrooms)|lower }} · {{ m.bathrooms }} {{ t(UI.bathrooms)|lower }}</span><b>{{ t(UI.from) }} {{ eur(m.price_base) }}</b></div>
 </a>
 {% endmacro %}
 
 {% macro personaliser(models, id, model=None, color='nordic-gray', show_pick=True) %}
 <div class="pz" id="{{ id }}" data-personalise='{{ pz_data(models) }}' data-model="{{ model or models[0].slug }}" data-color="{{ color }}">
-  <div class="stage"></div>
+  <figure class="stage"><figcaption></figcaption></figure>
   <div class="ctl">
-    {% if show_pick and models|length > 1 %}
-    <div><div class="lbl">{{ t(UI.nav_models) }}</div><div class="models-pick">{% for m in models %}<button type="button" data-model="{{ m.slug }}">{{ m.name }}</button>{% endfor %}</div></div>
-    {% endif %}
+    {% if show_pick and models|length > 1 %}<div><div class="lbl">{{ t(UI.nav_models) }}</div><div class="models-pick">{% for m in models %}<button type="button" data-model="{{ m.slug }}">{{ m.name }}</button>{% endfor %}</div></div>{% endif %}
     <div><div class="lbl">{{ t(UI.colour) }}</div><div class="swatches">{% for c in COLORS %}<button type="button" class="sw" data-color="{{ c.id }}"><i style="background:{{ c.hex }}"></i>{{ t(c.name) }}</button>{% endfor %}</div></div>
     <div><div class="lbl">{{ t(UI.roof) }}</div><div class="seg">{% for r in ROOFS %}<button type="button" data-roof="{{ r.id }}">{{ t(r.name) }}</button>{% endfor %}</div></div>
     <div class="cfg-now"><div class="lbl" style="margin-bottom:4px">{{ t(UI.current_config) }}</div><b>—</b></div>
-    {% if show_pick %}<div class="btn-row"><a class="btn btn-dark" data-model-link href="#">{{ t(UI.view_model) }}</a><a class="btn btn-outline" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>{% endif %}
+    {% if show_pick %}<div class="btn-row"><a class="btn dark" data-model-link href="#">{{ t(UI.view_model) }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>{% endif %}
   </div>
 </div>
 {% endmacro %}
 
-{% macro cta_band() %}
-<div class="cta rv">
-  <div>
-    <span class="eyebrow on-dark">{{ t(UI.nav_catalogue) }}</span>
-    <h2 style="margin:10px 0 14px">{{ t(UI.cta_title) }}</h2>
-    <p class="lead">{{ t(UI.cta_lead) }}</p>
-    <div class="btn-row" style="margin-top:24px"><a class="btn btn-primary" href="{{ url('catalogue/') }}">{{ t(UI.register) }}</a><a class="btn btn-outline on-dark" href="#contact" data-enquire="">{{ t(UI.request) }}</a></div>
-  </div>
-  <ul>
-    <li>{{ 'Katra komplektācijas izvēle ar cenu — jumts, apdare, grīdas, logi, vannasistabas' if lang=='lv' else 'Every specification option with its price — roof, finishes, floors, windows, bathrooms' }}</li>
-    <li>{{ 'Konfigurators ar kopsummu ar PVN un bez PVN' if lang=='lv' else 'Configurator with a running total, with and without VAT' }}</li>
-    <li>{{ 'Telpu eksplikācija, ēkas parametri, moduļi un piebūves' if lang=='lv' else 'Room schedule, building parameters, modules and annexes' }}</li>
-    <li>{{ 'Saglabātas konfigurācijas un piedāvājums 30 dienu laikā' if lang=='lv' else 'Saved configurations and an offer within 30 days' }}</li>
-  </ul>
+{% macro cta_band(dark=True) %}
+<div class="cta {{ 'dark' if dark }} rv">
+  <div><div class="eyebrow">{{ t(UI.nav_catalogue) }}</div><h3 style="font-size:30px;margin-top:8px;font-weight:300">{{ t(UI.cta_title) }}</h3><p class="{{ 'small' if not dark else '' }}" style="margin:8px 0 0;max-width:60ch;{{ 'color:var(--on-dark2)' if dark }}">{{ t(UI.cta_lead) }}</p></div>
+  <div style="text-align:right"><div class="btn-row" style="justify-content:flex-end"><a class="btn" href="{{ url('catalogue/') }}">{{ t(UI.register) }}</a><a class="btn ghost {{ 'on-dark' if dark }}" href="#contact" data-open-contact>{{ t(UI.request) }}</a></div></div>
 </div>
+{% endmacro %}
+
+{% macro next_cards(items) %}
+<div class="next">{% for eyebrow, label, href in items %}<a href="{{ href }}"><div class="eyebrow">{{ eyebrow }}</div><span>{{ label }}</span></a>{% endfor %}</div>
 {% endmacro %}
 
 {% macro faq_list(items, limit=None) %}
-<div class="acc">
-  {% for q,a in (items[:limit] if limit else items) %}
-  <details{% if loop.first %} open{% endif %}><summary>{{ t(q) }}</summary><div class="a">{{ t(a) }}</div></details>
-  {% endfor %}
-</div>
+<ul class="list">{% for q,a in (items[:limit] if limit else items) %}<li><span class="no">{{ '%02d'|format(loop.index) }}</span><div><b>{{ t(q) }}</b><p>{{ t(a) }}</p></div></li>{% endfor %}</ul>
 {% endmacro %}
 
-{% macro work_tile(w, big=False) %}
-<a class="work rv {{ 'big' if big }}" href="{{ url('projects/') }}#{{ w.id }}">
-  {{ img(w.images[0][0], t(w.title), '(max-width:560px) 100vw, 33vw')|safe }}
-  <div class="cap"><b>{{ t(w.title) }}</b><span>{{ t(w.location) }} · {{ w.year }}</span></div>
-</a>
+{% macro spread(sp, tint='l', extra='', cls='') %}
+<section class="sp {{ cls }}"><div class="bg {{ sp.pos or '' }}">{{ img(sp.img, '', '100vw')|safe }}</div><div class="tint {{ tint }}"></div>
+  <div class="in {{ extra }}"><div class="folio"><span>{{ t(sp.folio[0]) }}</span><span>{{ t(sp.folio[1]) }}</span></div>
+  <div class="dk md">{{ t(sp.kicker)|safe }}</div>
+  {{ caller() if caller }}
+</div></section>
 {% endmacro %}
