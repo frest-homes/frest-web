@@ -260,7 +260,7 @@ def build_lang(lang):
                    alts=alternates(key), self_url=abs_url(key, lang),
                    schemas=[json.dumps(s, ensure_ascii=False) for s in schemas],
                    switch_url=abs_url(key, other_of(lang)), preload_img=PRELOAD.get(key),
-                   noindex=(key in NOINDEX))
+                   og_image=PRELOAD.get(key, 'als110-day-dk'), noindex=(key in NOINDEX))
         written.append(write(path, env.get_template(tpl).render(**ctx)))
 
     # models
@@ -281,7 +281,7 @@ def build_lang(lang):
                    schemas=[json.dumps(prod, ensure_ascii=False),
                             json.dumps(breadcrumbs([home_crumb, (t(UI['nav_models']), abs_url('compare', lang)), (m['name'], self_u)]), ensure_ascii=False)],
                    noindex=False, switch_url=abs_url('model_dir', other_of(lang)) + m['slug'] + '/',
-                   preload_img=m['hero'],
+                   preload_img=m['hero'], og_image=m['hero'],
                    works=[w for w in WORKS if set(w['tags']) & set(m['works_tags'])], others=[x for x in MODELS if x is not m])
         written.append(write(path, env.get_template('model.html').render(**ctx)))
 
@@ -298,7 +298,7 @@ def build_lang(lang):
                    title=f"{a['title']} | Frest", desc=a['desc'],
                    alts=[],   # LV and EN articles are different pieces, not translations
                    self_url=self_u, schemas=schemas, noindex=False,
-                   switch_url=abs_url('knowledge', other_of(lang)), preload_img=a['hero'],
+                   switch_url=abs_url('knowledge', other_of(lang)), preload_img=a['hero'], og_image=a['hero'],
                    more=[x for x in arts if x is not a][:3])
         written.append(write(path, env.get_template('article.html').render(**ctx)))
 
