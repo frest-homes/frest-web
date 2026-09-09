@@ -10,5 +10,5 @@
   <div class="road">{% for h,p in PROCESS %}<div><div class="y">0{{ loop.index }}</div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div>{% endfor %}</div>
   <div class="cols eq" style="margin-top:44px" data-lb>{{ M.fig('factory-kit-assembly', 'Rūpnīcas komplekts objektā' if lang=='lv' else 'The factory kit on site', 'h') }}{{ M.fig('als-kettingskov-modular-assembly', 'Paneļu montāža · Kettingskov' if lang=='lv' else 'Panel assembly · Kettingskov', 'h') }}</div>
 </div></section>
-<section class="s"><div class="wrap">{{ M.cta_band() }}{{ M.next_cards([(t(UI.nav_models), t(UI.compare_title), url('compare/')), (t(UI.nav_projects), t(UI.projects_title), url('projects/'))]) }}</div></section>
+<section class="s"><div class="wrap">{{ M.cta_band() }}{{ M.next_cards([(t(UI.nav_models), t(UI.compare_title), url('compare')), (t(UI.nav_projects), t(UI.projects_title), url('projects'))]) }}</div></section>
 {% endblock %}

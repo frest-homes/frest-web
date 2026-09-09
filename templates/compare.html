@@ -14,9 +14,9 @@
     <tr class="total"><td>{{ t(UI.complete_price) }} <span class="small">· {{ t(PACKAGES.complete.sub) }}, {{ t(UI.with_vat) }}</span></td>{% for m in MODELS %}<td>{{ eur(m.price_complete) }}</td>{% endfor %}</tr>
     <tr><td>€ / m² ({{ t(PACKAGES.complete.name) }})</td>{% for m in MODELS %}<td>{{ eur((m.price_complete / m.area)|round) }}</td>{% endfor %}</tr>
     <tr class="same"><td>{{ t(TIMING.kit_l) }}</td>{% for m in MODELS %}<td>{{ t(TIMING.kit) }}</td>{% endfor %}</tr>
-    <tr><td></td>{% for m in MODELS %}<td><a class="pill ok" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }} →</a></td>{% endfor %}</tr>
+    <tr><td></td>{% for m in MODELS %}<td><a class="pill ok" href="{{ murl(m.slug) }}">{{ t(UI.view_model) }} →</a></td>{% endfor %}</tr>
   </tbody></table></div>
 <p class="small" style="margin-top:20px;max-width:80ch">{{ t(PACKAGES.note) }}</p>
 </div></section>
-<section class="s alt"><div class="wrap"><div class="cols"><div><div class="eyebrow">{{ t(UI.nav_which) }}</div><h2>{{ t(UI.quiz_title) }}</h2></div><div><p class="lede">{{ t(UI.quiz_lead) }}</p><a class="btn dark" href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a></div></div>{{ M.cta_band() }}</div></section>
+<section class="s alt"><div class="wrap"><div class="cols"><div><div class="eyebrow">{{ t(UI.nav_which) }}</div><h2>{{ t(UI.quiz_title) }}</h2></div><div><p class="lede">{{ t(UI.quiz_lead) }}</p><a class="btn dark" href="{{ url('which') }}">{{ t(UI.quiz_title) }}</a></div></div>{{ M.cta_band() }}</div></section>
 {% endblock %}

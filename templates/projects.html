@@ -19,7 +19,7 @@
 {% set first = w.images[0] %}
 <section class="s {{ 'alt' if loop.index is even }}" id="{{ w.id }}"><div class="wrap">
   <div class="cols"><div><div class="eyebrow">{{ t(w.location) }} · {{ w.year }}</div><h2>{{ t(w.title) }}</h2>
-    <div class="btn-row">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="pill ok" href="{{ url('model/'+ ('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') +'/') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }} →</a>{% endif %}{% endfor %}</div></div>
+    <div class="btn-row">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="pill ok" href="{{ murl('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }} →</a>{% endif %}{% endfor %}</div></div>
   <div><p class="lede">{{ t(w.text) }}</p></div></div>
   <div data-lb>
     <div style="margin-top:36px">{{ M.fig(first[0], t(w.title)+' — '+t(first[1]), 'w', '100vw') }}</div>
@@ -30,5 +30,5 @@
   </div>
 </div></section>
 {% endfor %}
-<section class="s"><div class="wrap">{{ M.cta_band() }}{{ M.next_cards([(t(UI.nav_gallery), t(UI.gallery_title)+' — '+ ('visi attēli' if lang=='lv' else 'all pictures'), url('gallery/')), (t(UI.nav_custom), t(UI.custom_title), url('custom-design/'))]) }}</div></section>
+<section class="s"><div class="wrap">{{ M.cta_band() }}{{ M.next_cards([(t(UI.nav_gallery), t(UI.gallery_title)+' — '+ ('visi attēli' if lang=='lv' else 'all pictures'), url('gallery')), (t(UI.nav_custom), t(UI.custom_title), url('custom'))]) }}</div></section>
 {% endblock %}

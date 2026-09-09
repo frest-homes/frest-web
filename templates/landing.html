@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% set L = lang == 'lv' %}
+{% block head %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":{{ title|tojson }},"description":{{ desc|tojson }},"speakable":{"@type":"SpeakableSpecification","cssSelector":[".lp-h1"]}}</script>
+{% endblock %}
+{% block content %}
+
+{# ---------------- hero: the render, the promise, and the form, all above the fold ---------------- #}
+<header class="lp-hero">
+  <div class="lp-bg">{{ img('als110-day-dk', 'Als 110', '100vw', '', 'eager', 'high')|safe }}<div class="lp-tint"></div></div>
+  <div class="wrap lp-grid">
+    <div class="lp-copy">
+      <div class="lp-kicker">{{ 'Als un Aura sērija · Latvija' if L else 'Als and Aura series · shipped and erected in Ireland' }}</div>
+      <h1 class="lp-h1">{{ ('Rūpnīcā ražota māja.<br>Cena zināma pirms<br>pirmās lāpstas.' if L else 'A factory-built home.<br>Priced before<br>the first dig.')|safe }}</h1>
+      <p class="lp-lede">{{ 'Siltinātas sienas, jumts, logi un fasāde top rūpnīcā un tiek uzceltas uz jūsu pamatiem dažās dienās. Als 110 rūpnīcas komplekts ar montāžu — 128 000 € ar PVN.' if L else 'Insulated walls, roof, windows and facade are built indoors and erected on your prepared foundation in days. The Als 110 kit, supplied and erected, is €128,000 including VAT.' }}</p>
+      <ul class="lp-chips">
+        <li><b>{{ '4' }}</b> {{ 'modeļi 68–110 m²' if L else 'models, 68–110 m²' }}</li>
+        <li><b>{{ '290–300 mm' }}</b> {{ 'siltinājuma sienā' if L else 'wall insulation' }}</li>
+        <li><b>{{ 'A' if L else 'A0-ready' }}</b> {{ 'energoklase' if L else 'fabric' }}</li>
+        <li><b>{{ '8' }}</b> {{ 'mājas vienā sezonā Dānijā' if L else 'homes in one season in Denmark' }}</li>
+      </ul>
+    </div>
+
+    <div class="lp-form" id="get">
+      <form class="leadform" data-lead data-source="landing">
+        <div class="lf-head">
+          <b>{{ 'Saņemiet katalogu ar cenām' if L else 'Get the catalogue with prices' }}</b>
+          <span class="small">{{ 'Pilnā komplektācija, cena katrai izvēlei un konfigurators ar summu. Piekļuvi atsūtām uzreiz uz e-pastu.' if L else 'Full specification, a price for every option and a configurator with a running total. Access is emailed to you straight away.' }}</span>
+        </div>
+        <label>{{ 'Vārds' if L else 'Name' }}<input type="text" name="name" required autocomplete="name" placeholder="{{ 'Jūsu vārds' if L else 'Your name' }}"></label>
+        <label>{{ 'E-pasts' if L else 'Email' }}<input type="email" name="email" required autocomplete="email" placeholder="{{ 'jusu@epasts.lv' if L else 'you@example.ie' }}"></label>
+        <label>{{ 'Tālrunis' if L else 'Phone' }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ '+371 …' if L else '+353 …' }}"></label>
+        <div class="lf-row">
+          <label>{{ 'Kur būvēsiet?' if L else 'Where are you building?' }}
+            <select name="region">
+              {% if L %}
+              <option value="">Izvēlieties</option><option>Rīga un Pierīga</option><option>Vidzeme</option><option>Kurzeme</option><option>Zemgale</option><option>Latgale</option><option>Ārpus Latvijas</option>
+              {% else %}
+              <option value="">Choose</option><option>Ireland — Leinster</option><option>Ireland — Munster</option><option>Ireland — Connacht</option><option>Ireland — Ulster</option><option>Northern Ireland</option><option>Other country</option>
+              {% endif %}
+            </select></label>
+          <label>{{ 'Kad?' if L else 'When?' }}
+            <select name="timing">
+              <option value="">{{ 'Izvēlieties' if L else 'Choose' }}</option>
+              <option>{{ 'Šogad' if L else 'This year' }}</option>
+              <option>{{ 'Nākamgad' if L else 'Next year' }}</option>
+              <option>{{ 'Vēl pētu' if L else 'Still researching' }}</option>
+            </select></label>
+        </div>
+        <label class="lf-stage">{{ 'Kurā posmā esat?' if L else 'Where are you in the process?' }}
+          <select name="stage">
+            <option value="">{{ 'Izvēlieties' if L else 'Choose' }}</option>
+            <option>{{ 'Vēl meklēju zemesgabalu' if L else 'Still looking for a site' }}</option>
+            <option>{{ 'Zemesgabals ir' if L else 'I have the site' }}</option>
+            <option>{{ 'Ir būvatļauja vai projekts' if L else 'I have planning permission' }}</option>
+            <option>{{ 'Esmu būvnieks vai arhitekts' if L else 'I am a builder or architect' }}</option>
+          </select></label>
+        <input type="text" name="_company" class="lf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn" type="submit">{{ 'Saņemt katalogu' if L else 'Send me the catalogue' }}</button>
+        <p class="lf-fine">{{ 'Nosūtot, jūs piekrītat, ka sazināmies par jūsu projektu. Datus nenododam trešajām personām.' if L else 'By sending this you agree that we may contact you about your project. We never pass your details to anyone else.' }} <a href="{{ url('privacy') }}">{{ t(UI.privacy) }}</a></p>
+        <div class="lf-done" hidden>
+          <b>{{ 'Paldies — katalogs ceļā.' if L else 'Thank you — the catalogue is on its way.' }}</b>
+          <p class="small">{{ 'Pārbaudiet e-pastu (arī mēstuļu mapi). Tur ir piekļuves saite un kods. Ja kaut kas nepienāk, rakstiet uz info@frest.lv.' if L else 'Check your inbox, and your spam folder. It contains the access link and your code. If nothing arrives, write to info@frest.lv.' }}</p>
+        </div>
+        <div class="lf-err" hidden></div>
+      </form>
+    </div>
+  </div>
+</header>
+
+{# ---------------- the honest price table ---------------- #}
+<section class="s"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">01 — {{ t(UI.nav_pricing) }}</div>
+    <h2>{{ 'Katrai cenai ir nosaukta pakete.' if L else 'Every price names its package.' }}</h2></div>
+    <div><p class="lede">{{ 'Rūpnīcas komplekts ar montāžu ir tas, ko mēs uzbūvējam. Pilnā pakete ir tā pati māja ar apdari, elektrību un apkuri. Pamati, zeme, pieslēgumi un būvatļauja nav nevienā no tām.' if L else 'The factory kit with assembly is what we build. The complete package is the same house with finishes, electrics and heating — a Latvian service, not an Irish one. Foundation, site, connections and planning are in neither.' }}</p></div></div>
+
+  <div class="tbl" style="margin-top:34px"><table>
+    <tr><th>{{ 'Modelis' if L else 'Model' }}</th><th>{{ t(UI.living_area) }}</th><th>{{ t(UI.bedrooms) }}</th>
+        <th class="num">{{ t(PACKAGES.base.sub) }} · {{ t(UI.with_vat) }}</th>
+        {% if L %}<th class="num">{{ t(PACKAGES.complete.name) }} · {{ t(UI.with_vat) }}</th>{% endif %}<th></th></tr>
+    {% for m in MODELS %}<tr>
+      <td><b>{{ m.name }}</b> <span class="small">· {{ t(m.tagline) }}</span></td>
+      <td>{{ num(m.area) }} m²</td><td>{{ m.bedrooms }}</td>
+      <td class="num">{{ eur(m.price_base) }}</td>
+      {% if L %}<td class="num">{{ eur(m.price_complete) }}</td>{% endif %}
+      <td><a class="pill ok" href="{{ murl(m.slug) }}">{{ t(UI.view_model) }} →</a></td></tr>{% endfor %}
+  </table></div>
+
+  <div class="cols eq" style="margin-top:30px">
+    <div class="paper">
+      <div class="eyebrow" style="color:var(--acc-ink)">{{ 'Iekļauts komplektā' if L else 'In the kit' }}</div>
+      <ul class="list">{% for i in PACKAGES.base.includes %}<li>{{ t(i) }}</li>{% endfor %}</ul>
+    </div>
+    <div class="paper">
+      <div class="eyebrow" style="color:var(--ash)">{{ 'Nav nevienā paketē' if L else 'In no package' }}</div>
+      <ul class="list">{% for i in PACKAGES.not_in_any %}<li>{{ t(i) }}</li>{% endfor %}
+        {% if not L %}<li>Irish certification, BER assessment and assigned certifier</li><li>Mechanical and electrical installation</li><li>Internal finishes</li>{% endif %}</ul>
+    </div>
+  </div>
+  <p class="small" style="margin-top:18px;max-width:82ch">{{ t(PACKAGES.note) }}</p>
+</div></section>
+
+{# ---------------- the four models, visually ---------------- #}
+<section class="s alt"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">02 — {{ t(UI.nav_models) }}</div>
+    <h2>{{ 'Četri modeļi, viena konstrukcija.' if L else 'Four models, one structure.' }}</h2></div>
+    <div><p class="lede">{{ 'Als sērija ir plašāka un garāka, Aura — kompaktāka un mūsdienīgāka. Visām vienāda siena, jumts un logu klase.' if L else 'The Als series is longer and more generous, Aura more compact and contemporary. All four share the same wall, roof and glazing class.' }}</p></div></div>
+  <div class="cols4" style="margin-top:34px">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>
+</div></section>
+
+{# ---------------- proof ---------------- #}
+{{ M.spread(SPREADS.cover, 'd', '', 'sp') }}
+
+<section class="s"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">03 — {{ 'Kā tas notiek' if L else 'How it works' }}</div>
+    <h2>{{ 'No sarunas līdz mājai zem jumta.' if L else 'From first call to a house under roof.' }}</h2></div>
+    <div><p class="lede">{{ t(TIMING.note) }}</p></div></div>
+  <div class="promise" style="margin-top:32px">
+  {% set steps = [('01','Saruna un modeļa izvēle','Kopā izejam cauri zemesgabalam, ģimenei un budžetam. Jūs saņemat katalogu ar cenām un konfiguratoru.'),
+                  ('02','Piedāvājums un tāme','Tāme pa sadaļām, nevis viena summa. Katrai izvēlei sava rinda.'),
+                  ('03','Projektēšana un saskaņošana','Arhitektūra, novietne, topogrāfija un būvatļauja — kārtojam mēs.'),
+                  ('04','Ražošana un montāža','Kamēr top pamati, rūpnīcā top sienas. Montāža objektā — dienas.')] if L else
+                 [('01','Talk and model choice','We go through the site, the family and the budget together. You get the catalogue with prices and the configurator.'),
+                  ('02','Quotation','A quotation broken into sections, with a line for every choice — not one number.'),
+                  ('03','Your Irish team','Your engineer designs the foundation to our loads and setting-out. We supply the structural documentation your certifier needs.'),
+                  ('04','Manufacture and erection','Panels are made while your slab cures, then shipped and erected in days.')] %}
+  {% for n,hh,p in steps %}<div class="p"><div class="n">{{ n }}</div><b>{{ hh }}</b><p>{{ p }}</p></div>{% endfor %}
+  </div>
+  {% if not L %}
+  <aside class="anote" style="margin-top:28px">We are honest about the shape of this: Frest manufactures in Latvia and erects on your prepared foundation. We do not have an Irish office, and we do not carry out foundations, services, fit-out or certification in Ireland — those stay with your local team, and we give them the drawings and calculations they need.</aside>
+  {% endif %}
+</div></section>
+
+{# ---------------- knowledge teaser: SEO depth + trust ---------------- #}
+<section class="s alt"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">04 — {{ 'Zināšanu bāze' if L else 'Knowledge base' }}</div>
+    <h2>{{ 'Vispirms izlasiet, tad rakstiet mums.' if L else 'Read first, then talk to us.' }}</h2></div>
+    <div><p class="lede">{{ 'Mēs uzrakstījām to, ko paši gribējām zināt pirms pirmās mājas — ar skaitļiem un bez pārdošanas.' if L else 'We wrote down what we wanted to know before the first house — with numbers, and without a sales pitch.' }}</p>
+    <a class="btn dark" href="{{ url('knowledge') }}">{{ 'Visi raksti' if L else 'All articles' }}</a></div></div>
+  <div class="cols3" style="margin-top:30px">
+    {% for x in ARTICLES[:3] %}<a class="tile" href="{{ aurl(x.slug) }}"><div class="eyebrow">{{ x.topic }} · {{ x.read }} min</div><h3>{{ x.title }}</h3><p class="small">{{ x.desc[:130] }}…</p></a>{% endfor %}
+  </div>
+</div></section>
+
+{# ---------------- FAQ ---------------- #}
+<section class="s"><div class="wrap"><div class="cols">
+  <div><div class="eyebrow">05 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if L else 'The honest version.' }}</h2>
+    <p class="small"><a href="{{ url('resources') }}">{{ t(UI.all_faq) }} →</a></p></div>
+  <div>{{ M.faq_list(FAQ, 5) }}</div>
+</div></div></section>
+
+{# ---------------- closing form ---------------- #}
+<section class="s alt" id="get2"><div class="wrap">
+  <div class="lp-close">
+    <div>
+      <div class="eyebrow">{{ 'Nākamais solis' if L else 'Next step' }}</div>
+      <h2>{{ 'Katalogs ar cenām, jūsu e-pastā.' if L else 'The catalogue with prices, in your inbox.' }}</h2>
+      <p class="lede">{{ 'Pilnā komplektācija ar cenu katrai izvēlei — jumts, apdare, grīdas, logi, vannasistabas, durvis — un konfigurators ar summu.' if L else 'The full specification with a price for every option — roof, finishes, floors, windows, bathrooms, doors — and a configurator with a running total.' }}</p>
+      <p class="small">{{ 'Vai zvaniet uzreiz:' if L else 'Or call us now:' }} <a href="tel:{{ SITE.phone|replace(' ','') }}"><b>{{ SITE.phone_display }}</b></a> · <a href="mailto:{{ SITE.email }}">{{ SITE.email }}</a></p>
+    </div>
+    <form class="leadform" data-lead data-source="landing-bottom">
+      <label>{{ 'Vārds' if L else 'Name' }}<input type="text" name="name" required autocomplete="name"></label>
+      <label>{{ 'E-pasts' if L else 'Email' }}<input type="email" name="email" required autocomplete="email"></label>
+      <label>{{ 'Tālrunis' if L else 'Phone' }}<input type="tel" name="phone" autocomplete="tel"></label>
+      <input type="text" name="_company" class="lf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">{{ 'Saņemt katalogu' if L else 'Send me the catalogue' }}</button>
+      <div class="lf-done" hidden><b>{{ 'Paldies — katalogs ceļā.' if L else 'Thank you — the catalogue is on its way.' }}</b><p class="small">{{ 'Pārbaudiet e-pastu un mēstuļu mapi.' if L else 'Check your inbox and your spam folder.' }}</p></div>
+      <div class="lf-err" hidden></div>
+    </form>
+  </div>
+</div></section>
+{% endblock %}

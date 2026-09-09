@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block content %}
+<header class="hero"><div class="wrap fadein">
+  <div class="eyebrow">{{ 'Zināšanu bāze' if lang=='lv' else 'Knowledge base' }} · {{ ARTICLES|length }} {{ 'raksti' if lang=='lv' else 'articles' }}</div>
+  <h1 style="margin-top:18px">{{ ('Viss, ko gribējām zināt,<br>pirms uzbūvējām pirmo māju.' if lang=='lv' else 'Everything we wanted to know<br>before we built the first house.')|safe }}</h1>
+  <p class="lede" style="margin-top:22px">{{ 'Izmaksas, pamati, būvatļauja, energoklase, kredīts un grafiks — bez pārdošanas, ar skaitļiem un ar to, kas parasti netiek pateikts.' if lang=='lv' else 'Costs, foundations, planning, Part L and BER, finance and programme — written for Irish self-builders, with numbers and with the parts that usually go unsaid.' }}</p>
+</div></header>
+
+<section class="s"><div class="wrap">
+  <div class="klist">
+  {% for a in ARTICLES %}
+    <a class="kcard rv" href="{{ aurl(a.slug) }}">
+      <div class="fig f">{{ img(a.hero, a.title, '(max-width:900px) 100vw, 33vw')|safe }}<figcaption>{{ a.topic }}</figcaption></div>
+      <div class="kbody">
+        <div class="eyebrow">{{ a.topic }} · {{ a.read }} min</div>
+        <h2>{{ a.title }}</h2>
+        <p class="small">{{ a.desc }}</p>
+        <span class="cap2" style="color:var(--acc-ink)">{{ 'Lasīt →' if lang=='lv' else 'Read →' }}</span>
+      </div>
+    </a>
+  {% endfor %}
+  </div>
+</div></section>
+
+<section class="s alt"><div class="wrap">
+  <div class="cols"><div><div class="eyebrow">{{ 'Nākamais solis' if lang=='lv' else 'Next step' }}</div>
+    <h2>{{ 'Konkrēti skaitļi jūsu mājai.' if lang=='lv' else 'Real numbers for your house.' }}</h2></div>
+    <div><p class="lede">{{ 'Katalogā ir pilnā komplektācija ar cenu katrai izvēlei un konfigurators ar summu. Reģistrējieties, un mēs to atsūtām.' if lang=='lv' else 'The catalogue holds the full specification with a price for every option and a configurator with a running total. Register and we send it over.' }}</p>
+      <a class="btn dark" href="{{ url('landing') }}">{{ t(UI.register) }}</a></div></div>
+  {{ M.cta_band() }}
+</div></section>
+{% endblock %}

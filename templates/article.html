@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block content %}
+<header class="ahero">
+  <div class="ahero-img">{{ img(a.hero, a.title, '100vw', '', 'eager', 'high')|safe }}<div class="hs-tint"></div></div>
+  <div class="wrap ahero-body">
+    <div class="eyebrow"><a href="{{ url('knowledge') }}" style="color:inherit">{{ 'Zināšanu bāze' if lang=='lv' else 'Knowledge base' }}</a> · {{ a.topic }} · {{ a.read }} min</div>
+    <h1>{{ a.title }}</h1>
+    <p class="tg">{{ a.desc }}</p>
+  </div>
+</header>
+
+<article class="s art"><div class="wrap">
+  <div class="artwrap">
+    <div class="artbody">
+    {% for b in a.body %}
+      {% set kind = b[0] %}
+      {% if kind == 'p' %}<p>{{ b[1]|safe }}</p>
+      {% elif kind == 'h2' %}<h2>{{ b[1] }}</h2>
+      {% elif kind == 'h3' %}<h3>{{ b[1] }}</h3>
+      {% elif kind == 'ul' %}<ul class="alist">{% for i in b[1] %}<li>{{ i|safe }}</li>{% endfor %}</ul>
+      {% elif kind == 'ol' %}<ol class="alist num">{% for i in b[1] %}<li>{{ i|safe }}</li>{% endfor %}</ol>
+      {% elif kind == 'note' %}<aside class="anote">{{ b[1]|safe }}</aside>
+      {% elif kind == 'table' %}<div class="tbl atbl"><table><tr>{% for th in b[1]['head'] %}<th>{{ th }}</th>{% endfor %}</tr>
+        {% for row in b[1]['rows'] %}<tr>{% for td in row %}<td>{{ td|safe }}</td>{% endfor %}</tr>{% endfor %}</table></div>
+      {% elif kind == 'img' %}{{ M.fig(b[1], b[2], 'w', '(max-width:900px) 100vw, 70vw') }}
+      {% elif kind == 'faq' %}<h3 class="afaqh">{{ 'Biežākie jautājumi' if lang=='lv' else 'Frequently asked questions' }}</h3>
+        <div class="faq">{% for q, ans in b[1] %}<details><summary>{{ q }}</summary><p>{{ ans|safe }}</p></details>{% endfor %}</div>
+      {% elif kind == 'cta' %}
+        <aside class="acta">
+          <div>
+            <b>{{ 'Gribat konkrētu skaitli savai mājai?' if lang=='lv' else 'Want a real number for your house?' }}</b>
+            <p class="small">{{ 'Katalogā ir pilnā komplektācija ar cenu katrai izvēlei. Reģistrējieties — atsūtām piekļuvi.' if lang=='lv' else 'The catalogue holds the full specification with a price for every option. Register and we send you access.' }}</p>
+          </div>
+          <a class="btn" href="{{ url('landing') }}">{{ 'Saņemt katalogu' if lang=='lv' else 'Get the catalogue' }}</a>
+        </aside>
+      {% endif %}
+    {% endfor %}
+    </div>
+
+    <aside class="artside">
+      <div class="sidebar">
+        <b>{{ 'Frest īsumā' if lang=='lv' else 'Frest in short' }}</b>
+        <p class="small">{{ 'Projektējam, ražojam un uzbūvējam skandināvu dizaina mājas Latvijā un Dānijā kopš 2019. gada. Rūpnīcas komplekts ar montāžu no 92 000 € ar PVN — bez pamatiem un iekšējās apdares.' if lang=='lv' else 'We manufacture insulated timber frame kits in Latvia and erect them on your prepared foundation. In Ireland we supply and erect the kit; foundation, services, fit-out and certification are arranged locally.' }}</p>
+        <p class="cap2"><a href="{{ url('pricing') }}" style="color:var(--acc-ink)">{{ t(UI.nav_pricing) }} →</a></p>
+      </div>
+      <div class="sidebar" style="margin-top:18px">
+        <b>{{ 'Modeļi' if lang=='lv' else 'Models' }}</b>
+        <ul class="list">{% for m in MODELS %}<li><a href="{{ murl(m.slug) }}">{{ m.name }}</a> <span class="small">{{ num(m.area) }} m²</span></li>{% endfor %}</ul>
+      </div>
+    </aside>
+  </div>
+
+  <div style="margin-top:56px">
+    <div class="eyebrow">{{ 'Lasiet arī' if lang=='lv' else 'Read next' }}</div>
+    <div class="cols3" style="margin-top:20px">
+      {% for x in more %}<a class="tile" href="{{ aurl(x.slug) }}"><div class="eyebrow">{{ x.topic }} · {{ x.read }} min</div><h3>{{ x.title }}</h3><p class="small">{{ x.desc[:120] }}…</p></a>{% endfor %}
+    </div>
+  </div>
+  {{ M.cta_band() }}
+</div></article>
+{% endblock %}

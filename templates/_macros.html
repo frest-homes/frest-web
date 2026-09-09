@@ -8,7 +8,7 @@
 {% endmacro %}
 
 {% macro model_card(m) %}
-<a class="mcard rv" href="{{ url('model/'+m.slug+'/') }}">
+<a class="mcard rv" href="{{ murl(m.slug) }}">
   <div class="eyebrow">{{ m.series }} · {{ t(m.style) }}</div>
   <div class="fig f" style="margin-top:12px">{{ img(m.card, m.name, '(max-width:640px) 100vw, 25vw')|safe }}<figcaption>{{ m.name }} · {{ num(m.area) }} m²</figcaption></div>
   <span class="nm">{{ m.name }}</span><span class="tg">{{ t(m.tagline) }}</span>
@@ -24,7 +24,7 @@
     <div><div class="lbl">{{ t(UI.colour) }}</div><div class="swatches">{% for c in COLORS %}<button type="button" class="sw" data-color="{{ c.id }}"><i style="background:{{ c.hex }}"></i>{{ t(c.name) }}</button>{% endfor %}</div></div>
     <div><div class="lbl">{{ t(UI.roof) }}</div><div class="seg">{% for r in ROOFS %}<button type="button" data-roof="{{ r.id }}">{{ t(r.name) }}</button>{% endfor %}</div></div>
     <div class="cfg-now"><div class="lbl" style="margin-bottom:4px">{{ t(UI.current_config) }}</div><b>—</b></div>
-    {% if show_pick %}<div class="btn-row"><a class="btn dark" data-model-link href="#">{{ t(UI.view_model) }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>{% endif %}
+    {% if show_pick %}<div class="btn-row"><a class="btn dark" data-model-link href="#">{{ t(UI.view_model) }}</a><a class="btn ghost" href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a></div>{% endif %}
   </div>
 </div>
 {% endmacro %}
@@ -32,7 +32,7 @@
 {% macro cta_band(dark=True) %}
 <div class="cta {{ 'dark' if dark }} rv">
   <div><div class="eyebrow">{{ t(UI.nav_catalogue) }}</div><h3 style="font-size:30px;margin-top:8px;font-weight:300">{{ t(UI.cta_title) }}</h3><p class="{{ 'small' if not dark else '' }}" style="margin:8px 0 0;max-width:60ch;{{ 'color:var(--on-dark2)' if dark }}">{{ t(UI.cta_lead) }}</p></div>
-  <div style="text-align:right"><div class="btn-row" style="justify-content:flex-end"><a class="btn" href="{{ url('catalogue/') }}">{{ t(UI.register) }}</a><a class="btn ghost {{ 'on-dark' if dark }}" href="#contact" data-open-contact>{{ t(UI.request) }}</a></div></div>
+  <div style="text-align:right"><div class="btn-row" style="justify-content:flex-end"><a class="btn" href="{{ url('catalogue') }}">{{ t(UI.register) }}</a><a class="btn ghost {{ 'on-dark' if dark }}" href="#contact" data-open-contact>{{ t(UI.request) }}</a></div></div>
 </div>
 {% endmacro %}
 

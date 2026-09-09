@@ -10,7 +10,7 @@
     <div class="folio"><span>{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }} · {{ t(m.style) }}</span><span>{{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }} · {{ cnt(m.bathrooms,'bathrooms') }}</span></div>
     <h1>{{ m.name }}</h1>
     <p class="lede" style="margin-top:18px">{{ t(m.lead) }}</p>
-    <div class="btn-row" style="margin-top:22px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost on-dark" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+    <div class="btn-row" style="margin-top:22px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost on-dark" href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a></div>
     <div class="kpis">
       <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div></div>
       <div class="stat"><div class="n">{{ m.bedrooms }} / {{ m.bathrooms }}</div><div class="l">{{ t(UI.bedrooms) }} / {{ t(UI.bathrooms) }}</div></div>
@@ -46,7 +46,7 @@
       {% if m.rooms_list %}<div class="eyebrow" style="margin-bottom:8px">{{ t(UI.room_legend) }}</div>
       <div class="tbl"><table class="rooms">{% for n,name,a in m.rooms_list %}<tr><td>{{ n }}</td><td>{{ t(name) }}</td><td>{{ num(a) }} m²</td></tr>{% endfor %}<tr class="total"><td></td><td>{{ t(UI.living_area) }}</td><td>{{ num(m.area) }} m²</td></tr></table></div>
       {% else %}<div class="tile"><div class="eyebrow">{{ t(UI.room_legend) }}</div><p class="small">{{ 'Detalizēta telpu eksplikācija ar platībām ir katalogā reģistrētiem lietotājiem.' if lang=='lv' else 'A detailed room schedule with areas is in the catalogue for registered users.' }}</p></div>{% endif %}
-      <p class="cap2" style="color:var(--ash);margin-top:18px"><a href="{{ url('catalogue/') }}">{{ t(UI.open_catalogue) }} →</a></p>
+      <p class="cap2" style="color:var(--ash);margin-top:18px"><a href="{{ url('catalogue') }}">{{ t(UI.open_catalogue) }} →</a></p>
     </div>
   </div>
 </div></section>
@@ -79,7 +79,7 @@
         <div><span>{{ t(UI.addon_total) }} · {{ t(UI.complete_price) }}</span><b>—</b></div>
         <div style="text-align:right"><span>{{ t(UI.living_area) }}</span><b data-area>—</b></div>
       </div>
-      <div class="btn-row" style="margin-top:18px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+      <div class="btn-row" style="margin-top:18px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost" href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a></div>
     </div>
   </div>
 
@@ -127,7 +127,7 @@
 
 {% if works %}
 <section class="s" id="built"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">{{ '07' if m.addons else '06' }} — {{ t(UI.built_examples) }}</div><h2>{{ 'Kur šī māja jau stāv.' if lang=='lv' else 'Where this house already stands.' }}</h2></div><div><p class="lede">{% for w in works %}<a href="{{ url('projects/') }}#{{ w.id }}">{{ t(w.title) }}</a> — {{ t(w.location) }}, {{ w.year }}{{ '. ' if not loop.last }}{% endfor %}</p></div></div>
+  <div class="cols"><div><div class="eyebrow">{{ '07' if m.addons else '06' }} — {{ t(UI.built_examples) }}</div><h2>{{ 'Kur šī māja jau stāv.' if lang=='lv' else 'Where this house already stands.' }}</h2></div><div><p class="lede">{% for w in works %}<a href="{{ url('projects') }}#{{ w.id }}">{{ t(w.title) }}</a> — {{ t(w.location) }}, {{ w.year }}{{ '. ' if not loop.last }}{% endfor %}</p></div></div>
   <div class="cols3" style="margin-top:36px" data-lb>{% for w in works[:3] %}{{ M.fig(w.images[0][0], t(w.title)+' · '+w.year|string, 'f', '33vw') }}{% endfor %}</div>
 </div></section>
 {% endif %}
@@ -136,7 +136,7 @@
   <div class="cols"><div><div class="eyebrow">{{ 'Nākamie soļi' if lang=='lv' else 'Next steps' }}</div><h2>{{ 'No piedāvājuma līdz atslēgām.' if lang=='lv' else 'From offer to keys.' }}</h2></div>
   <div><ul class="list">{% for h,p in PROCESS %}<li><span class="no">{{ loop.index }}</span><div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div></li>{% endfor %}</ul></div></div>
   {{ M.cta_band() }}
-  {% set nx = [] %}{% for o in others[:2] %}{% set _ = nx.append((o.series, o.name+' — '+t(o.tagline), url('model/'+o.slug+'/'))) %}{% endfor %}{{ M.next_cards(nx) }}
+  {% set nx = [] %}{% for o in others[:2] %}{% set _ = nx.append((o.series, o.name+' — '+t(o.tagline), murl(o.slug))) %}{% endfor %}{{ M.next_cards(nx) }}
 </div></section>
 <div class="sticky-cta"><div><b>{{ m.name }}</b><small>{{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }} · {{ t(m.style) }}</small></div><a class="btn" style="padding:10px 16px" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request_short) }}</a></div>
 {% endblock %}

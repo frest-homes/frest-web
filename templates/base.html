@@ -5,21 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title }}</title>
 <meta name="description" content="{{ desc }}">
-{% if canonical %}
-<link rel="canonical" href="{{ canonical }}{{ url(path) }}">
-<link rel="alternate" hreflang="lv" href="{{ canonical }}{{ BASE }}{{ path }}">
-<link rel="alternate" hreflang="en" href="{{ canonical }}{{ BASE }}en/{{ path }}">
-<link rel="alternate" hreflang="x-default" href="{{ canonical }}{{ BASE }}{{ path }}">
-{% endif %}
-<meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ desc }}"><meta property="og:type" content="website">
-<meta property="og:image" content="{{ canonical }}{{ imgsrc(og_image|default('als-kettingskov-aerial'), 1600) }}"><meta property="og:locale" content="{{ 'lv_LV' if lang=='lv' else 'en_GB' }}">
-<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff">
+{% if self_url %}<link rel="canonical" href="{{ self_url }}">{% endif %}
+{% for k, u in alts %}<link rel="alternate" hreflang="{{ k }}" href="{{ u }}">
+{% endfor %}
+{% if noindex %}<meta name="robots" content="noindex,follow">{% else %}<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">{% endif %}
+<meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ desc }}">
+<meta property="og:type" content="{{ 'article' if page=='article' else 'website' }}"><meta property="og:site_name" content="Frest Homes">
+{% if self_url %}<meta property="og:url" content="{{ self_url }}">{% endif %}
+<meta property="og:image" content="{{ canonical }}{{ imgsrc(og_image|default('als110-day-dk'), 1600) }}">
+<meta property="og:image:width" content="1600"><meta property="og:image:alt" content="{{ title }}">
+<meta property="og:locale" content="{{ GEO.lang|replace('-','_') }}">
+{% for k, u in alts %}{% if k != lang and k != 'x-default' %}<meta property="og:locale:alternate" content="{{ 'lv_LV' if k=='lv' else 'en_IE' }}">{% endif %}{% endfor %}
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#f2f7f8">
 <link rel="icon" href="{{ BASE }}static/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="{{ BASE }}static/editorial.css"><link rel="stylesheet" href="{{ BASE }}static/site.css">
+<script src="{{ BASE }}static/leads-config.js"></script><script src="{{ BASE }}static/leads.js" defer></script>
 {% block head %}{% endblock %}
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Frest Homes","legalName":"SIA Frest","url":"{{ canonical }}{{ BASE }}","email":"{{ SITE.email }}","telephone":"{{ SITE.phone }}","address":{"@type":"PostalAddress","addressLocality":"Riga","addressCountry":"LV"},"sameAs":["{{ SITE.facebook }}","{{ SITE.instagram }}"]}</script>
+{% for s in schemas %}<script type="application/ld+json">{{ s|safe }}</script>
+{% endfor %}
+{% if preload_img %}<link rel="preload" as="image" href="{{ imgsrc(preload_img, 1600) }}" imagesrcset="{{ srcset(preload_img) }}" imagesizes="100vw">{% endif %}
 </head>
 <body data-autocontact="{{ '1' if page=='home' else '0' }}">
 <a class="sr" href="#main">{{ 'Uz saturu' if lang=='lv' else 'Skip to content' }}</a>
@@ -27,26 +33,26 @@
   <a class="brand" href="{{ url('') }}" aria-label="Frest Homes"><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24"></a>
   <ul>
     <li class="dd"><button type="button" class="{{ 'on' if page=='model' }}">{{ t(UI.nav_models) }} <i>▼</i></button>
-      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}" data-c="{{ 'aura' if m.series=='Aura' else 'als' }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }}</small></a>{% endfor %}<a href="{{ url('compare/') }}" data-c="tool">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}" data-c="tool">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
-    <li><a href="{{ url('projects/') }}" class="{{ 'on' if page=='projects' }}">{{ t(UI.nav_projects) }}</a></li>
-    <li><a href="{{ url('gallery/') }}" class="{{ 'on' if page=='gallery' }}">{{ t(UI.nav_gallery) }}</a></li>
-    <li><a href="{{ url('pricing/') }}" class="{{ 'on' if page=='pricing' }}">{{ t(UI.nav_pricing) }}</a></li>
-    <li><a href="{{ url('custom-design/') }}" class="{{ 'on' if page=='custom' }}">{{ t(UI.nav_custom) }}</a></li>
+      <div class="menu">{% for m in MODELS %}<a href="{{ murl(m.slug) }}" data-c="{{ 'aura' if m.series=='Aura' else 'als' }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }}</small></a>{% endfor %}<a href="{{ url('compare') }}" data-c="tool">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('which') }}" data-c="tool">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
+    <li><a href="{{ url('projects') }}" class="{{ 'on' if page=='projects' }}">{{ t(UI.nav_projects) }}</a></li>
+    <li><a href="{{ url('gallery') }}" class="{{ 'on' if page=='gallery' }}">{{ t(UI.nav_gallery) }}</a></li>
+    <li><a href="{{ url('pricing') }}" class="{{ 'on' if page=='pricing' }}">{{ t(UI.nav_pricing) }}</a></li>
+    <li><a href="{{ url('custom') }}" class="{{ 'on' if page=='custom' }}">{{ t(UI.nav_custom) }}</a></li>
     <li class="dd"><button type="button" class="{{ 'on' if page in ['resources','team'] }}">{{ t(UI.nav_resources) }} <i>▼</i></button>
-      <div class="menu"><a href="{{ url('resources/') }}" data-c="tool">{{ t(UI.nav_faq) }}</a><a href="{{ url('resources/') }}#process" data-c="tool">{{ t(UI.nav_process) }}</a><a href="{{ url('') }}#addons" data-c="tool">{{ t(UI.nav_addons) }}</a><a href="{{ url('team/') }}" data-c="als">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}" data-c="aura">{{ t(UI.nav_catalogue) }}</a></div></li>
-    <li><a href="{{ url('catalogue/') }}" class="pill hi" style="padding:6px 10px">{{ t(UI.nav_catalogue) }}</a></li>
+      <div class="menu"><a href="{{ url('resources') }}" data-c="tool">{{ t(UI.nav_faq) }}</a><a href="{{ url('resources') }}#process" data-c="tool">{{ t(UI.nav_process) }}</a><a href="{{ url('') }}#addons" data-c="tool">{{ t(UI.nav_addons) }}</a><a href="{{ url('team') }}" data-c="als">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue') }}" data-c="aura">{{ t(UI.nav_catalogue) }}</a></div></li>
+    <li><a href="{{ url('catalogue') }}" class="pill hi" style="padding:6px 10px">{{ t(UI.nav_catalogue) }}</a></li>
     <li><a href="#contact" class="ctc" data-open-contact>{{ t(UI.nav_contact) }}</a></li>
-    <li><a href="{{ url_other(path) }}" hreflang="{{ other }}" title="{{ t(UI.lang_switch_title) }}">{{ t(UI.lang_switch) }}</a></li>
+    <li><a href="{{ switch_url }}" hreflang="{{ other }}" title="{{ t(UI.lang_switch_title) }}">{{ t(UI.lang_switch) }}</a></li>
   </ul>
   <button type="button" class="burger" data-burger data-open="{{ t(UI.menu) }}" data-close="{{ t(UI.close) }}" aria-expanded="false">{{ t(UI.menu) }}</button>
 </div></nav>
 <div class="mnav" id="mnav">
   <div class="eyebrow">{{ t(UI.nav_models) }}</div>
-  {% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }} <span class="small">{{ num(m.area) }} m²</span></a>{% endfor %}
-  <div class="sub"><a href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a><a href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}</a></div>
+  {% for m in MODELS %}<a href="{{ murl(m.slug) }}">{{ m.name }} <span class="small">{{ num(m.area) }} m²</span></a>{% endfor %}
+  <div class="sub"><a href="{{ url('compare') }}">{{ t(UI.compare_models) }}</a><a href="{{ url('which') }}">{{ t(UI.quiz_title) }}</a></div>
   <div class="eyebrow">Frest</div>
-  <a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a>
-  <div class="sub"><a href="{{ url_other(path) }}">{{ t(UI.lang_switch_title) }}</a></div>
+  <a href="{{ url('projects') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a>
+  <div class="sub"><a href="{{ switch_url }}">{{ t(UI.lang_switch_title) }}</a></div>
   <a href="#contact" class="ctc" data-open-contact>{{ t(UI.nav_contact) }} →</a>
 </div>
 
@@ -55,7 +61,7 @@
 <footer class="foot"><div class="wrap">
   <div class="row">
     <div><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24" style="height:22px;width:auto"><div class="cap">{{ t(SITE.tagline) }} · {{ t(SITE.address) }} · <a href="mailto:{{ SITE.email }}">{{ SITE.email }}</a> · <a href="tel:{{ SITE.phone|replace(' ','') }}">{{ SITE.phone_display }}</a></div></div>
-    <div class="links">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }}</a>{% endfor %}<a href="{{ url('compare/') }}">{{ t(UI.nav_compare) }}</a><a href="{{ url('projects/') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery/') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing/') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom-design/') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a><a href="{{ url('privacy/') }}">{{ t(UI.privacy) }}</a><a href="{{ url('terms/') }}">{{ t(UI.terms) }}</a><a href="#contact" data-open-contact>{{ t(UI.nav_contact) }}</a></div>
+    <div class="links">{% for m in MODELS %}<a href="{{ murl(m.slug) }}">{{ m.name }}</a>{% endfor %}<a href="{{ url('compare') }}">{{ t(UI.nav_compare) }}</a><a href="{{ url('projects') }}">{{ t(UI.nav_projects) }}</a><a href="{{ url('gallery') }}">{{ t(UI.nav_gallery) }}</a><a href="{{ url('pricing') }}">{{ t(UI.nav_pricing) }}</a><a href="{{ url('custom') }}">{{ t(UI.nav_custom) }}</a><a href="{{ url('resources') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('team') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a><a href="{{ url('privacy') }}">{{ t(UI.privacy) }}</a><a href="{{ url('terms') }}">{{ t(UI.terms) }}</a><a href="#contact" data-open-contact>{{ t(UI.nav_contact) }}</a></div>
   </div>
   <p class="small" style="margin-top:26px;max-width:80ch">{{ t(PACKAGES.note) }} {{ 'Attēli ir renderi vai uzbūvēto māju fotogrāfijas; apdare var atšķirties atkarībā no izvēlētās komplektācijas.' if lang=='lv' else 'Images are renders or photographs of built houses; finishes may differ with the chosen specification.' }} © {{ year }} {{ SITE.company }}. {{ t(UI.rights) }} · <a href="{{ SITE.facebook }}" rel="noopener" target="_blank">Facebook</a> · <a href="{{ SITE.instagram }}" rel="noopener" target="_blank">Instagram</a></p>
 </div></footer>

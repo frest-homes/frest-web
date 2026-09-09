@@ -12,7 +12,7 @@
       <h1>{{ m.name }}</h1>
       <p class="tg">{{ t(m.tagline) }}</p>
       <div class="hs-specs"><span><b>{{ num(m.area) }} m²</b> {{ 'telpu platība' if lang=='lv' else 'living area' }}</span><span>{{ cnt(m.bedrooms,'bedrooms') }} · {{ cnt(m.bathrooms,'bathrooms') }}</span></div>
-      <div class="btn-row"><a class="btn" href="{{ url('model/'+m.slug+'/') }}">{{ 'Skatīt modeli' if lang=='lv' else 'See the model' }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+      <div class="btn-row"><a class="btn" href="{{ murl(m.slug) }}">{{ 'Skatīt modeli' if lang=='lv' else 'See the model' }}</a><a class="btn ghost" href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a></div>
     </div>{% endfor %}
   </div>
   <button class="hs-arrow p" type="button" aria-label="{{ 'Iepriekšējais modelis' if lang=='lv' else 'Previous model' }}">‹</button>
@@ -31,7 +31,7 @@
       <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div><div class="d">{{ '300 mm siltinājums, trīskārši logi' if lang=='lv' else '300 mm insulation, triple glazing' }}</div></div>
       <div class="stat"><div class="n">4</div><div class="l">{{ 'Modeļi' if lang=='lv' else 'Models' }}</div><div class="d">{{ 'Als un Aura sērijas' if lang=='lv' else 'Als and Aura series' }}</div></div>
       <div class="stat"><div class="n">2019</div><div class="l">{{ 'Kopš' if lang=='lv' else 'Since' }}</div><div class="d">{{ 'Latvijā un Dānijā' if lang=='lv' else 'in Latvia and Denmark' }}</div></div>
-      <div class="stat"><div class="n">{{ eur((MODELS|selectattr('slug','equalto','als-110')|first).price_base) }}</div><div class="l">Als 110 · {{ t(PACKAGES.base.sub) }}</div><div class="d">{{ t(UI.with_vat) }} · {{ t(UI.kit_excl)|lower }}<br><a href="{{ url('pricing/') }}">{{ t(UI.see_packages) }}</a></div></div>
+      <div class="stat"><div class="n">{{ eur((MODELS|selectattr('slug','equalto','als-110')|first).price_base) }}</div><div class="l">Als 110 · {{ t(PACKAGES.base.sub) }}</div><div class="d">{{ t(UI.with_vat) }} · {{ t(UI.kit_excl)|lower }}<br><a href="{{ url('pricing') }}">{{ t(UI.see_packages) }}</a></div></div>
     </div></div>
   </div>
   <div class="promise">
@@ -51,7 +51,7 @@
 {% call M.spread(SPREADS.cover, 'l', 'top') %}{% endcall %}
 <section class="s" style="padding-top:44px"><div class="wrap"><div class="cols eq" style="align-items:start">
   <p class="lede" style="margin:0">{{ 'Kettingskovā, Dienviddānijā, 2022. gadā vienā sezonā uzbūvējām astoņas Als mājas: Als 70 un Als 110 ar melnu, pelēku un koka fasādi. Katrai savs zemesgabals, sava terase pret sauli un tas pats rūpnīcas komplekts.' if lang=='lv' else 'In Kettingskov, southern Denmark, we built eight Als homes in one season of 2022: Als 70 and Als 110 with black, gray and wood facades. Each with its own plot, its own terrace facing the sun and the same factory kit.' }}</p>
-  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Publicējam vienu cenu: rūpnīcas komplektu ar montāžu, ar PVN — Als 110 no 128 000 €. Tajā nav pamatu darbu, iekšējās apdares, zemes, pieslēgumu un atļaujas. Pilnā pakete ar apdari, elektrību un apkuri un visu paku salīdzinājums ir sadaļā Cenas, precīza cena — tāmē pēc zemesgabala.' if lang=='lv' else 'We publish one headline price: the factory kit with assembly, incl. VAT — Als 110 from €128,000. It does not include foundation works, interior finishing, land, connections or the permit. The Complete package and the full package comparison are on the Pricing page; the exact price comes in an estimate once the plot is known.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('pricing/') }}">{{ t(UI.see_packages) }}</a></p></div>
+  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Publicējam vienu cenu: rūpnīcas komplektu ar montāžu, ar PVN — Als 110 no 128 000 €. Tajā nav pamatu darbu, iekšējās apdares, zemes, pieslēgumu un atļaujas. Pilnā pakete ar apdari, elektrību un apkuri un visu paku salīdzinājums ir sadaļā Cenas, precīza cena — tāmē pēc zemesgabala.' if lang=='lv' else 'We publish one headline price: the factory kit with assembly, incl. VAT — Als 110 from €128,000. It does not include foundation works, interior finishing, land, connections or the permit. The Complete package and the full package comparison are on the Pricing page; the exact price comes in an estimate once the plot is known.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('pricing') }}">{{ t(UI.see_packages) }}</a></p></div>
 </div></div></section>
 
 {# ---- the four models ---- #}
@@ -60,9 +60,9 @@
   <div><p class="lede">{{ t(UI.models_lead) }}</p><p class="small">{{ 'Katrs modelis pieejams kā Pamata pakete (rūpnīcas komplekts ar montāžu) vai Pilnā pakete (atslēgas risinājums). Četras fasādes krāsas un divi jumta tipi bez papildu maksas.' if lang=='lv' else 'Every model comes as a Base package (factory kit with assembly) or a Complete package (turnkey). Four facade colours and two roof types at no extra cost.' }}</p></div></div>
   <div class="cols4" style="margin-top:36px">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>
   <div class="trio">
-    <a href="{{ url('compare/') }}"><div class="eyebrow">{{ t(UI.nav_compare) }}</div><span>{{ t(UI.compare_title) }}</span><small>{{ 'Visi četri blakus, tikai atšķirības, €/m²' if lang=='lv' else 'All four side by side, differences only, €/m²' }}</small></a>
-    <a href="{{ url('configure/') }}"><div class="eyebrow">{{ t(UI.nav_which) }}</div><span>{{ t(UI.quiz_title) }}</span><small>{{ t(UI.quiz_lead) }}</small></a>
-    <a href="{{ url('catalogue/') }}"><div class="eyebrow">{{ t(UI.nav_catalogue) }}</div><span>{{ t(UI.cta_title) }}</span><small>{{ 'Katra izvēle ar cenu, konfigurators, piedāvājums' if lang=='lv' else 'Every option priced, configurator, offer' }}</small></a>
+    <a href="{{ url('compare') }}"><div class="eyebrow">{{ t(UI.nav_compare) }}</div><span>{{ t(UI.compare_title) }}</span><small>{{ 'Visi četri blakus, tikai atšķirības, €/m²' if lang=='lv' else 'All four side by side, differences only, €/m²' }}</small></a>
+    <a href="{{ url('which') }}"><div class="eyebrow">{{ t(UI.nav_which) }}</div><span>{{ t(UI.quiz_title) }}</span><small>{{ t(UI.quiz_lead) }}</small></a>
+    <a href="{{ url('catalogue') }}"><div class="eyebrow">{{ t(UI.nav_catalogue) }}</div><span>{{ t(UI.cta_title) }}</span><small>{{ 'Katra izvēle ar cenu, konfigurators, piedāvājums' if lang=='lv' else 'Every option priced, configurator, offer' }}</small></a>
   </div>
 </div></section>
 
@@ -77,7 +77,7 @@
   <div class="island" style="display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:start;margin-top:26px">
     <div><p class="lede">{{ t(SPREADS.factory.text) }}</p>
       <div class="facts2">{% for n,l in SPREADS.factory.stats %}<div class="stat"><div class="n">{{ n }}</div><div class="l">{{ t(l) }}</div></div>{% endfor %}</div>
-      <p class="cap2"><a href="{{ url('resources/') }}#process" style="color:var(--acc)">{{ 'Process soli pa solim →' if lang=='lv' else 'The process step by step →' }}</a></p></div>
+      <p class="cap2"><a href="{{ url('resources') }}#process" style="color:var(--acc)">{{ 'Process soli pa solim →' if lang=='lv' else 'The process step by step →' }}</a></p></div>
     <div class="sidebar"><b>{{ 'Kas ir rūpnīcas komplekts' if lang=='lv' else 'What the factory kit is' }}</b><p class="small">{{ 'Siltināti sienu paneļi ar tvaika barjeru un apšuvumu, jumta konstrukcija un segums, logi un ārdurvis, pabeigta fasāde un montāža objektā. Pamatu plātne — standarts, ko liek vietējais būvnieks pēc mūsu rasējuma.' if lang=='lv' else 'Insulated wall panels with vapour barrier and cladding, roof structure and covering, windows and exterior doors, a finished facade and assembly on site. The concrete slab is the standard, laid by a local builder to our drawing.' }}</p></div>
   </div>
 {% endcall %}
@@ -96,7 +96,7 @@
 
 {# ---- completed projects (editorial figures) ---- #}
 <section class="s alt" id="works"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.nav_projects) }}</div><h2>{{ ('Reālas mājas. <br>Ne renderi.' if lang=='lv' else 'Real houses. <br>Not renders.')|safe }}</h2></div><div><p class="lede">{{ t(UI.projects_lead) }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('projects/') }}">{{ t(UI.all_works) }} →</a></p></div></div>
+  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.nav_projects) }}</div><h2>{{ ('Reālas mājas. <br>Ne renderi.' if lang=='lv' else 'Real houses. <br>Not renders.')|safe }}</h2></div><div><p class="lede">{{ t(UI.projects_lead) }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('projects') }}">{{ t(UI.all_works) }} →</a></p></div></div>
   <div class="cols eq" style="margin-top:36px" data-lb>
     {{ M.fig('als110-photo-lv-exterior-forest', 'Als 110 · Latvija · 2024', 'h') }}
     {{ M.fig('als70-front-dk', 'Als 70 · Kettingskov · 2022', 'h') }}
@@ -135,8 +135,8 @@
 
 {# ---- FAQ + CTA ---- #}
 <section class="s"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">07 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if lang=='lv' else 'The honest version.' }}</h2><p class="small"><a href="{{ url('resources/') }}">{{ t(UI.all_faq) }} →</a></p></div><div>{{ M.faq_list(FAQ, 4) }}</div></div>
+  <div class="cols"><div><div class="eyebrow">07 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if lang=='lv' else 'The honest version.' }}</h2><p class="small"><a href="{{ url('resources') }}">{{ t(UI.all_faq) }} →</a></p></div><div>{{ M.faq_list(FAQ, 4) }}</div></div>
   {{ M.cta_band() }}
-  {{ M.next_cards([(t(UI.nav_projects), t(UI.projects_title), url('projects/')), (t(UI.nav_custom), t(UI.custom_title), url('custom-design/'))]) }}
+  {{ M.next_cards([(t(UI.nav_projects), t(UI.projects_title), url('projects')), (t(UI.nav_custom), t(UI.custom_title), url('custom'))]) }}
 </div></section>
 {% endblock %}
