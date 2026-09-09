@@ -346,3 +346,115 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
 .sp{min-height:clamp(640px,58vw,920px)}
 .sp .in{min-height:inherit}
 @media(max-width:900px){.sp{min-height:clamp(560px,120vw,760px)}}
+
+/* ================================================================================
+   LANDING PAGE — the page paid social traffic lands on. One job: the form.
+   ================================================================================ */
+.lp-hero{position:relative;min-height:min(92vh,940px);display:flex;align-items:center;overflow:hidden;background:var(--dark);padding:120px 0 72px}
+.lp-bg{position:absolute;inset:0}
+.lp-bg picture{display:block;position:absolute;inset:0}
+.lp-bg img{width:100%;height:100%;object-fit:cover;display:block}
+.lp-tint{position:absolute;inset:0;background:
+  linear-gradient(100deg,rgba(8,28,32,.93) 0%,rgba(8,28,32,.78) 26%,rgba(8,28,32,.40) 46%,rgba(8,28,32,.14) 60%,rgba(8,28,32,.34) 80%,rgba(8,28,32,.62) 100%)}
+.lp-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,420px);gap:52px;align-items:center}
+.lp-copy{color:#fff;max-width:none}
+.lp-kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:20px}
+.lp-h1{font-size:clamp(38px,4.6vw,64px);line-height:1.03;font-weight:300;letter-spacing:-.02em;margin:0 0 22px;color:#fff}
+.lp-lede{font-size:clamp(16px,1.25vw,19px);line-height:1.6;color:rgba(255,255,255,.86);margin:0 0 28px;max-width:44ch}
+.lp-chips{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:10px}
+.lp-chips li{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:var(--rp);
+  padding:9px 15px;font-size:13px;color:rgba(255,255,255,.86);backdrop-filter:blur(6px)}
+.lp-chips b{color:#fff;font-weight:600}
+@media(max-width:1000px){.lp-grid{grid-template-columns:1fr;gap:34px}.lp-copy{max-width:none}.lp-hero{padding:104px 0 56px;min-height:0}}
+
+/* the form itself */
+.lp-form{position:relative}
+.leadform{background:var(--paper);border-radius:var(--r2);padding:26px;box-shadow:0 26px 60px rgba(8,28,32,.24);display:grid;gap:13px}
+.lf-head{display:grid;gap:6px;margin-bottom:2px}
+.lf-head b{font-size:19px;font-weight:500;letter-spacing:-.01em}
+.leadform label{display:grid;gap:6px;font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:var(--ink2)}
+.leadform input,.leadform select{font:inherit;font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%;transition:border-color .15s,box-shadow .15s}
+.leadform input:focus,.leadform select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(80,209,224,.22)}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.leadform .btn{width:100%;justify-content:center;margin-top:4px;font-size:14px;padding:14px 20px}
+.lf-fine{font-size:11.5px;line-height:1.5;color:var(--ash);margin:0}
+.lf-fine a{color:var(--acc-ink)}
+.lf-hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0}
+.lf-done{background:var(--bg3);border-radius:var(--r);padding:20px;display:grid;gap:8px}
+.lf-done b{font-size:18px;font-weight:500}
+.lf-code{margin:6px 0 0;font-size:15px;background:#fff;border:1px dashed var(--acc);border-radius:10px;padding:10px 12px}
+.lf-err{background:#fff4f4;border:1px solid #f2c7c7;color:#8a2b2b;border-radius:12px;padding:11px 13px;font-size:13px}
+@media(max-width:520px){.lf-row{grid-template-columns:1fr}.leadform{padding:20px}}
+
+/* closing block */
+.lp-close{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,400px);gap:48px;align-items:center}
+.lp-close h2{margin-top:12px}
+@media(max-width:900px){.lp-close{grid-template-columns:1fr;gap:28px}}
+.paper{background:var(--paper);border-radius:var(--r2);padding:26px 28px}
+.paper .list{margin-top:12px}
+/* editorial .list li is a 44px + 1fr grid for numbered lists; plain text items need one column */
+.paper .list li{display:block;padding:13px 0;font-size:14.5px;line-height:1.5}
+
+/* ================================================================================
+   KNOWLEDGE BASE + ARTICLES
+   ================================================================================ */
+.klist{display:grid;gap:20px}
+.kcard{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:26px;background:var(--paper);
+  border-radius:var(--r2);overflow:hidden;text-decoration:none;color:inherit;transition:transform .25s,box-shadow .25s}
+.kcard:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(12,36,41,.10)}
+.kcard .fig{margin:0;height:100%;min-height:190px;border-radius:0}
+.kbody{padding:24px 28px 24px 0;display:flex;flex-direction:column;justify-content:center;gap:9px}
+.kbody h2{font-size:clamp(20px,1.9vw,26px);font-weight:400;letter-spacing:-.01em;margin:0;line-height:1.22}
+.kbody .small{margin:0;max-width:64ch}
+@media(max-width:820px){.kcard{grid-template-columns:1fr}.kcard .fig{min-height:200px}.kbody{padding:0 22px 24px}}
+
+.ahero{position:relative;min-height:min(64vh,620px);display:flex;align-items:flex-end;overflow:hidden;background:var(--dark);padding:130px 0 46px}
+.ahero-img{position:absolute;inset:0}
+.ahero-img picture{display:block;position:absolute;inset:0}
+.ahero-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ahero-body{position:relative;color:#fff;max-width:none}
+.ahero-body .eyebrow{color:var(--acc)}
+.ahero-body h1{font-size:clamp(30px,3.7vw,52px);font-weight:300;line-height:1.08;letter-spacing:-.02em;margin:16px 0 14px;max-width:22ch;color:#fff}
+.ahero-body .tg{font-size:clamp(15px,1.15vw,18px);line-height:1.6;color:rgba(255,255,255,.82);max-width:62ch;margin:0}
+@media(max-width:900px){.ahero{padding:110px 0 36px;min-height:0}}
+
+.artwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px);gap:56px;align-items:start}
+.artbody{max-width:74ch;font-size:17px;line-height:1.72;color:var(--ink)}
+.artbody p{margin:0 0 20px}
+.artbody h2{font-size:clamp(24px,2.3vw,32px);font-weight:400;letter-spacing:-.015em;margin:44px 0 16px;line-height:1.2}
+.artbody h3{font-size:clamp(18px,1.5vw,21px);font-weight:500;margin:32px 0 10px}
+.artbody a{color:var(--acc-ink)}
+.alist{margin:0 0 22px;padding-left:1.15em}
+.alist li{margin-bottom:9px}
+.alist.num{padding-left:1.35em}
+.anote{background:var(--bg3);border-left:3px solid var(--hi);border-radius:0 var(--r) var(--r) 0;
+  padding:16px 20px;margin:0 0 24px;font-size:15.5px;line-height:1.62;color:var(--ink2)}
+.atbl{margin:0 0 26px}
+.atbl table{font-size:14.5px}
+.afaqh{margin-top:46px}
+.acta{background:var(--dark);color:#fff;border-radius:var(--r2);padding:24px 26px;margin:34px 0;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center}
+.acta b{font-size:18px;font-weight:500;display:block;margin-bottom:5px}
+.acta .small{color:rgba(255,255,255,.76);margin:0}
+@media(max-width:700px){.acta{grid-template-columns:1fr}.artwrap{grid-template-columns:1fr;gap:40px}}
+.artside{position:sticky;top:92px}
+@media(max-width:900px){.artside{position:static}}
+
+/* [hidden] must win over the display rules above (a .lf-done[hidden] was still showing) */
+[hidden]{display:none!important}
+/* the article hero needs a scrim too, or white type sits on sky */
+.ahero .hs-tint{background:linear-gradient(180deg,rgba(8,28,32,.30) 0%,rgba(8,28,32,.20) 40%,rgba(8,28,32,.82) 100%)}
+
+/* sidebar model list: name and area on one line */
+.artside .list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.artside .list li a{white-space:nowrap}
+
+/* a wide table inside an article must scroll inside itself, never widen the page
+   (grid children default to min-width:auto, which is what let it push out) */
+.artwrap{min-width:0}
+.artbody{min-width:0}
+.artbody>*{max-width:100%}
+.atbl{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.atbl table{min-width:520px}
+@media(max-width:560px){.atbl table{min-width:440px}}
