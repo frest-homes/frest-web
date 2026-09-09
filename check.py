@@ -10,11 +10,11 @@ async def main():
             pg=await ctx.new_page()
             errs=[]; pg.on('pageerror', lambda e: errs.append(str(e))); pg.on('console', lambda m: errs.append('console:'+m.text) if m.type=='error' else None)
             for path in PAGES:
-                await pg.goto(BASE+path, wait_until='networkidle'); await pg.evaluate("document.querySelectorAll('.rv').forEach(e=>e.classList.add('in'))"); await pg.evaluate("(async()=>{for(let y=0;y<document.body.scrollHeight;y+=600){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,60));}window.scrollTo(0,0);})()"); await pg.wait_for_timeout(800)
+                await pg.goto(BASE+path, wait_until='networkidle'); await pg.evaluate("document.querySelectorAll('.rv').forEach(e=>e.classList.add('in'))"); await pg.evaluate("(async()=>{for(let y=0;y<document.body.scrollHeight;y+=600){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,60));}window.scrollTo(0,0);})()"); await pg.evaluate("Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r;setTimeout(r,4000)})))"); await pg.wait_for_timeout(500)
                 sw=await pg.evaluate('document.documentElement.scrollWidth'); h=await pg.evaluate('document.body.scrollHeight')
                 broken=await pg.evaluate("[...document.images].filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.currentSrc||i.src).slice(0,5)")
                 name=(path.strip('/').replace('/','_') or 'home')+'-'+label
-                await pg.screenshot(path=f'shots/{name}.png', full_page=True)
+                await pg.set_viewport_size({'width':vw,'height':min(h,20000)}); await pg.evaluate("Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r;setTimeout(r,4000)})))"); await pg.wait_for_timeout(700); await pg.screenshot(path=f'shots/{name}.png', full_page=True); await pg.set_viewport_size({'width':vw,'height':900 if vw>400 else 844})
                 print(f'{label} {path or "/"}: scrollWidth={sw} (vw {vw}) height={h} broken={broken} errs={[e for e in errs if "fonts.g" not in e][:3]}')
                 errs.clear()
             await ctx.close()

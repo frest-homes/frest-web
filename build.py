@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content.data import SITE, MODELS, PACKAGES, FACADE_COLORS, ROOF_TYPES, ADDONS, ADDON_WHY, WORKS, CUSTOM_PROJECTS, PROCESS, FAQ, TEAM, VALUES, QUIZ
 from content.ui import UI
+from content.editorial import DESC as IMGDESC, AUDIENCES, SPREADS, KICKERS, POS as IMGPOS
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--base', default='/')
@@ -115,7 +116,7 @@ def build_lang(lang):
     t, url = h['t'], h['url']
     ctx_base = dict(h, SITE=SITE, UI=UI, MODELS=MODELS, PACKAGES=PACKAGES, COLORS=FACADE_COLORS, ROOFS=ROOF_TYPES, ADDONS=ADDONS, ADDON_WHY=ADDON_WHY,
                     WORKS=WORKS, CUSTOM=CUSTOM_PROJECTS, PROCESS=PROCESS, FAQ=FAQ, TEAM=TEAM, VALUES=VALUES, QUIZ=QUIZ, year=datetime.date.today().year,
-                    canonical=args.canonical, TITLES=TITLES)
+                    canonical=args.canonical, TITLES=TITLES, IMGDESC=IMGDESC, IMGPOS=IMGPOS, AUDIENCES=AUDIENCES, SPREADS=SPREADS, KICKERS=KICKERS)
     # personaliser data (JSON for JS)
     def pz_data(models):
         d = {'colors': [{'id': c['id'], 'name': t(c['name'])} for c in FACADE_COLORS], 'roofs': [{'id': r['id'], 'name': t(r['name'])} for r in ROOF_TYPES], 'models': {}}
@@ -126,6 +127,7 @@ def build_lang(lang):
     quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': url(f"model/{m['slug']}/"), 'img': h['imgsrc'](m['card'], 960), 'srcset': h['srcset'](m['card']),
                                'facts': f"{h['num'](m['area'])} m² · {m['bedrooms']} {t(UI['bedrooms']).lower()} · {t(UI['from'])} {h['eur'](m['price_complete'])}"} for m in MODELS}
     ctx_base['pz_data'] = pz_data
+    ctx_base['aud_data'] = json.dumps({k: {'h': t(h), 'p': t(p), 'href': url(href), 'link': t(link)} for k, lab, h, p, href, link in AUDIENCES}, ensure_ascii=False)
     ctx_base['quiz_data'] = json.dumps(quiz_models, ensure_ascii=False)
 
     def write(path, html_out):
