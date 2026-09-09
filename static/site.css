@@ -1,9 +1,17 @@
 /* Frest Homes theme — tokens for the shared editorial system + Frest-specific interactive components */
 :root{
-  --bg:#ffffff;--bg2:#f5f6f8;--bg3:#eceef1;--ink:#0f1115;--ink2:#3a3f47;--ash:#6b7280;--line:rgba(15,17,21,.12);--line2:rgba(15,17,21,.22);
-  --acc:#50d1e0;--acc2:#7cc4cc;--acc-ink:#0b7c8a;--acc-tint:#e8f8fa;--hi:#fbb900;--hi-tint:#fff6dc;
-  --dark:#0b0d12;--dark2:#161a22;--on-dark:#f5f6f8;--on-dark2:rgba(245,246,248,.72);
+  /* Frest ground: never plain white — a pale cyan mist, a deeper mist and a warm sand from the brand yellow.
+     Content panels are white paper on top of that, which is what gives the page depth. */
+  --bg:#f2f7f8;--bg2:#e8f1f3;--bg3:#fdf7e7;--paper:#ffffff;
+  --ink:#0f1115;--ink2:#39434b;--ash:#6b7683;--line:rgba(12,36,41,.11);--line2:rgba(12,36,41,.2);
+  --acc:#50d1e0;--acc2:#7cdfea;--acc-ink:#0a7a88;--acc-tint:#e2f6f9;--hi:#fbb900;--hi-tint:#fff4d6;
+  /* dark is a deep Frest petrol, not El Soco black */
+  --dark:#0c2429;--dark2:#123840;--on-dark:#eef7f8;--on-dark2:rgba(238,247,248,.74);
   --serif:'Work Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--sans:'Work Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  /* Frest is a rounded brand */
+  --r:16px;--r2:26px;--r3:34px;--rp:999px;
+  --sh:0 1px 2px rgba(12,36,41,.05),0 10px 28px rgba(12,36,41,.07);
+  --sh2:0 2px 6px rgba(12,36,41,.06),0 24px 60px rgba(12,36,41,.12);
 }
 /* Frest reads its display type in the same Work Sans, light weight — the serif slot is the display slot */
 h1,h2,.dk,.big,.stat .n,.lede,.list b,.trio a span,.next span,.road .y,.toc a,.audpanel h3,.audpanel p,.cbox h3,.mnav a{font-family:var(--sans)}
@@ -142,3 +150,147 @@ h1{font-weight:300}h2{font-weight:300}
 .rv{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}.rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 .hp{position:absolute;left:-9999px}
+
+/* =========================================================================================
+   FREST DESIGN UPGRADE (rev-03)
+   El Soco keeps the structure; Frest brings the skin: tinted ground, white paper panels,
+   rounded geometry, soft shadows, expressive full-bleed imagery, and a nav that works.
+   Everything below is theme layer only — editorial.css stays square and portable.
+   ========================================================================================= */
+body{background:var(--bg)}
+.s{border-top:0;padding:78px 0}
+.s+.s{padding-top:78px}
+.s.alt{background:var(--bg2)}
+.s.sand{background:var(--bg3)}
+.hero{padding:64px 0 34px}
+
+/* --- paper panels ------------------------------------------------------------------ */
+.tile,.sidebar,.audpanel,.cbox,.next a,.trio a,.mcard,.toc,.quiz,.pz,.addons,.cmp,.road,.tbl,.aud{
+  background:var(--paper);border-radius:var(--r2);border:1px solid var(--line);box-shadow:var(--sh)}
+.tile{padding:28px}
+.tbl{padding:6px 20px 10px;overflow-x:auto}
+.tbl table{border-collapse:collapse}
+.tbl th{border-bottom:1px solid var(--line)}
+.tbl td{border-top:1px solid var(--line)}
+.tbl tr:first-child td{border-top:0}
+.road{display:grid;padding:8px 0;overflow:hidden}
+.road div{padding:22px 22px 24px;border-right:1px solid var(--line);border-top:0}
+.road div:last-child{border-right:0}
+.sidebar{padding:24px 26px;border-left:1px solid var(--line)}
+.sidebar::before{content:"";display:block;width:34px;height:3px;border-radius:2px;background:var(--acc);margin-bottom:14px}
+.next a,.trio a{padding:22px 24px;transition:transform .25s,box-shadow .25s}
+.next a:hover,.trio a:hover,.mcard:hover{transform:translateY(-3px);box-shadow:var(--sh2);text-decoration:none}
+.mcard{padding:16px 16px 20px;overflow:hidden}
+.mcard .fig{border-radius:var(--r);overflow:hidden}
+.stat{border-top:0;padding-top:0}
+.stat::before{content:"";display:block;width:30px;height:3px;border-radius:2px;background:var(--acc);margin-bottom:14px}
+.stat .n{font-weight:300;letter-spacing:-.01em}
+
+/* --- rounded figures, buttons, fields ----------------------------------------------- */
+.fig,.figwrap .fig,.pz .stage,.plan .stage,.gitem,.strip .it,.lb .box{border-radius:var(--r);overflow:hidden}
+.fig.p-c img{border-radius:var(--r)}
+.btn,.pill,.aud button,.seg button,.tabs button,.filters button,.opts button,.models-pick button,.addon-list button,.send,button.send{border-radius:var(--rp)}
+.btn{padding:13px 24px;border:1px solid transparent;transition:transform .2s,background .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(80,209,224,.32)}
+.btn.ghost{border-color:var(--line2)}.btn.ghost:hover{box-shadow:none;border-color:var(--acc)}
+.btn.dark{background:var(--dark);border-color:var(--dark)}.btn.dark:hover{box-shadow:0 8px 20px rgba(12,36,41,.28)}
+.pill{padding:7px 14px;border:1px solid var(--line2)}
+.pill.ok{background:var(--acc-tint);border-color:transparent;color:var(--acc-ink)}
+.pill.hi{background:var(--hi-tint);border-color:transparent;color:#8a6400}
+input,select,textarea{border-radius:var(--r)!important;background:var(--paper);border:1px solid var(--line)}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-tint)}
+.cta{border-radius:var(--r3);border:0;background:var(--paper);box-shadow:var(--sh);padding:38px 40px}
+.cta.dark{background:linear-gradient(135deg,var(--dark),var(--dark2));box-shadow:var(--sh2)}
+.aud{padding:10px;display:flex;flex-wrap:wrap;gap:8px}
+.aud button{border:1px solid transparent;padding:9px 16px}
+.aud button.on{background:var(--acc-tint);color:var(--acc-ink)}
+.audpanel{padding:26px 28px;margin-top:16px}
+.foot{background:var(--bg2);border-top:1px solid var(--line)}
+.sp{border-radius:0}
+.list li{border-color:var(--line)}
+
+/* --- navigation: rounded, colour-coded, and no hover gap ---------------------------- */
+.nav{background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+.nav .wrap{height:70px}
+.nav ul{gap:6px}
+.nav ul>li>a,.nav li.dd>button{display:inline-block;padding:9px 13px;border-radius:var(--rp);transition:background .18s,color .18s;cursor:pointer;background:none;border:0}
+.nav ul>li>a:hover,.nav li.dd>button:hover,.nav li.dd.open>button{background:var(--acc-tint);color:var(--acc-ink)}
+.nav a.on,.nav li.dd>button.on{color:var(--acc-ink);background:var(--acc-tint)}
+.nav a.ctc{color:var(--acc-ink)}
+.nav a.pill.hi{padding:9px 16px}
+.nav li.dd>button i{transition:transform .2s;display:inline-block}
+.nav li.dd.open>button i{transform:rotate(180deg)}
+/* the menu now touches the trigger: a transparent bridge keeps the pointer inside the li */
+.nav li.dd .menu{top:calc(100% - 2px);left:-6px;min-width:290px;border:1px solid var(--line);border-radius:var(--r2);
+  padding:12px 10px;box-shadow:var(--sh2);background:var(--paper);margin-top:10px}
+.nav li.dd .menu::before{content:"";position:absolute;left:0;right:0;top:-14px;height:16px}
+.nav li.dd.open .menu{display:block;animation:ddin .16s ease-out}
+@keyframes ddin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.nav li.dd .menu a{border-radius:var(--r);padding:11px 14px 11px 34px;position:relative;line-height:1.35}
+.nav li.dd .menu a::before{content:"";position:absolute;left:14px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--line2)}
+.nav li.dd .menu a[data-c="aura"]::before{background:var(--acc)}
+.nav li.dd .menu a[data-c="als"]::before{background:var(--hi)}
+.nav li.dd .menu a[data-c="tool"]::before{background:var(--acc-ink)}
+.nav li.dd .menu a:hover,.nav li.dd .menu a.on{background:var(--acc-tint);color:var(--acc-ink);text-decoration:none}
+.nav li.dd .menu a small{margin-top:2px}
+.nav .burger{border-radius:var(--rp);padding:9px 15px}
+.mnav{background:var(--bg)}
+.mnav a{border-bottom:1px solid var(--line)}
+@media(max-width:1120px){.nav ul{display:none}.nav .burger{display:inline-block}}
+
+/* --- hero slideshow ----------------------------------------------------------------- */
+.hs{position:relative;min-height:min(78vh,720px);display:flex;align-items:flex-end;overflow:hidden;background:var(--dark)}
+.hs-track{position:absolute;inset:0}
+.hs-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+.hs-slide.on{opacity:1}
+.hs-slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 7s linear}
+.hs-slide.on img{transform:scale(1)}
+.hs-tint{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,36,41,.8) 0%,rgba(12,36,41,.5) 40%,rgba(12,36,41,.06) 72%,rgba(12,36,41,.26) 100%)}
+@media(max-width:860px){.hs-tint{background:linear-gradient(180deg,rgba(12,36,41,.5),rgba(12,36,41,.86) 62%)}}
+.hs-body{position:relative;z-index:2;width:100%;padding-top:52px;padding-bottom:46px;color:var(--on-dark)}
+.hs-brand{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:26px}
+.hs-cap{display:none;max-width:640px}
+.hs-cap.on{display:block;animation:hsin .6s ease-out}
+@keyframes hsin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hs-cap .badge{display:inline-block;border-radius:var(--rp);background:rgba(238,247,248,.16);backdrop-filter:blur(6px);color:var(--on-dark);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;border:1px solid rgba(238,247,248,.28)}
+.hs-cap h1{color:var(--on-dark);font-size:clamp(44px,7vw,86px);margin:18px 0 6px;line-height:1}
+.hs-cap p.tg{color:var(--on-dark2);font-size:clamp(17px,2vw,22px);margin:0 0 26px;font-weight:300;max-width:34ch}
+.hs-specs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.hs-specs span{border-radius:var(--rp);border:1px solid rgba(238,247,248,.3);background:rgba(12,36,41,.35);backdrop-filter:blur(6px);
+  padding:9px 16px;font-size:14px;color:var(--on-dark)}
+.hs-specs span b{font-weight:600}
+.hs .btn.ghost{color:var(--on-dark);border-color:rgba(238,247,248,.5)}
+.hs .btn.ghost:hover{border-color:var(--acc);color:var(--acc)}
+.hs-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;border-radius:50%;border:1px solid rgba(238,247,248,.34);
+  background:rgba(12,36,41,.32);backdrop-filter:blur(6px);color:var(--on-dark);font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .2s,border-color .2s}
+.hs-arrow:hover{background:var(--acc);border-color:var(--acc);color:var(--dark)}
+.hs-arrow.p{left:20px}.hs-arrow.n{right:20px}
+@media(max-width:860px){.hs-arrow{display:none}}
+.hs-dots{position:absolute;right:28px;bottom:26px;z-index:3;display:flex;gap:9px}
+@media(max-width:860px){.hs-dots{left:28px;right:auto}}
+.hs-dots button{width:34px;height:4px;border-radius:2px;border:0;background:rgba(238,247,248,.35);cursor:pointer;padding:0;transition:background .2s,width .2s}
+.hs-dots button.on{background:var(--acc);width:52px}
+@media(prefers-reduced-motion:reduce){.hs-slide,.hs-slide img,.hs-cap.on{transition:none;animation:none}}
+
+/* --- promise band ------------------------------------------------------------------- */
+.promise{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:38px}
+@media(max-width:900px){.promise{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.promise{grid-template-columns:1fr}.road{grid-template-columns:1fr!important}.road div{border-right:0;border-bottom:1px solid var(--line)}}
+.promise .p{background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:24px;box-shadow:var(--sh)}
+.promise .p .n{width:34px;height:34px;border-radius:50%;background:var(--acc-tint);color:var(--acc-ink);display:grid;place-items:center;font-size:13px;font-weight:600;margin-bottom:14px}
+.promise .p b{display:block;font-size:19px;font-weight:400;margin-bottom:6px}
+.promise .p p{margin:0;font-size:15px;color:var(--ink2);line-height:1.5}
+.timing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:34px}
+@media(max-width:860px){.timing{grid-template-columns:1fr}}
+.timing .t{background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:24px 26px;box-shadow:var(--sh)}
+.timing .t .v{font-size:30px;font-weight:300;color:var(--ink);letter-spacing:-.01em}
+.timing .t .l{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc-ink);margin:10px 0 6px}
+.timing .t .d{font-size:14px;color:var(--ash);line-height:1.5}
+/* nav must never push the page wider than the viewport */
+.nav .wrap{max-width:1320px}
+@media(max-width:1360px){.nav ul{gap:2px}.nav ul>li>a,.nav li.dd>button{padding:9px 10px}}
+@media(max-width:1260px){.nav ul>li>a,.nav li.dd>button{padding:8px 8px;font-size:10px;letter-spacing:.12em}.nav a.pill.hi{padding:8px 12px}}
+
+.mcard .fig{background:var(--bg2)}
+.mcard .fig img{mix-blend-mode:multiply}

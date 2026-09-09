@@ -6,9 +6,17 @@ const L=document.documentElement.lang||'lv';
 const fmtEur=n=>new Intl.NumberFormat(L==='lv'?'lv-LV':'en-GB',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
 
 /* nav */
-$$('.nav li.dd').forEach(li=>{const b=$('button',li);b.addEventListener('click',e=>{e.stopPropagation();const o=li.classList.contains('open');$$('.nav li.dd.open').forEach(x=>x.classList.remove('open'));if(!o)li.classList.add('open');});
-  li.addEventListener('mouseenter',()=>{$$('.nav li.dd.open').forEach(x=>x!==li&&x.classList.remove('open'));li.classList.add('open')});li.addEventListener('mouseleave',()=>li.classList.remove('open'));});
-document.addEventListener('click',()=>$$('.nav li.dd.open').forEach(x=>x.classList.remove('open')));
+/* dropdowns: hover-intent with a close delay so the pointer can travel to the menu */
+$$('.nav li.dd').forEach(li=>{const b=$('button',li);let t=null;
+  const open=()=>{clearTimeout(t);$$('.nav li.dd.open').forEach(x=>x!==li&&x.classList.remove('open'));li.classList.add('open');b.setAttribute('aria-expanded','true')};
+  const close=()=>{li.classList.remove('open');b.setAttribute('aria-expanded','false')};
+  const later=()=>{clearTimeout(t);t=setTimeout(close,260)};
+  b.setAttribute('aria-expanded','false');b.setAttribute('aria-haspopup','true');
+  b.addEventListener('click',e=>{e.stopPropagation();li.classList.contains('open')?close():open()});
+  li.addEventListener('mouseenter',open);li.addEventListener('mouseleave',later);
+  li.addEventListener('focusin',open);li.addEventListener('focusout',e=>{if(!li.contains(e.relatedTarget))close()});
+  $$('a',li).forEach(a=>a.addEventListener('click',e=>e.stopPropagation()));});
+document.addEventListener('click',()=>$$('.nav li.dd.open').forEach(x=>{x.classList.remove('open');const b=$('button',x);b&&b.setAttribute('aria-expanded','false')}));
 const bg=$('[data-burger]'),mn=$('#mnav');
 if(bg&&mn){bg.addEventListener('click',()=>{const o=mn.classList.toggle('open');bg.setAttribute('aria-expanded',o);bg.textContent=o?bg.dataset.close:bg.dataset.open;document.body.style.overflow=o?'hidden':''});}
 
@@ -86,4 +94,32 @@ if(cf){cf.addEventListener('submit',async e=>{e.preventDefault();const btn=$('bu
   try{const r=await fetch(cf.action.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',headers:{'Accept':'application/json'},body:fd});if(!r.ok)throw 0;$('.cform .f-body',m).hidden=true;$('.cform .f-thanks',m).hidden=false;try{localStorage.setItem('frest_lead',JSON.stringify({name:fd.get('name'),email:fd.get('email')}))}catch(_){}}
   catch(err){cf.submit()}btn.disabled=false});
   try{const prev=JSON.parse(localStorage.getItem('frest_lead')||'null');if(prev){$('input[name=name]',cf).value=prev.name||'';$('input[name=email]',cf).value=prev.email||''}}catch(_){}}
+/* ---- hero slideshow ---------------------------------------------------------------- */
+$$('[data-hs]').forEach(hs=>{
+  const slides=$$('.hs-slide',hs), caps=$$('.hs-cap',hs), dots=$$('.hs-dots button',hs);
+  if(slides.length<2){return}
+  let i=0, timer=null, paused=false;
+  const DUR=6500, reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const show=n=>{i=(n+slides.length)%slides.length;
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    caps.forEach((c,k)=>c.classList.toggle('on',k===i));
+    dots.forEach((d,k)=>{d.classList.toggle('on',k===i);d.setAttribute('aria-selected',k===i)});
+    const im=slides[i].querySelector('img'); if(im&&im.loading==='lazy'){im.loading='eager'}
+    const nx=slides[(i+1)%slides.length].querySelector('img'); if(nx&&nx.loading==='lazy'){nx.loading='eager'}};
+  const play=()=>{if(reduce||paused)return;clearInterval(timer);timer=setInterval(()=>show(i+1),DUR)};
+  const stop=()=>clearInterval(timer);
+  $('.hs-arrow.n',hs).addEventListener('click',()=>{show(i+1);play()});
+  $('.hs-arrow.p',hs).addEventListener('click',()=>{show(i-1);play()});
+  dots.forEach((d,k)=>d.addEventListener('click',()=>{show(k);play()}));
+  hs.addEventListener('mouseenter',()=>{paused=true;stop()});
+  hs.addEventListener('mouseleave',()=>{paused=false;play()});
+  hs.addEventListener('focusin',()=>{paused=true;stop()});
+  hs.addEventListener('focusout',e=>{if(!hs.contains(e.relatedTarget)){paused=false;play()}});
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():play());
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&!$('.cmodal.open')){show(i+1);play()}if(e.key==='ArrowLeft'&&!$('.cmodal.open')){show(i-1);play()}});
+  let x0=null;hs.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+  hs.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>44){show(i+(dx<0?1:-1));play()}x0=null},{passive:true});
+  show(0);play();
+});
 })();
+
