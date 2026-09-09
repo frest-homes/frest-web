@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block content %}
+<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_pricing) }}</span><h1 style="margin-top:8px">{{ t(UI.pricing_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.pricing_lead) }}</p></div></section>
+<section class="section tight"><div class="wrap cmp-wrap">
+<table class="cmp">
+  <thead><tr><th>{{ 'Modelis' if lang=='lv' else 'Model' }}</th><th>{{ t(UI.living_area) }}</th><th>{{ t(PACKAGES.base.name) }}<div class="small mute" style="text-transform:none;letter-spacing:0">{{ t(PACKAGES.base.sub) }}</div></th><th>{{ t(PACKAGES.complete.name) }}<div class="small mute" style="text-transform:none;letter-spacing:0">{{ t(PACKAGES.complete.sub) }}</div></th><th>€ / m²</th><th></th></tr></thead>
+  <tbody>{% for m in MODELS %}<tr><td style="text-transform:none;letter-spacing:0;font-size:17px;color:var(--ink)"><b>{{ m.name }}</b><div class="small mute">{{ t(m.tagline) }}</div></td><td>{{ num(m.area) }} m²</td><td>{{ eur(m.price_base) }}</td><td><b>{{ eur(m.price_complete) }}</b></td><td>{{ eur((m.price_complete/m.area)|round) }}</td><td><a class="btn btn-outline btn-sm" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }}</a></td></tr>{% endfor %}</tbody>
+</table>
+<p class="note" style="margin-top:16px">{{ t(PACKAGES.note) }}</p>
+</div></section>
+<section class="section surface" id="included"><div class="wrap">
+  <div class="section-head"><span class="eyebrow">{{ t(UI.packages) }}</span><h2>{{ t(UI.whats_included) }}</h2></div>
+  <div class="grid g2">
+    {% for key in ['base','complete'] %}{% set p = PACKAGES[key] %}
+    <div class="pk {{ 'pop' if p.popular }}">{% if p.popular %}<span class="tag d pop-tag">{{ t(UI.popular) }}</span>{% endif %}
+      <div><span class="eyebrow">{{ t(p.sub) }}</span><h3 style="margin-top:6px">{{ t(p.name) }}</h3></div>
+      <div class="pr">{{ t(UI.from) }} {{ eur(MODELS|map(attribute='price_'+key)|min) }}<small>{{ t(UI.with_vat) }}</small></div>
+      <div><div class="h">{{ t(UI.includes) }}</div><ul class="inc">{% for i in p.includes %}<li>{{ t(i) }}</li>{% endfor %}</ul></div>
+      <div><div class="h">{{ t(UI.excludes) }}</div><ul class="exc">{% for i in p.excludes %}<li>{{ t(i) }}</li>{% endfor %}</ul></div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="note" style="margin-top:18px"><b>{{ t(UI.not_in_any) }}:</b> {% for i in PACKAGES.not_in_any %}{{ t(i) }}{{ ', ' if not loop.last }}{% endfor %}.</div>
+</div></section>
+<section class="section"><div class="wrap">
+  <div class="split"><div class="ph">{{ img('factory-kit-assembly', '', '(max-width:900px) 100vw, 50vw')|safe }}</div>
+  <div><span class="eyebrow">{{ t(UI.delivery_title) }}</span><h2 style="margin:8px 0 14px">{{ SITE.delivery_weeks }} {{ t(UI.weeks_delivery) }}</h2><p class="lead">{{ 'No pasūtījuma apstiprinājuma līdz nodošanai. Paneļi tiek ražoti rūpnīcā, kamēr objektā top pamati, tāpēc montāža aizņem dažas dienas. Precīzs grafiks — piedāvājumā.' if lang=='lv' else 'From order confirmation to handover. Panels are produced in the factory while the foundations are built on site, so assembly takes days. The exact schedule is in the offer.' }}</p><div class="btn-row" style="margin-top:20px"><a class="btn btn-dark" href="#contact" data-enquire="">{{ t(UI.request) }}</a></div></div></div>
+</div></section>
+<section class="section surface"><div class="wrap">{{ M.cta_band() }}</div></section>
+{% endblock %}

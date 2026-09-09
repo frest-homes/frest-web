@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block content %}
+<section class="mhero" style="min-height:min(60vh,560px)">
+  {{ img('als110-interior-living', '', '100vw', 'bg', 'eager', 'high')|safe }}<div class="shade"></div>
+  <div class="wrap"><div class="hero-copy"><span class="eyebrow on-dark">{{ t(UI.nav_catalogue) }}</span><h1>{{ t(UI.cta_title) }}</h1><p class="lead">{{ t(UI.cta_lead) }}</p></div></div>
+</section>
+<section class="section"><div class="wrap">
+  <div class="split" style="align-items:start">
+    <div>
+      <span class="eyebrow">{{ 'Reģistrācija' if lang=='lv' else 'Registration' }}</span>
+      <h2 style="margin:8px 0 14px">{{ 'Pieprasīt piekļuvi' if lang=='lv' else 'Request access' }}</h2>
+      <p class="lead">{{ 'Aizpildiet formu — piekļuves saiti nosūtīsim uz jūsu e‑pastu. Katalogā: Als 70, Als 110, Aura 70 un Aura 110 ar pilnu komplektāciju un cenām.' if lang=='lv' else 'Fill in the form — we send the access link to your e-mail. In the catalogue: Als 70, Als 110, Aura 70 and Aura 110 with the full specification and prices.' }}</p>
+      <div class="note" style="margin-top:16px">{{ t(UI.cta_soon) }}</div>
+      <form class="f" action="{{ SITE.formsubmit }}" method="POST" id="regform">
+        <input type="hidden" name="_subject" value="frest.lv — kataloga piekļuves pieprasījums">
+        <input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_utm" value=""><input type="hidden" name="_lang" value="{{ lang }}">
+        <input type="hidden" name="_next" value="{{ canonical }}{{ url('catalogue/') }}?requested=1">
+        <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
+        <div class="row2"><label>{{ t(UI.f_name) }} *<input name="name" required autocomplete="name"></label><label>{{ t(UI.f_phone) }}<input name="phone" type="tel" autocomplete="tel"></label></div>
+        <label>{{ t(UI.f_email) }} *<input name="email" type="email" required autocomplete="email"></label>
+        <label>{{ t(UI.f_model) }}<select name="model">{% for m in MODELS %}<option value="{{ m.name }}">{{ m.name }} — {{ num(m.area) }} m²</option>{% endfor %}<option value="all">{{ 'Visi modeļi' if lang=='lv' else 'All models' }}</option></select></label>
+        <div><div class="small mute" style="margin-bottom:6px">{{ t(UI.f_plot) }}</div><div class="radio"><label><input type="radio" name="plot" value="yes"> {{ t(UI.f_plot_yes) }}</label><label><input type="radio" name="plot" value="no"> {{ t(UI.f_plot_no) }}</label></div></div>
+        <label class="chk"><input type="checkbox" name="consent" required value="yes"><span>{{ t(UI.f_consent) }}</span></label>
+        <div class="btn-row"><button class="btn btn-primary" type="submit">{{ t(UI.register) }}</button></div>
+      </form>
+    </div>
+    <div>
+      <div class="tile" style="background:var(--dark);color:#fff;border:0">
+        <span class="eyebrow on-dark">{{ 'Katalogā' if lang=='lv' else 'In the catalogue' }}</span>
+        <ul style="list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px">
+          {% for x in [('Māja un plāns — telpu eksplikācija, ēkas parametri','House and plan — room schedule, building parameters'),('Personalizācija — fasādes, jumts, apdares ar cenu ietekmi','Personalisation — facades, roof, finishes with price impact'),('Konfigurators 7 grupās: jumts, sienas, grīdas, logi, vannasistabas, durvis, kājlīstes','Configurator in 7 groups: roof, walls, floors, windows, bathrooms, doors, skirting'),('Kopsumma ar PVN un bez PVN, €/m², salīdzinājums ar Frest piedāvājumu','Total with and without VAT, €/m², comparison with the Frest offer'),('Nosūtīt savu konfigurāciju — piedāvājums 30 dienu laikā','Send your configuration — offer within 30 days')] %}
+          <li style="display:flex;gap:10px"><span style="color:var(--cyan)">✓</span><span>{{ x[0] if lang=='lv' else x[1] }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="ph" style="border-radius:16px;overflow:hidden;margin-top:16px">{{ img('als110-plan-ground', 'Als 110', '40vw')|safe }}</div>
+    </div>
+  </div>
+</div></section>
+<script>if(location.search.includes('requested=1')){document.addEventListener('DOMContentLoaded',()=>{const f=document.getElementById('regform');f.innerHTML='<div class="note" style="background:var(--cyan-tint)"><b>{{ t(UI.thanks_title) }}</b> {{ t(UI.thanks_text) }}</div>';});}</script>
+{% endblock %}

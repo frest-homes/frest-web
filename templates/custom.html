@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% set og_image = 'custom-avotkalna-12' %}
+{% block content %}
+<section class="mhero" style="min-height:min(70vh,640px)">
+  {{ img('custom-build-exterior-sunset', '', '100vw', 'bg', 'eager', 'high')|safe }}<div class="shade"></div>
+  <div class="wrap"><div class="hero-copy"><span class="eyebrow on-dark">{{ t(UI.custom_eyebrow) }}</span><h1>{{ t(UI.custom_title) }}</h1><p class="lead">{{ t(UI.custom_lead) }}</p><div class="btn-row"><a class="btn btn-primary" href="#contact" data-enquire="custom">{{ t(UI.custom_cta) }}</a></div></div></div>
+</section>
+<section class="section"><div class="wrap">
+  <div class="section-head"><span class="eyebrow">{{ t(UI.nav_custom) }}</span><h2>{{ 'Projekti un koncepti' if lang=='lv' else 'Projects and concepts' }}</h2></div>
+  <div class="grid g3">
+    {% for p in CUSTOM %}
+    <div class="mcard rv"><div class="ph">{{ img(p.img, p.name, '(max-width:640px) 100vw, 33vw')|safe }}</div><div class="bd"><span class="tag y">{{ t(p.task) }}</span><h3 style="font-size:22px">{{ p.name }}</h3><p class="mute small">{{ t(p.text) }}</p><div class="facts"><div><b>{{ p.size }} m²</b><span>{{ t(UI.size) }}</span></div></div></div></div>
+    {% endfor %}
+  </div>
+</div></section>
+<section class="section surface"><div class="wrap">
+  <div class="section-head"><h2>{{ 'Ko mēs piedāvājam' if lang=='lv' else 'What we offer' }}</h2></div>
+  <div class="grid g3">{% for h,p in UI.custom_services %}<div class="tile rv"><span class="n">{{ loop.index }}</span><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>{% endfor %}</div>
+  <div class="steps" style="margin-top:32px">
+    {% for h,p in [(('Konsultācija','Consultation'),('Pārrunājam vīziju, zemesgabalu un budžetu','We discuss the vision, plot and budget')),(('Koncepts','Concept'),('Plānojums un 3D vizualizācijas','Layout and 3D visualisations')),(('Projekts','Design'),('Detalizēta tehniskā dokumentācija','Detailed technical documentation')),(('Ražošana','Production'),('Paneļi rūpnīcā ar milimetru precizitāti','Panels made in the factory to the millimetre')),(('Būvniecība','Construction'),('Montāža un nodošana','Assembly and handover'))] %}
+    <div class="step-c"><b>0{{ loop.index }}</b><h3>{{ h[0] if lang=='lv' else h[1] }}</h3><p>{{ p[0] if lang=='lv' else p[1] }}</p></div>
+    {% endfor %}
+  </div>
+</div></section>
+<section class="section"><div class="wrap">
+  <div class="section-head row"><div><span class="eyebrow">{{ t(UI.nav_projects) }}</span><h2 style="margin-top:8px">{{ 'Uzbūvētie individuālie projekti' if lang=='lv' else 'Completed custom projects' }}</h2></div><a class="btn btn-outline" href="{{ url('projects/') }}">{{ t(UI.all_works) }}</a></div>
+  <div class="works">{% for w in WORKS if 'custom' in w.tags %}{{ M.work_tile(w, loop.first) }}{% endfor %}</div>
+</div></section>
+<section class="section surface"><div class="wrap"><div class="cta"><div><span class="eyebrow on-dark">{{ t(UI.nav_custom) }}</span><h2 style="margin:10px 0 14px">{{ t(UI.custom_cta) }}</h2><p class="lead">{{ 'Atsūtiet zemesgabala adresi un dažus vārdus par savu ieceri — atbildēsim ar pirmajiem ieteikumiem.' if lang=='lv' else 'Send the plot address and a few words about your plans — we reply with first suggestions.' }}</p><div class="btn-row" style="margin-top:24px"><a class="btn btn-primary" href="#contact" data-enquire="custom">{{ t(UI.request) }}</a></div></div><div class="ph" style="border-radius:12px;overflow:hidden">{{ img('als110-plus-latvia-interior', '', '40vw')|safe }}</div></div></div></section>
+{% endblock %}

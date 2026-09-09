@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.footer_legal) }}</span><h1 style="margin-top:8px">{{ t(UI.privacy) if page=='privacy' else t(UI.terms) }}</h1></div></section>
+<section class="section tight"><div class="wrap"><div class="prose"><p>{{ t(UI.privacy_body) if page=='privacy' else t(UI.terms_body) }}</p><p>{{ SITE.company }} · {{ SITE.email }} · {{ SITE.phone_display }} · {{ t(SITE.address) }}</p></div></div></section>
+{% endblock %}

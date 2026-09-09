@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section"><div class="wrap" style="text-align:center;padding-top:60px;padding-bottom:60px"><span class="eyebrow">404</span><h1 style="margin:10px 0 14px">{{ 'Lapa nav atrasta' if lang=='lv' else 'Page not found' }}</h1><p class="lead" style="margin:0 auto">{{ 'Iespējams, saite ir novecojusi. Sāciet no sākuma vai apskatiet modeļus.' if lang=='lv' else 'The link may be out of date. Start from the home page or browse the models.' }}</p><div class="btn-row" style="justify-content:center;margin-top:24px"><a class="btn btn-dark" href="{{ url('') }}">{{ 'Sākums' if lang=='lv' else 'Home' }}</a><a class="btn btn-outline" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></div></div></section>
+{% endblock %}

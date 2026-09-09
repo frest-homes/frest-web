@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% set og_image = 'als-kettingskov-aerial' %}
+{% block content %}
+<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_projects) }}</span><h1 style="margin-top:8px">{{ t(UI.projects_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.projects_lead) }}</p>
+<div class="facts-grid" style="margin-top:28px;max-width:760px"><div class="fact"><b>{{ WORKS|length }}</b><span>{{ 'projekti' if lang=='lv' else 'projects' }}</span></div><div class="fact"><b>2</b><span>{{ 'valstis' if lang=='lv' else 'countries' }}</span></div><div class="fact"><b>2019</b><span>{{ 'kopš' if lang=='lv' else 'since' }}</span></div><div class="fact"><b>8+</b><span>{{ 'Als mājas vienā ciematā' if lang=='lv' else 'Als homes in one village' }}</span></div></div>
+</div></section>
+{% for w in WORKS %}
+<section class="section {{ 'surface' if loop.index is even }}" id="{{ w.id }}">
+  <div class="wrap">
+    <div class="split {{ 'rev' if loop.index is even }}" style="align-items:start">
+      <div class="ph" style="aspect-ratio:4/3" data-lb>{% set first = w.images[0] %}<figure style="margin:0;height:100%;cursor:zoom-in" data-full="{{ imgsrc(first[0]) }}" data-cap="{{ t(w.title) }} — {{ t(first[1]) }}">{{ img(first[0], t(w.title), '(max-width:900px) 100vw, 55vw')|safe }}</figure></div>
+      <div>
+        <span class="eyebrow">{{ t(w.location) }} · {{ w.year }}</span>
+        <h2 style="margin:8px 0 14px">{{ t(w.title) }}</h2>
+        <p class="lead">{{ t(w.text) }}</p>
+        <div class="pill-row" style="margin-top:16px">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="tag" href="{{ url('model/'+ ('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') +'/') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }}</a>{% endif %}{% endfor %}</div>
+        <div class="strip" style="grid-auto-columns:minmax(140px,30%);margin-top:20px" data-lb>
+          {% for im,cap in w.images[1:] %}<figure data-full="{{ imgsrc(im) }}" data-cap="{{ t(w.title) }} — {{ t(cap) }}">{{ img(im, t(cap), '30vw')|safe }}<figcaption>{{ t(cap) }}</figcaption></figure>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endfor %}
+<section class="section"><div class="wrap">{{ M.cta_band() }}</div></section>
+{% endblock %}

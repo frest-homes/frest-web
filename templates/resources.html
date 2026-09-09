@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block head %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for q,a in FAQ %}{"@type":"Question","name":{{ t(q)|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ t(a)|tojson }}}}{{ ',' if not loop.last }}{% endfor %}]}</script>
+{% endblock %}
+{% block content %}
+<section class="phero"><div class="wrap"><span class="eyebrow">{{ t(UI.nav_resources) }}</span><h1 style="margin-top:8px">{{ t(UI.resources_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.resources_lead) }}</p></div></section>
+<section class="section tight"><div class="wrap"><div class="split" style="align-items:start"><div>{{ M.faq_list(FAQ) }}</div><div><div class="ph" style="aspect-ratio:3/4;margin-bottom:16px">{{ img('factory-roof-installation', '', '40vw')|safe }}</div><div class="tile"><h3>{{ t(UI.nav_process) }}</h3><p>{{ t(UI.process_lead) }}</p><div style="margin-top:12px"><a class="btn-link" href="{{ url('') }}#process">{{ t(UI.nav_process) }}</a></div></div></div></div></div></section>
+<section class="section surface"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.nav_process) }}</span><h2>{{ t(UI.process_title) }}</h2></div><div class="steps">{% for h,p in PROCESS %}<div class="step-c"><b>0{{ loop.index }}</b><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>{% endfor %}</div></div></section>
+<section class="section"><div class="wrap">{{ M.cta_band() }}</div></section>
+{% endblock %}

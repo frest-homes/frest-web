@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% block content %}
+{# ---------- HERO ---------- #}
+<section class="hero" data-slider>
+  {% for m in MODELS %}
+  <div class="slide {{ 'on' if loop.first }}">{{ img(m.hero, m.name, '100vw', '', 'eager' if loop.first else 'lazy', 'high' if loop.first else None)|safe }}</div>
+  {% endfor %}
+  <div class="shade"></div>
+  <div class="wrap">
+    {% for m in MODELS %}
+    <div class="hero-copy" {% if not loop.first %}hidden{% endif %}>
+      <span class="eyebrow on-dark">{{ t(UI.hero_eyebrow) }} · {{ m.series }}</span>
+      <h1>{{ m.name }}</h1>
+      <div class="sub">{{ t(m.tagline) }}</div>
+      <p class="lead">{{ t(m.lead) }}</p>
+      <div class="btn-row"><a class="btn btn-primary" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }} {{ m.name }}</a><a class="btn btn-outline on-dark" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></div>
+      <div class="kpis">
+        <div class="kpi"><b>{{ num(m.area) }} m²</b><span>{{ t(UI.living_area) }}</span></div>
+        <div class="kpi"><b>{{ t(UI.from) }} {{ eur(m.price_base) }}</b><span>{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</span></div>
+        <div class="kpi"><b>{{ SITE.delivery_weeks }}</b><span>{{ t(UI.weeks_delivery) }}</span></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="hero-nav"><button class="pv" aria-label="previous">‹</button><button class="nx" aria-label="next">›</button></div>
+  <div class="dots">{% for m in MODELS %}<button aria-label="{{ m.name }}"></button>{% endfor %}</div>
+</section>
+
+{# ---------- WHY ---------- #}
+<section class="section tight">
+  <div class="wrap">
+    <div class="grid g4">
+      {% for h,p in UI.why %}
+      <div class="tile rv"><span class="n">{{ loop.index }}</span><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- MODELS ---------- #}
+<section class="section surface" id="models">
+  <div class="wrap">
+    <div class="section-head row"><div><span class="eyebrow">{{ t(UI.nav_models) }}</span><h2 style="margin-top:8px">{{ t(UI.models_title) }}</h2><p class="lead" style="margin-top:12px">{{ t(UI.models_lead) }}</p></div><a class="btn btn-outline" href="{{ url('compare/') }}">{{ t(UI.compare_models) }}</a></div>
+    <div class="grid g4">{% for m in MODELS %}{{ M.model_card(m) }}{% endfor %}</div>
+  </div>
+</section>
+
+{# ---------- QUIZ ---------- #}
+<section class="section">
+  <div class="wrap">
+    <div class="quiz rv" data-quiz='{{ quiz_data }}'>
+      <div>
+        <span class="eyebrow on-dark">{{ t(UI.nav_which) }}</span>
+        <h2 style="margin:10px 0 8px">{{ t(UI.quiz_title) }}</h2>
+        <p class="lead">{{ t(UI.quiz_lead) }}</p>
+        <p class="small" style="margin-top:20px;color:rgba(255,255,255,.55)">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p>
+      </div>
+      <div>
+        <div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
+        {% for q in QUIZ.q %}
+        <div class="step"><h3>{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>
+        {% endfor %}
+        <div class="res"><span class="eyebrow on-dark">{{ t(UI.quiz_result) }}</span><h3 style="font-size:32px;margin-top:6px" data-r-name></h3><div class="ph"><img alt="" loading="lazy"></div><p data-r-why class="lead" style="color:rgba(255,255,255,.85)"></p><p class="small mute" style="margin-top:8px;color:rgba(255,255,255,.6)" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn btn-primary" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn btn-outline on-dark" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- PERSONALISE ---------- #}
+<section class="section surface" id="personalise">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ t(UI.personalise_title) }}</span><h2>{{ t(UI.personalise_title) }}</h2><p class="lead">{{ t(UI.personalise_lead) }}</p></div>
+    {{ M.personaliser(MODELS, 'pz-home', 'als-110', 'charcoal-black') }}
+  </div>
+</section>
+
+{# ---------- PROCESS ---------- #}
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ t(UI.nav_process) }}</span><h2>{{ t(UI.process_title) }}</h2><p class="lead">{{ t(UI.process_lead) }}</p></div>
+    <div class="steps">
+      {% for h,p in PROCESS %}<div class="step-c rv"><b>0{{ loop.index }}</b><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- WORKS ---------- #}
+<section class="section surface" id="works">
+  <div class="wrap">
+    <div class="section-head row"><div><span class="eyebrow">{{ t(UI.nav_projects) }}</span><h2 style="margin-top:8px">{{ t(UI.works_title) }}</h2><p class="lead" style="margin-top:12px">{{ t(UI.works_lead) }}</p></div><a class="btn btn-outline" href="{{ url('projects/') }}">{{ t(UI.all_works) }}</a></div>
+    <div class="works">
+      {{ M.work_tile(WORKS[0], True) }}{{ M.work_tile(WORKS[1]) }}{{ M.work_tile(WORKS[2]) }}{{ M.work_tile(WORKS[5]) }}{{ M.work_tile(WORKS[7]) }}
+    </div>
+  </div>
+</section>
+
+{# ---------- ADD-ONS ---------- #}
+<section class="section" id="addons">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ t(UI.nav_addons) }}</span><h2>{{ t(UI.addons_title) }}</h2><p class="lead">{{ t(UI.addons_lead) }}</p></div>
+    <div class="grid g3">
+      {% for a in ADDONS %}
+      <div class="tile rv"><span class="tag y">{{ t(UI.from) }} {{ eur(a.price) }}</span><h3 style="margin-top:14px">{{ t(a.name) }} · {{ a.area }} m²</h3><p>{{ t(a.text) }}</p><ul class="small mute" style="margin:12px 0 0;padding-left:18px">{% for f in a.feats %}<li>{{ t(f) }}</li>{% endfor %}</ul><div style="margin-top:16px"><a class="btn-link" href="#contact" data-enquire="{{ t(a.name) }}">{{ t(UI.request_short) }}</a></div></div>
+      {% endfor %}
+    </div>
+    <div class="grid g4" style="margin-top:24px">
+      {% for h,p in ADDON_WHY %}<div class="fact"><b style="font-size:18px;font-weight:500">{{ t(h) }}</b><span style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink-2)">{{ t(p) }}</span></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- FAQ ---------- #}
+<section class="section surface" id="faq">
+  <div class="wrap">
+    <div class="split" style="align-items:start">
+      <div><span class="eyebrow">{{ t(UI.nav_faq) }}</span><h2 style="margin:8px 0 20px">{{ t(UI.faq_title) }}</h2>{{ M.faq_list(FAQ, 4) }}<div style="margin-top:20px"><a class="btn-link" href="{{ url('resources/') }}">{{ t(UI.all_faq) }}</a></div></div>
+      <div class="ph" style="aspect-ratio:3/4">{{ img('als110-photo-lv-staircase', '', '(max-width:900px) 100vw, 40vw')|safe }}</div>
+    </div>
+  </div>
+</section>
+
+{# ---------- CTA ---------- #}
+<section class="section">
+  <div class="wrap">{{ M.cta_band() }}</div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% import "_macros.html" as M with context %}
+{% set og_image = 'als-kettingskov-aerial' %}
+{% block content %}
+<section class="phero"><div class="wrap"><span class="eyebrow">Frest Homes</span><h1 style="margin-top:8px">{{ t(UI.team_title) }}</h1><p class="lead" style="margin-top:14px">{{ t(UI.team_lead) }}</p></div></section>
+<section class="section tight"><div class="wrap"><div class="ph" style="border-radius:16px;overflow:hidden;aspect-ratio:21/9">{{ img('als-kettingskov-aerial', 'Kettingskov', '100vw')|safe }}</div>
+<div class="facts-grid" style="margin-top:24px"><div class="fact"><b>2019</b><span>{{ 'pirmā māja Dānijā' if lang=='lv' else 'first house in Denmark' }}</span></div><div class="fact"><b>3</b><span>{{ 'valstis — LV, DK, ES' if lang=='lv' else 'countries — LV, DK, ES' }}</span></div><div class="fact"><b>4</b><span>{{ 'standarta modeļi' if lang=='lv' else 'standard models' }}</span></div><div class="fact"><b>A</b><span>{{ 'energoklase' if lang=='lv' else 'energy class' }}</span></div></div></div></section>
+<section class="section surface"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.values_title) }}</span><h2>{{ t(UI.values_title) }}</h2></div><div class="grid g4">{% for h,p in VALUES %}<div class="tile rv"><span class="n">{{ loop.index }}</span><h3>{{ t(h) }}</h3><p>{{ t(p) }}</p></div>{% endfor %}</div></div></section>
+<section class="section"><div class="wrap"><div class="section-head"><span class="eyebrow">{{ t(UI.leadership) }}</span><h2>{{ t(UI.leadership) }}</h2></div>
+<div class="grid g3">{% for p in TEAM %}<div class="person rv"><div class="ph">{% if p.img %}{{ img(p.img, p.name, '33vw')|safe }}{% else %}{{ p.name[0] }}{% endif %}</div><div><b>{{ p.name }}</b><span>{{ t(p.role) }} · {{ t(p.unit) }}</span></div><p>{{ t(p.bio) }}</p></div>{% endfor %}</div></div></section>
+<section class="section surface"><div class="wrap">{{ M.cta_band() }}</div></section>
+{% endblock %}
