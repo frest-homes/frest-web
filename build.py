@@ -13,12 +13,18 @@ from content.editorial import DESC as IMGDESC, AUDIENCES, SPREADS, KICKERS, POS 
 ap = argparse.ArgumentParser()
 ap.add_argument('--base', default='/')
 ap.add_argument('--out', default='site')
+ap.add_argument('--root-lang', default='lv', choices=['lv', 'en'])  # which language lives at /
+ap.add_argument('--cname', default='')      # custom domain -> writes site/CNAME for GitHub Pages
 ap.add_argument('--canonical', default='')  # e.g. https://frest-homes.github.io/frest-web
 args = ap.parse_args()
 BASE = args.base if args.base.endswith('/') else args.base + '/'
 OUT = args.out
 MANIFEST = json.load(open('assets/manifest.json'))
 LANGS = ['lv', 'en']
+ROOT_LANG = None  # set in main() from --root-lang
+def seg(lang):
+    """URL segment for a language: '' for the one at the root, 'xx/' for the other."""
+    return '' if lang == ROOT_LANG else lang + '/'
 
 # ---------- routes ----------
 PAGES = [
@@ -60,7 +66,7 @@ env = Environment(loader=FileSystemLoader('templates'), autoescape=select_autoes
 # ---------- helpers ----------
 def make_helpers(lang):
     other = 'en' if lang == 'lv' else 'lv'
-    prefix = BASE + ('en/' if lang == 'en' else '')
+    prefix = BASE + seg(lang)
 
     def t(x):
         if isinstance(x, dict) and lang in x:
@@ -71,7 +77,7 @@ def make_helpers(lang):
         return prefix + path.lstrip('/')
 
     def url_other(path=''):
-        return BASE + ('en/' if other == 'en' else '') + path.lstrip('/')
+        return BASE + seg(other) + path.lstrip('/')
 
     def imgsrc(name, w=None):
         m = MANIFEST[name]
@@ -135,9 +141,8 @@ def build_lang(lang):
     ctx_base['quiz_data'] = json.dumps(quiz_models, ensure_ascii=False)
 
     def write(path, html_out):
-        full = os.path.join(OUT, 'en' if lang == 'en' else '', path, 'index.html') if path != '' or lang == 'en' else os.path.join(OUT, 'index.html')
-        if path == '' and lang == 'en':
-            full = os.path.join(OUT, 'en', 'index.html')
+        sub = seg(lang).rstrip('/')
+        full = os.path.join(OUT, sub, path, 'index.html') if (path or sub) else os.path.join(OUT, 'index.html')
         os.makedirs(os.path.dirname(full), exist_ok=True)
         open(full, 'w', encoding='utf-8').write(html_out)
         return full
@@ -156,11 +161,13 @@ def build_lang(lang):
     # 404
     ctx = dict(ctx_base, page='404', path='404', title='404 | Frest', desc='')
     out = env.get_template('404.html').render(**ctx)
-    if lang == 'lv':
+    if lang == ROOT_LANG:
         open(os.path.join(OUT, '404.html'), 'w', encoding='utf-8').write(out)
     return written
 
 def main():
+    global ROOT_LANG
+    ROOT_LANG = args.root_lang
     os.makedirs(OUT, exist_ok=True)
     # static
     os.makedirs(os.path.join(OUT, 'static'), exist_ok=True)
@@ -173,7 +180,7 @@ def main():
     can = args.canonical.rstrip('/') if args.canonical else ''
     urls = []
     for lang in LANGS:
-        pre = '/en' if lang == 'en' else ''
+        pre = ('/' + seg(lang).rstrip('/')) if seg(lang) else ''
         for _, path, key in PAGES:
             if key in ('privacy', 'terms'):
                 continue
@@ -184,13 +191,19 @@ def main():
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
     for u in urls:
         loc = (can or '') + BASE.rstrip('/') + u
-        alt_lv = (can or '') + BASE.rstrip('/') + u.replace('/en/', '/', 1) if u.startswith('/en/') else loc
-        alt_en = (can or '') + BASE.rstrip('/') + ('/en' + u if not u.startswith('/en/') else u)
+        oth = 'en' if ROOT_LANG == 'lv' else 'lv'
+        op = '/' + oth
+        bare = u[len(op):] if u.startswith(op + '/') else u
+        alt_root = (can or '') + BASE.rstrip('/') + bare
+        alt_oth = (can or '') + BASE.rstrip('/') + op + bare
+        alt_lv, alt_en = (alt_root, alt_oth) if ROOT_LANG == 'lv' else (alt_oth, alt_root)
         sm.append(f'<url><loc>{loc}</loc><xhtml:link rel="alternate" hreflang="lv" href="{alt_lv}"/><xhtml:link rel="alternate" hreflang="en" href="{alt_en}"/></url>')
     sm.append('</urlset>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w').write('\n'.join(sm))
     open(os.path.join(OUT, 'robots.txt'), 'w').write(f"User-agent: *\nAllow: /\nSitemap: {(can or '') + BASE.rstrip('/')}/sitemap.xml\n")
     open(os.path.join(OUT, '.nojekyll'), 'w').write('')
+    if args.cname:
+        open(os.path.join(OUT, 'CNAME'), 'w').write(args.cname.strip() + '\n')
     print(f'built {len(all_written)} pages -> {OUT} (base {BASE})')
 
 if __name__ == '__main__':
