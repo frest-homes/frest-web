@@ -11,7 +11,11 @@ SITE = {
     'email': 'info@frest.lv',
     'phone': '+371 20622020',
     'phone_display': '+371 2062 2020',
-    'address': T('Rīga, Latvija', 'Riga, Latvia'),
+    'address': T('Strēlnieku iela 5-43, Rīga, LV-1010', 'Strēlnieku iela 5-43, Riga, LV-1010, Latvia'),
+    'street': 'Strēlnieku iela 5-43',
+    'postcode': 'LV-1010',
+    'reg_no': '',      # TODO Janis: SIA Frest reģistrācijas numurs — rendered only when filled
+    'vat_no': '',      # TODO Janis: PVN reģistrācijas numurs — rendered only when filled
     'facebook': 'https://www.facebook.com/frest.dk',
     'instagram': 'https://www.instagram.com/frest_homes',
     'tagline': T('Skandināvu mājas. Rūpnīcas precizitāte.', 'Scandinavian homes. Factory precision.'),
