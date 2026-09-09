@@ -37,7 +37,7 @@ PAGES = [
     ('legal.html', 'terms/', 'terms'),
 ]
 TITLES = {
-    'home': {'lv': 'Rūpnīcā ražotas skandināvu mājas | Frest Homes', 'en': 'Factory-built Scandinavian homes | Frest Homes'},
+    'home': {'lv': 'Skandināvu dizaina mājas — projektējam un uzbūvējam | Frest Homes', 'en': 'Scandinavian-design homes — we design and build | Frest Homes'},
     'compare': {'lv': 'Salīdzināt modeļus — Aura 70, Aura 110, Als 70, Als 110 | Frest', 'en': 'Compare models — Aura 70, Aura 110, Als 70, Als 110 | Frest'},
     'which': {'lv': 'Kura māja man? | Frest', 'en': 'Which house is mine? | Frest'},
     'pricing': {'lv': 'Paketes un cenas | Frest', 'en': 'Packages and prices | Frest'},
@@ -51,8 +51,8 @@ TITLES = {
     'terms': {'lv': 'Noteikumi | Frest', 'en': 'Terms | Frest'},
 }
 DESC = {
-    'home': {'lv': 'Aura un Als sērijas mājas: rūpnīcā ražotas, energoklase A, 16–20 nedēļas līdz atslēgām. Uzbūvētas Dānijā un Latvijā. Cenas no 92 000 €.',
-             'en': 'Aura and Als series homes: factory-built, energy class A, 16–20 weeks to keys. Built in Denmark and Latvia. Prices from €92,000.'},
+    'home': {'lv': 'Aura un Als sērijas mājas: projektēšana, saskaņošana, ražošana un būvniecība ar vienu atbildīgo. Energoklase A. Uzbūvētas Dānijā un Latvijā. Cenas no 92 000 €.',
+             'en': 'Aura and Als series homes: design, permitting, manufacturing and construction with one responsible partner. Energy class A. Built in Denmark and Latvia. Prices from €92,000.'},
 }
 
 env = Environment(loader=FileSystemLoader('templates'), autoescape=select_autoescape(['html']), trim_blocks=True, lstrip_blocks=True)
