@@ -1,0 +1,7 @@
+site/
+serve/
+shots/
+harvest/
+figma-src/
+assets/manifest.json
+__pycache__/
