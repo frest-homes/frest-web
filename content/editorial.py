@@ -73,14 +73,14 @@ DESC = {
 # "Kas jūs esat?" — audience selector (El Soco: Choose who you are)
 AUDIENCES = [
     ('all', T('Visi', 'Everyone'), T('Skandināvu dizaina māja, ko projektējam un uzbūvējam līdz atslēgām.', 'A Scandinavian-design house we design and build to the keys.'),
-     T('Frest ražo sienu un jumta paneļus sausos apstākļos, uzstāda tos objektā dažās dienās un nodod māju ar apdari, elektrību un apkuri. Četri modeļi, divas sērijas, cenas no 92 000 € ar PVN.',
-       'Frest builds wall and roof panels indoors, assembles them on site in days and hands over the house with finishes, electrics and heating. Four models, two series, prices from €92,000 incl. VAT.'), 'model/als-110/', T('Sākt ar modeļiem →', 'Start with the models →')),
+     T('Frest ražo sienu un jumta paneļus sausos apstākļos, uzstāda tos objektā dažās dienās un nodod māju ar apdari, elektrību un apkuri. Četri modeļi, divas sērijas, viens līgums un viena tāme.',
+       'Frest builds wall and roof panels indoors, assembles them on site in days and hands over the house with finishes, electrics and heating. Four models, two series, one contract and one estimate.'), 'model/als-110/', T('Sākt ar modeļiem →', 'Start with the models →')),
     ('family', T('Ģimene', 'Family'), T('Trīs guļamistabas, divi sanmezgli, viena atslēga.', 'Three bedrooms, two bathrooms, one key.'),
      T('Aura 110 vai Als 110 — 103–110 m², mezanīns bērniem vai darbam, terase zem jumta. Pilnā pakete nozīmē, ka pēc nodošanas jāieved tikai virtuve un mēbeles.',
        'Aura 110 or Als 110 — 103–110 m², a mezzanine for the children or for work, a covered terrace. The Complete package means only the kitchen and furniture come after handover.'), 'configure/', T('Kura māja man? →', 'Which house is mine? →')),
     ('first', T('Pirmā māja', 'First home'), T('Kompakta, energoefektīva, ar skaidru cenu.', 'Compact, energy-efficient, with a clear price.'),
-     T('Aura 70 vai Als 70 — 68–72 m², divas guļamistabas, energoklase A un apkures izmaksas 280–430 € gadā. No 92 000 € ar PVN rūpnīcas komplektā ar montāžu.',
-       'Aura 70 or Als 70 — 68–72 m², two bedrooms, energy class A and heating at €280–430 per year. From €92,000 incl. VAT as a factory kit with assembly.'), 'model/als-70/', T('Als 70 →', 'Als 70 →')),
+     T('Aura 70 vai Als 70 — 68–72 m², divas guļamistabas, energoklase A un apkures izmaksas 280–430 € gadā. Rūpnīcas komplekts ar montāžu no 92 000 € ar PVN — bez pamatiem un iekšējās apdares.',
+       'Aura 70 or Als 70 — 68–72 m², two bedrooms, energy class A and heating at €280–430 per year. The factory kit with assembly from €92,000 incl. VAT — foundation and interior finishing not included.'), 'model/als-70/', T('Als 70 →', 'Als 70 →')),
     ('investor', T('Investors', 'Investor'), T('Dvīņu mājas, piebūves, vairāku māju apbūve.', 'Twin houses, annexes, multi-house developments.'),
      T('Aura 70 Urban — divas vienības uz viena zemesgabala. Als 110 Dual Homes. Kettingskovā astoņas Als mājas uzbūvētas vienā sezonā. Cenas un termiņi ir prognozējami, jo ražošana ir rūpnīcā.',
        'Aura 70 Urban — two units on one plot. Als 110 Dual Homes. In Kettingskov eight Als homes were built in one season. Prices and timelines are predictable because production is in the factory.'), 'projects/', T('Realizētie projekti →', 'Completed projects →')),

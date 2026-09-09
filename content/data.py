@@ -88,8 +88,8 @@ PACKAGES = {
         T('Būvatļauja un projekta saskaņošana', 'Building permit and approvals'),
         T('Labiekārtošana', 'Landscaping'),
     ],
-    'note': T('Cenas norādītas ar PVN standarta komplektācijā. Galīgā cena tiek precizēta piedāvājumā pēc zemesgabala un komplektācijas izvēles.',
-              'Prices include VAT in standard specification. The final price is confirmed in the offer after the plot and specification are chosen.'),  # CHECK
+    'note': T('Visas cenas ir ar PVN standarta komplektācijā un vienmēr attiecas uz konkrētu paketi. Nevienā cenā nav iekļauti pamatu darbi, zeme, pieslēgumi, būvatļauja un labiekārtošana — tie tiek rēķināti atsevišķi pēc zemesgabala. Galīgo cenu apstiprinām tāmē pēc zemesgabala un komplektācijas izvēles.',
+              'All prices include VAT in standard specification and always refer to a specific package. No price includes foundation works, land, utility connections, the building permit or landscaping — these are quoted separately once the plot is known. The final price is confirmed in a detailed estimate after the plot and specification are chosen.')
 }
 
 MODELS = [

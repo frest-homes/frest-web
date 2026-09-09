@@ -21,6 +21,11 @@ UI = {
     'ceiling': T('Griestu augstums', 'Ceiling height'), 'style': T('Stils', 'Style'), 'delivery': T('Piegāde', 'Delivery'), 'warranty_terms': T('Pēc līguma', 'Per contract'), 'warranty': T('Garantija', 'Warranty'), 'years': T('gadi', 'years'),
     'base_price': T('Pamata pakete', 'Base package'), 'complete_price': T('Pilnā pakete', 'Complete package'),
     'm2': 'm²', 'with_vat': T('ar PVN', 'incl. VAT'),
+    # Every price on the site must say WHICH package it is. price_base = the factory kit
+    # (panels, roof, windows, facade, assembly) — no foundation, no interior.
+    'kit_price': T('Rūpnīcas komplekts ar montāžu', 'Factory kit with assembly'),
+    'kit_excl': T('Bez pamatiem un iekšējās apdares', 'Excl. foundation and interior finishing'),
+    'see_packages': T('Kas ir katrā paketē →', 'What is in each package →'),
 
     # home
     'hero_eyebrow': T('Projektējam un uzbūvējam', 'We design and we build'),
