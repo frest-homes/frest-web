@@ -7,14 +7,14 @@
 {% block content %}
 <header class="mhero"><div class="bg">{{ img(m.hero, m.name, '100vw', '', 'eager', 'high')|safe }}</div><div class="tint"></div>
   <div class="in fadein">
-    <div class="folio"><span>{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }} · {{ t(m.style) }}</span><span>{{ num(m.area) }} m² · {{ m.bedrooms }} {{ t(UI.bedrooms)|lower }} · {{ t(UI.from) }} {{ eur(m.price_base) }}</span></div>
+    <div class="folio"><span>{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }} · {{ t(m.style) }}</span><span>{{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }} · {{ cnt(m.bathrooms,'bathrooms') }}</span></div>
     <h1>{{ m.name }}</h1>
     <p class="lede" style="margin-top:18px">{{ t(m.lead) }}</p>
     <div class="btn-row" style="margin-top:22px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost on-dark" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
     <div class="kpis">
       <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div></div>
       <div class="stat"><div class="n">{{ m.bedrooms }} / {{ m.bathrooms }}</div><div class="l">{{ t(UI.bedrooms) }} / {{ t(UI.bathrooms) }}</div></div>
-      <div class="stat"><div class="n">{{ eur(m.price_base) }}</div><div class="l">{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</div></div>
+      <div class="stat"><div class="n">{{ eur(m.price_base) }}</div><div class="l">{{ t(PACKAGES.base.sub) }} · {{ t(UI.with_vat) }}</div><div class="d">{{ t(UI.kit_excl) }}</div></div>
       <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div></div>
     </div>
   </div>
@@ -138,5 +138,5 @@
   {{ M.cta_band() }}
   {% set nx = [] %}{% for o in others[:2] %}{% set _ = nx.append((o.series, o.name+' — '+t(o.tagline), url('model/'+o.slug+'/'))) %}{% endfor %}{{ M.next_cards(nx) }}
 </div></section>
-<div class="sticky-cta"><div><b>{{ m.name }}</b><small>{{ t(UI.from) }} {{ eur(m.price_base) }} · {{ t(UI.with_vat) }}</small></div><a class="btn" style="padding:10px 16px" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request_short) }}</a></div>
+<div class="sticky-cta"><div><b>{{ m.name }}</b><small>{{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }} · {{ t(m.style) }}</small></div><a class="btn" style="padding:10px 16px" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request_short) }}</a></div>
 {% endblock %}

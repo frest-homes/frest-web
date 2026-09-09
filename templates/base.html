@@ -27,7 +27,7 @@
   <a class="brand" href="{{ url('') }}" aria-label="Frest Homes"><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24"></a>
   <ul>
     <li class="dd"><button type="button" class="{{ 'on' if page=='model' }}">{{ t(UI.nav_models) }} <i>▼</i></button>
-      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}" data-c="{{ 'aura' if m.series=='Aura' else 'als' }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ t(UI.from) }} {{ eur(m.price_base) }}</small></a>{% endfor %}<a href="{{ url('compare/') }}" data-c="tool">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}" data-c="tool">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
+      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}" data-c="{{ 'aura' if m.series=='Aura' else 'als' }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ cnt(m.bedrooms,'bedrooms') }}</small></a>{% endfor %}<a href="{{ url('compare/') }}" data-c="tool">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}" data-c="tool">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
     <li><a href="{{ url('projects/') }}" class="{{ 'on' if page=='projects' }}">{{ t(UI.nav_projects) }}</a></li>
     <li><a href="{{ url('gallery/') }}" class="{{ 'on' if page=='gallery' }}">{{ t(UI.nav_gallery) }}</a></li>
     <li><a href="{{ url('pricing/') }}" class="{{ 'on' if page=='pricing' }}">{{ t(UI.nav_pricing) }}</a></li>

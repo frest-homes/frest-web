@@ -12,7 +12,7 @@
   <div class="eyebrow">{{ m.series }} · {{ t(m.style) }}</div>
   <div class="fig f" style="margin-top:12px">{{ img(m.card, m.name, '(max-width:640px) 100vw, 25vw')|safe }}<figcaption>{{ m.name }} · {{ num(m.area) }} m²</figcaption></div>
   <span class="nm">{{ m.name }}</span><span class="tg">{{ t(m.tagline) }}</span>
-  <div class="row"><span>{{ m.bedrooms }} {{ t(UI.bedrooms)|lower }} · {{ m.bathrooms }} {{ t(UI.bathrooms)|lower }}</span><b>{{ t(UI.from) }} {{ eur(m.price_base) }}</b></div>
+  <div class="row"><span>{{ cnt(m.bedrooms,'bedrooms') }} · {{ cnt(m.bathrooms,'bathrooms') }}</span><b>{{ t(UI.view_model) }} →</b></div>
 </a>
 {% endmacro %}
 

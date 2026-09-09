@@ -10,8 +10,8 @@
   {% for label, vals, unit, best in rows %}{% set tv = vals|map('string')|list %}{% set same = (tv|unique|list|length == 1) %}
     <tr class="{{ 'same' if same }}"><td>{{ t(label) }}</td>{% for v in vals %}<td class="{{ 'best' if best=='max' and v==(vals|max) and not same }}">{{ (t(v) if v is mapping else (num(v) if v is not none else '—')) }}{{ (' '+unit) if unit and v is not none and v is not mapping }}</td>{% endfor %}</tr>
   {% endfor %}
-    <tr class="total"><td>{{ t(UI.base_price) }}</td>{% for m in MODELS %}<td>{{ eur(m.price_base) }}</td>{% endfor %}</tr>
-    <tr class="total"><td>{{ t(UI.complete_price) }}</td>{% for m in MODELS %}<td>{{ eur(m.price_complete) }}</td>{% endfor %}</tr>
+    <tr class="total"><td>{{ t(UI.base_price) }} <span class="small">· {{ t(PACKAGES.base.sub) }}, {{ t(UI.with_vat) }}</span></td>{% for m in MODELS %}<td>{{ eur(m.price_base) }}</td>{% endfor %}</tr>
+    <tr class="total"><td>{{ t(UI.complete_price) }} <span class="small">· {{ t(PACKAGES.complete.sub) }}, {{ t(UI.with_vat) }}</span></td>{% for m in MODELS %}<td>{{ eur(m.price_complete) }}</td>{% endfor %}</tr>
     <tr><td>€ / m² ({{ t(PACKAGES.complete.name) }})</td>{% for m in MODELS %}<td>{{ eur((m.price_complete / m.area)|round) }}</td>{% endfor %}</tr>
     <tr class="same"><td>{{ t(TIMING.kit_l) }}</td>{% for m in MODELS %}<td>{{ t(TIMING.kit) }}</td>{% endfor %}</tr>
     <tr><td></td>{% for m in MODELS %}<td><a class="pill ok" href="{{ url('model/'+m.slug+'/') }}">{{ t(UI.view_model) }} →</a></td>{% endfor %}</tr>

@@ -11,7 +11,7 @@
       <span class="badge">{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }}</span>
       <h1>{{ m.name }}</h1>
       <p class="tg">{{ t(m.tagline) }}</p>
-      <div class="hs-specs"><span><b>{{ num(m.area) }} m²</b> {{ 'telpu platība' if lang=='lv' else 'living area' }}</span><span><b>{{ m.bedrooms }}</b> {{ t(UI.bedrooms)|lower }} · <b>{{ m.bathrooms }}</b> {{ t(UI.bathrooms)|lower }}</span><span>{{ t(UI.from) }} <b>{{ eur(m.price_base) }}</b></span></div>
+      <div class="hs-specs"><span><b>{{ num(m.area) }} m²</b> {{ 'telpu platība' if lang=='lv' else 'living area' }}</span><span>{{ cnt(m.bedrooms,'bedrooms') }} · {{ cnt(m.bathrooms,'bathrooms') }}</span></div>
       <div class="btn-row"><a class="btn" href="{{ url('model/'+m.slug+'/') }}">{{ 'Skatīt modeli' if lang=='lv' else 'See the model' }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
     </div>{% endfor %}
   </div>
@@ -31,7 +31,7 @@
       <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div><div class="d">{{ '300 mm siltinājums, trīskārši logi' if lang=='lv' else '300 mm insulation, triple glazing' }}</div></div>
       <div class="stat"><div class="n">4</div><div class="l">{{ 'Modeļi' if lang=='lv' else 'Models' }}</div><div class="d">{{ 'Als un Aura sērijas' if lang=='lv' else 'Als and Aura series' }}</div></div>
       <div class="stat"><div class="n">2019</div><div class="l">{{ 'Kopš' if lang=='lv' else 'Since' }}</div><div class="d">{{ 'Latvijā un Dānijā' if lang=='lv' else 'in Latvia and Denmark' }}</div></div>
-      <div class="stat"><div class="n">92 000 €</div><div class="l">{{ 'Sākot no' if lang=='lv' else 'From' }}</div><div class="d">{{ 'ar PVN, betona plātnes pamats' if lang=='lv' else 'incl. VAT, concrete slab' }}</div></div>
+      <div class="stat"><div class="n">{{ eur((MODELS|selectattr('slug','equalto','als-110')|first).price_base) }}</div><div class="l">Als 110 · {{ t(PACKAGES.base.sub) }}</div><div class="d">{{ t(UI.with_vat) }} · {{ t(UI.kit_excl)|lower }}<br><a href="{{ url('pricing/') }}">{{ t(UI.see_packages) }}</a></div></div>
     </div></div>
   </div>
   <div class="promise">
@@ -51,7 +51,7 @@
 {% call M.spread(SPREADS.cover, 'l', 'top') %}{% endcall %}
 <section class="s" style="padding-top:44px"><div class="wrap"><div class="cols eq" style="align-items:start">
   <p class="lede" style="margin:0">{{ 'Kettingskovā, Dienviddānijā, 2022. gadā vienā sezonā uzbūvējām astoņas Als mājas: Als 70 un Als 110 ar melnu, pelēku un koka fasādi. Katrai savs zemesgabals, sava terase pret sauli un tas pats rūpnīcas komplekts.' if lang=='lv' else 'In Kettingskov, southern Denmark, we built eight Als homes in one season of 2022: Als 70 and Als 110 with black, gray and wood facades. Each with its own plot, its own terrace facing the sun and the same factory kit.' }}</p>
-  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Als 70 no 92 000 € · Als 110 no 128 000 € · Aura 70 no 95 000 € · Aura 110 no 125 000 € — rūpnīcas komplekts ar montāžu, ar PVN. Pilnā pakete ar apdari, elektrību un apkuri: +37–51 000 €. Bez pamatu darbiem, zemes un atļaujas. Precīza cena — piedāvājumā.' if lang=='lv' else 'Als 70 from €92,000 · Als 110 from €128,000 · Aura 70 from €95,000 · Aura 110 from €125,000 — factory kit with assembly, incl. VAT. Complete package with finishes, electrics and heating: +€37–51,000. Excluding foundation works, land and permit. The exact price is in the offer.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('projects/') }}#kettingskov">{{ 'Ciemats pilnībā →' if lang=='lv' else 'The village in full →' }}</a></p></div>
+  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Publicējam vienu cenu: rūpnīcas komplektu ar montāžu, ar PVN — Als 110 no 128 000 €. Tajā nav pamatu darbu, iekšējās apdares, zemes, pieslēgumu un atļaujas. Pilnā pakete ar apdari, elektrību un apkuri un visu paku salīdzinājums ir sadaļā Cenas, precīza cena — tāmē pēc zemesgabala.' if lang=='lv' else 'We publish one headline price: the factory kit with assembly, incl. VAT — Als 110 from €128,000. It does not include foundation works, interior finishing, land, connections or the permit. The Complete package and the full package comparison are on the Pricing page; the exact price comes in an estimate once the plot is known.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('pricing/') }}">{{ t(UI.see_packages) }}</a></p></div>
 </div></div></section>
 
 {# ---- the four models ---- #}
@@ -129,7 +129,7 @@
 {# ---- modules ---- #}
 <section class="s alt" id="addons"><div class="wrap">
   <div class="cols"><div><div class="eyebrow">06 — {{ t(UI.nav_addons) }}</div><h2>{{ t(UI.addons_title) }}</h2></div><div><p class="lede">{{ t(UI.addons_lead) }}</p></div></div>
-  <div class="cols3" style="margin-top:36px">{% for a in ADDONS %}<div class="tile"><div class="eyebrow">{{ t(UI.from) }} {{ eur(a.price) }} · {{ a.area }} m²</div><h3>{{ t(a.name) }}</h3><p class="small">{{ t(a.text) }}</p><p class="small" style="color:var(--ink2)">{% for f in a.feats %}{{ t(f) }}{{ ' · ' if not loop.last }}{% endfor %}</p><a class="cap2" style="color:var(--acc-ink)" href="#contact" data-open-contact="{{ t(a.name) }}">{{ t(UI.request_short) }} →</a></div>{% endfor %}</div>
+  <div class="cols3" style="margin-top:36px">{% for a in ADDONS %}<div class="tile"><div class="eyebrow">{{ a.area }} m² · {{ t(UI.from) }} {{ eur(a.price) }} {{ t(UI.with_vat) }}</div><h3>{{ t(a.name) }}</h3><p class="small">{{ t(a.text) }}</p><p class="small" style="color:var(--ink2)">{% for f in a.feats %}{{ t(f) }}{{ ' · ' if not loop.last }}{% endfor %}</p><a class="cap2" style="color:var(--acc-ink)" href="#contact" data-open-contact="{{ t(a.name) }}">{{ t(UI.request_short) }} →</a></div>{% endfor %}</div>
   <div class="cols4" style="margin-top:28px">{% for h,p in ADDON_WHY %}<div class="stat"><div class="l" style="margin-top:0;color:var(--acc-ink)">{{ t(h) }}</div><div class="d">{{ t(p) }}</div></div>{% endfor %}</div>
 </div></section>
 
