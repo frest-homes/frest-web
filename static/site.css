@@ -294,3 +294,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
 
 .mcard .fig{background:var(--bg2)}
 .mcard .fig img{mix-blend-mode:multiply}
+
+/* model hero: folio and eyebrow must stay legible over bright renders */
+.mhero .tint{background:linear-gradient(180deg,rgba(12,36,41,.28),rgba(12,36,41,.42) 45%,rgba(12,36,41,.92))}
+.mhero .folio{color:var(--on-dark2);border-color:rgba(238,247,248,.34)}
+.mhero .folio span{color:var(--on-dark)}
+.mhero .eyebrow{color:var(--acc)}
+.mhero .kpis .l,.mhero .kpis .d{color:var(--on-dark2)}
+.mhero .stat::before{background:var(--acc)}
+/* captions must read on bright skies too */
+.fig figcaption{background:linear-gradient(to top,rgba(12,36,41,.9),rgba(12,36,41,.62) 45%,rgba(12,36,41,0));text-shadow:0 1px 2px rgba(12,36,41,.5);padding-top:26px}
+.fig.p-c figcaption{background:linear-gradient(to top,rgba(255,255,255,.96),rgba(255,255,255,.6));color:var(--ink2);text-shadow:none}
+.hero{padding-bottom:20px}
