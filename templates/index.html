@@ -1,21 +1,48 @@
 {% extends "base.html" %}
 {% import "_macros.html" as M with context %}
 {% block content %}
-{# ---- brand intro (El Soco hero) ---- #}
-<header class="hero"><div class="wrap fadein"><div class="grid">
-  <div>
-    <div class="eyebrow">{{ t(UI.hero_eyebrow) }} · Aura · Als · Latvija · Danmark</div>
-    <h1 style="margin-top:18px">{{ 'Māja, kas top rūpnīcā.' if lang=='lv' else 'A house made in a factory.' }}</h1>
-    <p class="lede" style="margin-top:22px">{{ 'Frest ražo skandināvu dizaina mājas Latvijā: sienu un jumta paneļi top sausumā, objektā tos saliek dažās dienās, un atslēgas ir rokā 16–20 nedēļās. Četri modeļi. Divas sērijas. Uzbūvētas Dānijā un Latvijā kopš 2019. gada.' if lang=='lv' else 'Frest makes Scandinavian-design homes in Latvia: wall and roof panels are built indoors, assembled on site in days, and the keys are in your hand within 16–20 weeks. Four models. Two series. Built in Denmark and Latvia since 2019.' }}</p>
-    <p class="cap">{{ 'Energoklase A · 300 mm siltinājums · betona plātnes pamats · no 92 000 € ar PVN' if lang=='lv' else 'Energy class A · 300 mm insulation · concrete slab foundation · from €92,000 incl. VAT' }}</p>
-    <p style="margin-top:26px"><a class="pill ok" href="#models" style="padding:10px 16px">{{ 'Četri modeļi →' if lang=='lv' else 'The four models →' }}</a> &nbsp; <a class="pill hi" href="{{ url('catalogue/') }}" style="padding:10px 16px">{{ t(UI.nav_catalogue) }} →</a></p>
+{# ---- hero slideshow: the best visualisation of each model, rotating ---- #}
+{% set ms = MODELS|sort(attribute='order') %}
+<header class="hs" data-hs aria-roledescription="carousel">
+  <div class="hs-track">{% for m in ms %}<div class="hs-slide {{ 'on' if loop.first }}">{{ img(m.hero, m.name, '100vw', '', 'eager' if loop.first else 'lazy', 'high' if loop.first else None)|safe }}<div class="hs-tint"></div></div>{% endfor %}</div>
+  <div class="hs-body wrap">
+    <div class="hs-brand">{{ 'Projektējam · Uzbūvējam · Nododam atslēgas' if lang=='lv' else 'We design · We build · We hand over the keys' }}</div>
+    {% for m in ms %}<div class="hs-cap {{ 'on' if loop.first }}">
+      <span class="badge">{{ m.series }} {{ 'sērija' if lang=='lv' else 'series' }}</span>
+      <h1>{{ m.name }}</h1>
+      <p class="tg">{{ t(m.tagline) }}</p>
+      <div class="hs-specs"><span><b>{{ num(m.area) }} m²</b> {{ 'telpu platība' if lang=='lv' else 'living area' }}</span><span><b>{{ m.bedrooms }}</b> {{ t(UI.bedrooms)|lower }} · <b>{{ m.bathrooms }}</b> {{ t(UI.bathrooms)|lower }}</span><span>{{ t(UI.from) }} <b>{{ eur(m.price_base) }}</b></span></div>
+      <div class="btn-row"><a class="btn" href="{{ url('model/'+m.slug+'/') }}">{{ 'Skatīt modeli' if lang=='lv' else 'See the model' }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+    </div>{% endfor %}
   </div>
-  <div>{{ M.fig('als110-photo-lv-exterior-forest', 'Als 110 · Latvija · 2024', 'p', '(max-width:900px) 100vw, 40vw', False) }}</div>
-</div></div></header>
+  <button class="hs-arrow p" type="button" aria-label="{{ 'Iepriekšējais modelis' if lang=='lv' else 'Previous model' }}">‹</button>
+  <button class="hs-arrow n" type="button" aria-label="{{ 'Nākamais modelis' if lang=='lv' else 'Next model' }}">›</button>
+  <div class="hs-dots">{% for m in ms %}<button type="button" class="{{ 'on' if loop.first }}" aria-label="{{ m.name }}"></button>{% endfor %}</div>
+</header>
+
+{# ---- the promise: design & build, one responsibility ---- #}
+<section class="s"><div class="wrap">
+  <div class="eyebrow">{{ t(UI.hero_eyebrow) }} · Als · Aura · Latvija · Danmark</div>
+  <h1 style="margin:16px 0 30px;font-size:clamp(36px,4.4vw,58px);max-width:22ch">{{ ('Viena komanda — no skices līdz atslēgām.' if lang=='lv' else 'One team — from sketch to keys.') }}</h1>
+  <div class="cols" style="align-items:start">
+    <div><p class="lede" style="margin-top:0">{{ 'Frest projektē, saskaņo, ražo un uzbūvē skandināvu dizaina mājas. Jums ir viens partneris, viena tāme un viens cilvēks, kam zvanīt — no pirmās skices līdz nodošanas aktam.' if lang=='lv' else 'Frest designs, permits, manufactures and builds Scandinavian-design homes. You have one partner, one estimate and one person to call — from the first sketch to the handover report.' }}</p>
+      </div>
+    <div class="cols4" style="grid-template-columns:1fr 1fr;gap:22px">
+      <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div><div class="d">{{ '300 mm siltinājums, trīskārši logi' if lang=='lv' else '300 mm insulation, triple glazing' }}</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">{{ 'Modeļi' if lang=='lv' else 'Models' }}</div><div class="d">{{ 'Als un Aura sērijas' if lang=='lv' else 'Als and Aura series' }}</div></div>
+      <div class="stat"><div class="n">2019</div><div class="l">{{ 'Kopš' if lang=='lv' else 'Since' }}</div><div class="d">{{ 'Latvijā un Dānijā' if lang=='lv' else 'in Latvia and Denmark' }}</div></div>
+      <div class="stat"><div class="n">92 000 €</div><div class="l">{{ 'Sākot no' if lang=='lv' else 'From' }}</div><div class="d">{{ 'ar PVN, betona plātnes pamats' if lang=='lv' else 'incl. VAT, concrete slab' }}</div></div>
+    </div></div>
+  </div>
+  <div class="promise">
+    {% for n, h, p in ([('01','Projektēšana un saskaņošana','Arhitektūra, novietojums, topogrāfija un būvatļauja — kārtojam mēs, jūs parakstāt.'),('02','Ražošana ar precizitāti','Sienu un jumta paneļi top sausumā, ar siltinājumu un apšuvumu jau iekšā.'),('03','Būvniecība līdz atslēgām','Montāža, inženierkomunikācijas, apdare un nodošana ar pieņemšanas aktu.'),('04','Viens līgums, viena atbildība','Cena tāmē pa sadaļām, garantija un viens kontaktpunkts visam ceļam.')] if lang=='lv' else [('01','Design and permitting','Architecture, siting, topography and the building permit — we handle it, you sign.'),('02','Manufacturing precision','Wall and roof panels are built indoors, insulation and cladding already inside.'),('03','Construction to the keys','Assembly, services, finishing and handover with an acceptance report.'),('04','One contract, one responsibility','The price in an estimate by section, a warranty and one point of contact.')]) %}
+    <div class="p"><div class="n">{{ n }}</div><b>{{ h }}</b><p>{{ p }}</p></div>{% endfor %}
+  </div>
+</div></section>
 
 {# ---- audience selector ---- #}
 <section class="s" id="you"><div class="wrap"><div class="cols">
-  <div><div class="eyebrow">{{ 'Izvēlieties, kas jūs esat' if lang=='lv' else 'Choose who you are' }}</div><h2>{{ ('Viena rūpnīca. <br>Septiņi veidi, kā to lasīt.' if lang=='lv' else 'One factory. <br>Seven ways to read it.')|safe }}</h2><p class="small" style="margin-top:-6px">{{ 'Izvēlieties skatpunktu — teksts zemāk mainās jums.' if lang=='lv' else 'Pick an angle — the text below changes for you.' }}</p></div>
+  <div><div class="eyebrow">{{ 'Izvēlieties, kas jūs esat' if lang=='lv' else 'Choose who you are' }}</div><h2>{{ ('Viena māja. <br>Septiņi veidi, kā to lasīt.' if lang=='lv' else 'One house. <br>Seven ways to read it.')|safe }}</h2><p class="small" style="margin-top:-6px">{{ 'Izvēlieties skatpunktu — teksts zemāk mainās jums.' if lang=='lv' else 'Pick an angle — the text below changes for you.' }}</p></div>
   <div><div class="aud" id="aud" data-aud='{{ aud_data }}'>{% for k, lab, h, p, href, link in AUDIENCES %}<button type="button" data-aud="{{ k }}" class="{{ 'on' if k=='all' }}">{{ t(lab) }}</button>{% endfor %}</div>
   <div class="audpanel" id="audpanel"><h3 id="audh"></h3><p id="audp"></p><div class="cap2" id="audl"></div></div></div>
 </div></div></section>
@@ -89,8 +116,14 @@
 
 {# ---- process road ---- #}
 <section class="s" id="process"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">05 — {{ t(UI.nav_process) }}</div><h2>{{ ('Pieci soļi. <br>Sešpadsmit nedēļas.' if lang=='lv' else 'Five steps. <br>Sixteen weeks.')|safe }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
+  <div class="cols"><div><div class="eyebrow">05 — {{ t(UI.nav_process) }}</div><h2>{{ ('Pieci soļi —<br>un godīgs grafiks.' if lang=='lv' else 'Five steps —<br>and an honest schedule.')|safe }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
   <div class="road">{% for h,p in PROCESS %}<div><div class="y">0{{ loop.index }}</div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div>{% endfor %}</div>
+  <div class="timing">
+    {% for v,l,d in [(TIMING.design,TIMING.design_l,TIMING.design_d),(TIMING.build,TIMING.build_l,TIMING.build_d),(TIMING.kit,TIMING.kit_l,TIMING.kit_d)] %}
+    <div class="t"><div class="v">{{ t(v) }}</div><div class="l">{{ t(l) }}</div><div class="d">{{ t(d) }}</div></div>{% endfor %}
+  </div>
+  <p class="small" style="margin-top:18px;max-width:78ch">{{ t(TIMING.note) }}</p>
+
 </div></section>
 
 {# ---- modules ---- #}

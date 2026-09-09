@@ -27,13 +27,13 @@
   <a class="brand" href="{{ url('') }}" aria-label="Frest Homes"><img src="{{ BASE }}static/logo.png" alt="frest" width="98" height="24"></a>
   <ul>
     <li class="dd"><button type="button" class="{{ 'on' if page=='model' }}">{{ t(UI.nav_models) }} <i>▼</i></button>
-      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ t(UI.from) }} {{ eur(m.price_base) }}</small></a>{% endfor %}<a href="{{ url('compare/') }}">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
+      <div class="menu">{% for m in MODELS %}<a href="{{ url('model/'+m.slug+'/') }}" data-c="{{ 'aura' if m.series=='Aura' else 'als' }}">{{ m.name }}<small>{{ t(m.tagline) }} · {{ num(m.area) }} m² · {{ t(UI.from) }} {{ eur(m.price_base) }}</small></a>{% endfor %}<a href="{{ url('compare/') }}" data-c="tool">{{ t(UI.compare_models) }}<small>{{ t(UI.nav_which) }}</small></a><a href="{{ url('configure/') }}" data-c="tool">{{ t(UI.quiz_title) }}<small>{{ t(UI.quiz_lead) }}</small></a></div></li>
     <li><a href="{{ url('projects/') }}" class="{{ 'on' if page=='projects' }}">{{ t(UI.nav_projects) }}</a></li>
     <li><a href="{{ url('gallery/') }}" class="{{ 'on' if page=='gallery' }}">{{ t(UI.nav_gallery) }}</a></li>
     <li><a href="{{ url('pricing/') }}" class="{{ 'on' if page=='pricing' }}">{{ t(UI.nav_pricing) }}</a></li>
     <li><a href="{{ url('custom-design/') }}" class="{{ 'on' if page=='custom' }}">{{ t(UI.nav_custom) }}</a></li>
     <li class="dd"><button type="button" class="{{ 'on' if page in ['resources','team'] }}">{{ t(UI.nav_resources) }} <i>▼</i></button>
-      <div class="menu"><a href="{{ url('resources/') }}">{{ t(UI.nav_faq) }}</a><a href="{{ url('resources/') }}#process">{{ t(UI.nav_process) }}</a><a href="{{ url('') }}#addons">{{ t(UI.nav_addons) }}</a><a href="{{ url('team/') }}">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div></li>
+      <div class="menu"><a href="{{ url('resources/') }}" data-c="tool">{{ t(UI.nav_faq) }}</a><a href="{{ url('resources/') }}#process" data-c="tool">{{ t(UI.nav_process) }}</a><a href="{{ url('') }}#addons" data-c="tool">{{ t(UI.nav_addons) }}</a><a href="{{ url('team/') }}" data-c="als">{{ t(UI.nav_team) }}</a><a href="{{ url('catalogue/') }}" data-c="aura">{{ t(UI.nav_catalogue) }}</a></div></li>
     <li><a href="{{ url('catalogue/') }}" class="pill hi" style="padding:6px 10px">{{ t(UI.nav_catalogue) }}</a></li>
     <li><a href="#contact" class="ctc" data-open-contact>{{ t(UI.nav_contact) }}</a></li>
     <li><a href="{{ url_other(path) }}" hreflang="{{ other }}" title="{{ t(UI.lang_switch_title) }}">{{ t(UI.lang_switch) }}</a></li>

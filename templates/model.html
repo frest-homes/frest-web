@@ -15,7 +15,7 @@
       <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div></div>
       <div class="stat"><div class="n">{{ m.bedrooms }} / {{ m.bathrooms }}</div><div class="l">{{ t(UI.bedrooms) }} / {{ t(UI.bathrooms) }}</div></div>
       <div class="stat"><div class="n">{{ eur(m.price_base) }}</div><div class="l">{{ t(UI.base_price) }} · {{ t(UI.with_vat) }}</div></div>
-      <div class="stat"><div class="n">{{ SITE.delivery_weeks }}</div><div class="l">{{ t(UI.weeks_delivery) }}</div></div>
+      <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div></div>
     </div>
   </div>
 </header>
