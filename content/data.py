@@ -84,7 +84,7 @@ MODELS = [
                   'Compact form, modern aesthetics and an open plan with large windows. The ideal first home for a couple or a small family.'),
         'about': T('Aura 70 ir kompakts un efektīvs modelis mazām ģimenēm. Rūpnīcā ražota konstrukcija ar augstiem siltināšanas standartiem, atvērtu virtuves‑viesistabas zonu, divām guļamistabām un bēniņu stāvu, ko var izmantot kā darba vai viesu telpu.',
                    'Aura 70 is a compact, efficient model for small families. A factory-built structure with high insulation standards, an open kitchen–living area, two bedrooms and a loft that works as a study or guest space.'),
-        'area': 76, 'total_area': 76, 'loft': 15, 'terrace': 17, 'width': 7, 'length': None,  # CHECK
+        'area': 72, 'total_area': 70, 'loft': 15, 'terrace': 17, 'width': 7, 'length': None,  # CHECK
         'rooms': 3, 'bedrooms': 2, 'bathrooms': 1, 'ceiling': 2.5,
         'price_base': 95000, 'price_complete': 135000, 'warranty': 2,  # CHECK warranty 2 vs 3
         'style': T('Mūsdienīgs', 'Contemporary'),
@@ -110,7 +110,7 @@ MODELS = [
             {'name': 'Aura 70 Urban', 'img': 'aura70-urban',
              'text': T('Divas Aura 70 vienības uz kopīga zemesgabala ar centrālu autostāvvietu. Piemērots vairāku paaudžu ģimenēm, īres īpašumiem vai nelielai kopienai.',
                        'Two Aura 70 units on a shared plot with central parking. Suited to multi-generational families, rental property or a small community.'),
-             'facts': [T('2 × 76 m² neatkarīgas vienības', '2 × 76 m² independent units'), T('Kopīga autostāvvieta', 'Shared parking'), T('Optimizēts pilsētas zemesgabaliem', 'Optimised for urban plots')]},
+             'facts': [T('2 × 72 m² neatkarīgas vienības', '2 × 72 m² independent units'), T('Kopīga autostāvvieta', 'Shared parking'), T('Optimizēts pilsētas zemesgabaliem', 'Optimised for urban plots')]},
         ],
     },
     {
