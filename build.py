@@ -1,67 +1,105 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Frest Homes static site generator.
-Usage: python3 build.py [--base /frest-web/] [--out site]
-Reads content/data.py + content/ui.py, images from assets/manifest.json (run images.py first)."""
-import os, sys, json, shutil, argparse, datetime, html
+
+One source tree, two published sites:
+
+    www.frest.lv        --root-lang lv --sister https://www.fresthomes.com
+    www.fresthomes.com  --root-lang en --sister https://www.frest.lv
+
+The root language is the real site. The other language is emitted as small redirect stubs that
+point at the sister domain, so the two domains never compete for the same query and every
+language has exactly one canonical home. hreflang is written across the two domains.
+
+Usage: python3 build.py [--base /] [--out site] [--root-lang lv|en]
+                        [--canonical https://www.frest.lv] [--sister https://www.fresthomes.com]
+                        [--cname www.frest.lv]
+Reads content/*.py, images from assets/manifest.json (run images.py then focal.py first).
+"""
+import os, sys, json, shutil, argparse, datetime, html, re
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content.data import TIMING, SITE, MODELS, PACKAGES, FACADE_COLORS, ROOF_TYPES, ADDONS, ADDON_WHY, WORKS, CUSTOM_PROJECTS, PROCESS, FAQ, TEAM, VALUES, QUIZ
 from content.ui import UI
 from content.editorial import DESC as IMGDESC, AUDIENCES, SPREADS, KICKERS, POS as IMGPOS
+from content.seo import PATHS, ALIASES, META, INTRO, GEO
+from content.knowledge_lv import ARTICLES_LV
+from content.knowledge_en import ARTICLES_EN
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--base', default='/')
 ap.add_argument('--out', default='site')
-ap.add_argument('--root-lang', default='lv', choices=['lv', 'en'])  # which language lives at /
-ap.add_argument('--cname', default='')      # custom domain -> writes site/CNAME for GitHub Pages
-ap.add_argument('--canonical', default='')  # e.g. https://frest-homes.github.io/frest-web
+ap.add_argument('--root-lang', default='lv', choices=['lv', 'en'])
+ap.add_argument('--cname', default='')
+ap.add_argument('--canonical', default='')          # this site's own origin
+ap.add_argument('--sister', default='')             # the other language's origin
 args = ap.parse_args()
 BASE = args.base if args.base.endswith('/') else args.base + '/'
 OUT = args.out
 MANIFEST = json.load(open('assets/manifest.json'))
 LANGS = ['lv', 'en']
-ROOT_LANG = None  # set in main() from --root-lang
+ROOT_LANG = args.root_lang
+OTHER_LANG = 'en' if ROOT_LANG == 'lv' else 'lv'
+CAN = args.canonical.rstrip('/')
+SIS = args.sister.rstrip('/')
+TODAY = datetime.date.today().isoformat()
+ARTICLES = {'lv': ARTICLES_LV, 'en': ARTICLES_EN}
+
 def seg(lang):
     """URL segment for a language: '' for the one at the root, 'xx/' for the other."""
     return '' if lang == ROOT_LANG else lang + '/'
 
+def ppath(key, lang):
+    return PATHS[key][lang]
+
+def other_of(lang):
+    return 'en' if lang == 'lv' else 'lv'
+
+# Hero images preloaded per page — the LCP element on each.
+PRELOAD = {'home': 'aura70-hero', 'landing': 'als110-day-dk', 'pricing': 'als110-evening-dk',
+           'projects': 'als-kettingskov-aerial', 'knowledge': 'als110-photo-lv-exterior-forest'}
+
 # ---------- routes ----------
 PAGES = [
-    # (template, slug-path, key)
-    ('index.html', '', 'home'),
-    ('compare.html', 'compare/', 'compare'),
-    ('which.html', 'configure/', 'which'),
-    ('pricing.html', 'pricing/', 'pricing'),
-    ('gallery.html', 'gallery/', 'gallery'),
-    ('projects.html', 'projects/', 'projects'),
-    ('custom.html', 'custom-design/', 'custom'),
-    ('resources.html', 'resources/', 'resources'),
-    ('team.html', 'team/', 'team'),
-    ('catalogue.html', 'catalogue/', 'catalogue'),
-    ('legal.html', 'privacy/', 'privacy'),
-    ('legal.html', 'terms/', 'terms'),
+    ('index.html',    'home',      None),
+    ('landing.html',  'landing',   None),
+    ('compare.html',  'compare',   None),
+    ('which.html',    'which',     None),
+    ('pricing.html',  'pricing',   None),
+    ('gallery.html',  'gallery',   None),
+    ('projects.html', 'projects',  None),
+    ('custom.html',   'custom',    None),
+    ('knowledge.html','knowledge', None),
+    ('resources.html','resources', None),
+    ('team.html',     'team',      None),
+    ('catalogue.html','catalogue', None),
+    ('legal.html',    'privacy',   None),
+    ('legal.html',    'terms',     None),
 ]
-TITLES = {
-    'home': {'lv': 'Skandināvu dizaina mājas — projektējam un uzbūvējam | Frest Homes', 'en': 'Scandinavian-design homes — we design and build | Frest Homes'},
-    'compare': {'lv': 'Salīdzināt modeļus — Aura 70, Aura 110, Als 70, Als 110 | Frest', 'en': 'Compare models — Aura 70, Aura 110, Als 70, Als 110 | Frest'},
-    'which': {'lv': 'Kura māja man? | Frest', 'en': 'Which house is mine? | Frest'},
-    'pricing': {'lv': 'Paketes un cenas | Frest', 'en': 'Packages and prices | Frest'},
-    'gallery': {'lv': 'Galerija | Frest', 'en': 'Gallery | Frest'},
-    'projects': {'lv': 'Realizētie projekti Dānijā un Latvijā | Frest', 'en': 'Completed projects in Denmark and Latvia | Frest'},
-    'custom': {'lv': 'Individuāli projekti | Frest', 'en': 'Custom design | Frest'},
-    'resources': {'lv': 'Biežāk uzdotie jautājumi | Frest', 'en': 'Frequently asked questions | Frest'},
-    'team': {'lv': 'Par mums | Frest', 'en': 'About us | Frest'},
-    'catalogue': {'lv': 'Katalogs ar cenām | Frest', 'en': 'Catalogue with prices | Frest'},
-    'privacy': {'lv': 'Privātuma politika | Frest', 'en': 'Privacy policy | Frest'},
-    'terms': {'lv': 'Noteikumi | Frest', 'en': 'Terms | Frest'},
-}
-DESC = {
-    'home': {'lv': 'Aura un Als sērijas mājas: projektēšana, saskaņošana, ražošana un būvniecība ar vienu atbildīgo. Energoklase A. Uzbūvētas Dānijā un Latvijā. Rūpnīcas komplekts ar montāžu no 92 000 € ar PVN, bez pamatiem un apdares.',
-             'en': 'Aura and Als series homes: design, permitting, manufacturing and construction with one responsible partner. Energy class A. Built in Denmark and Latvia. Factory kit with assembly from €92,000 incl. VAT, excl. foundation and interior.'},
-}
+# pages that should not be indexed or listed in the sitemap
+NOINDEX = {'privacy', 'terms'}
 
 env = Environment(loader=FileSystemLoader('templates'), autoescape=select_autoescape(['html']), trim_blocks=True, lstrip_blocks=True)
+
+# ---------- absolute URL of any page, on whichever domain owns that language ----------
+def abs_url(key_or_path, lang, article=None):
+    """Absolute URL for a page in `lang`, on the domain that owns `lang`.
+    The root language lives on this site (CAN); the other language lives on the sister site (SIS)."""
+    if article is not None:
+        p = ppath('article_dir', lang) + article + '/'
+    elif key_or_path in PATHS:
+        p = ppath(key_or_path, lang)
+    else:
+        p = key_or_path.lstrip('/')
+    if lang == ROOT_LANG:
+        return f"{CAN}{BASE}{p}" if CAN else f"{BASE}{p}"
+    return f"{SIS}/{p}" if SIS else f"{BASE}{seg(lang)}{p}"
+
+def alternates(key, article=None):
+    """hreflang set for a page, pointing across both domains. x-default follows English."""
+    lv = abs_url(key, 'lv', article)
+    en = abs_url(key, 'en', article)
+    return [('lv', lv), ('en', en), ('x-default', en)]
 
 # ---------- helpers ----------
 def make_helpers(lang):
@@ -74,10 +112,19 @@ def make_helpers(lang):
         return x
 
     def url(path=''):
-        return prefix + path.lstrip('/')
+        """Internal link. Accepts a page key (preferred) or a raw path."""
+        p = PATHS[path][lang] if path in PATHS else path.lstrip('/')
+        return prefix + p
 
-    def url_other(path=''):
-        return BASE + seg(other) + path.lstrip('/')
+    def murl(slug):
+        return prefix + ppath('model_dir', lang) + slug + '/'
+
+    def aurl(slug):
+        return prefix + ppath('article_dir', lang) + slug + '/'
+
+    def url_other(key_or_path='', article=None):
+        """The language switch always crosses to the sister domain."""
+        return abs_url(key_or_path, other, article)
 
     def imgsrc(name, w=None):
         m = MANIFEST[name]
@@ -105,7 +152,7 @@ def make_helpers(lang):
                 f'<img src="{fb}" {attrs} {extra}></picture>')
 
     def eur(n):
-        s = f"{int(n):,}".replace(',', ' ')
+        s = f"{int(n):,}".replace(',', ' ')
         return f"{s} €" if lang == 'lv' else f"€{int(n):,}"
 
     def num(n):
@@ -124,28 +171,71 @@ def make_helpers(lang):
         w = SING[key][lang] if n == 1 and key in SING else t(UI[key]).lower()
         return f"{n} {w}"
 
-    return dict(t=t, url=url, url_other=url_other, img=img, imgsrc=imgsrc, srcset=srcset, eur=eur, num=num, cnt=cnt, lang=lang, other=other, BASE=BASE)
+    return dict(t=t, url=url, murl=murl, aurl=aurl, url_other=url_other, img=img, imgsrc=imgsrc, srcset=srcset,
+                eur=eur, num=num, cnt=cnt, lang=lang, other=other, BASE=BASE)
 
 def model_by_slug(slug):
     return next(m for m in MODELS if m['slug'] == slug)
 
+# ---------- schema.org ----------
+def org_schema(lang, h):
+    areas = GEO[lang]['area']
+    return {
+        "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness",
+        "@id": (CAN + BASE + "#org"), "name": "Frest Homes", "legalName": SITE['company'],
+        "url": CAN + BASE, "email": SITE['email'], "telephone": SITE['phone'],
+        "image": CAN + h['imgsrc']('als110-day-dk', 1600),
+        "logo": CAN + BASE + "static/logo.png",
+        "description": META['home'][lang][1],
+        "address": {"@type": "PostalAddress", "streetAddress": SITE['street'],
+                    "addressLocality": "Rīga", "postalCode": SITE['postcode'], "addressCountry": "LV"},
+        "areaServed": [{"@type": "Country", "name": a} for a in areas],
+        "priceRange": "€€€",
+        "foundingDate": "2019",
+        "sameAs": [SITE['facebook'], SITE['instagram']],
+        "knowsLanguage": ["lv", "en", "da"],
+    }
+
+def breadcrumbs(items):
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u}
+                                for i, (n, u) in enumerate(items)]}
+
+def faq_schema(pairs):
+    return {"@context": "https://schema.org", "@type": "FAQPage",
+            "mainEntity": [{"@type": "Question", "name": q,
+                            "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in pairs]}
+
+def article_schema(art, lang, url, h):
+    return {"@context": "https://schema.org", "@type": "Article",
+            "headline": art['title'], "description": art['desc'],
+            "datePublished": art['date'], "dateModified": art['date'],
+            "inLanguage": GEO[lang]['lang'],
+            "image": CAN + h['imgsrc'](art['hero'], 1600),
+            "author": {"@type": "Organization", "name": "Frest Homes"},
+            "publisher": {"@id": CAN + BASE + "#org"},
+            "mainEntityOfPage": {"@type": "WebPage", "@id": url}}
+
+# ---------- build ----------
 def build_lang(lang):
     h = make_helpers(lang)
     t, url = h['t'], h['url']
+    arts = ARTICLES[lang]
     ctx_base = dict(h, SITE=SITE, UI=UI, MODELS=MODELS, PACKAGES=PACKAGES, COLORS=FACADE_COLORS, ROOFS=ROOF_TYPES, ADDONS=ADDONS, ADDON_WHY=ADDON_WHY,
                     WORKS=WORKS, CUSTOM=CUSTOM_PROJECTS, PROCESS=PROCESS, TIMING=TIMING, FAQ=FAQ, TEAM=TEAM, VALUES=VALUES, QUIZ=QUIZ, year=datetime.date.today().year,
-                    canonical=args.canonical, TITLES=TITLES, IMGDESC=IMGDESC, IMGPOS=IMGPOS, AUDIENCES=AUDIENCES, SPREADS=SPREADS, KICKERS=KICKERS)
-    # personaliser data (JSON for JS)
+                    canonical=CAN, TITLES=None, IMGDESC=IMGDESC, IMGPOS=IMGPOS, AUDIENCES=AUDIENCES, SPREADS=SPREADS, KICKERS=KICKERS,
+                    ARTICLES=arts, INTRO=INTRO, PATHS=PATHS, GEO=GEO[lang], sister=SIS)
+
     def pz_data(models):
         d = {'colors': [{'id': c['id'], 'name': t(c['name'])} for c in FACADE_COLORS], 'roofs': [{'id': r['id'], 'name': t(r['name'])} for r in ROOF_TYPES], 'models': {}}
         for m in models:
-            d['models'][m['slug']] = {'name': m['name'], 'url': url(f"model/{m['slug']}/"),
+            d['models'][m['slug']] = {'name': m['name'], 'url': h['murl'](m['slug']),
                                       'facades': {r: {c: {'src': h['imgsrc'](n, 1600), 'srcset': h['srcset'](n)} for c, n in cols.items()} for r, cols in m['facades'].items()}}
         return json.dumps(d, ensure_ascii=False)
-    quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': url(f"model/{m['slug']}/"), 'img': h['imgsrc'](m['card'], 960), 'srcset': h['srcset'](m['card']),
+    quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': h['murl'](m['slug']), 'img': h['imgsrc'](m['card'], 960), 'srcset': h['srcset'](m['card']),
                                'facts': f"{h['num'](m['area'])} m² · {h['cnt'](m['bedrooms'], 'bedrooms')} · {h['cnt'](m['bathrooms'], 'bathrooms')}"} for m in MODELS}
     ctx_base['pz_data'] = pz_data
-    ctx_base['aud_data'] = json.dumps({k: {'h': t(h), 'p': t(p), 'href': url(href), 'link': t(link)} for k, lab, h, p, href, link in AUDIENCES}, ensure_ascii=False)
+    ctx_base['aud_data'] = json.dumps({k: {'h': t(hh), 'p': t(p), 'href': url(href), 'link': t(link)} for k, lab, hh, p, href, link in AUDIENCES}, ensure_ascii=False)
     ctx_base['quiz_data'] = json.dumps(quiz_models, ensure_ascii=False)
 
     def write(path, html_out):
@@ -156,62 +246,169 @@ def build_lang(lang):
         return full
 
     written = []
-    for tpl, path, key in PAGES:
-        ctx = dict(ctx_base, page=key, path=path, title=TITLES[key][lang], desc=DESC.get(key, DESC['home'])[lang])
-        out = env.get_template(tpl).render(**ctx)
-        written.append(write(path, out))
+    home_crumb = ('Frest', abs_url('home', lang))
+
+    for tpl, key, _ in PAGES:
+        path = ppath(key, lang)
+        title, desc = META[key][lang]
+        schemas = [org_schema(lang, h)] if key == 'home' else []
+        if key != 'home':
+            schemas.append(breadcrumbs([home_crumb, (title.split(' | ')[0], abs_url(key, lang))]))
+        if key == 'resources':
+            schemas.append(faq_schema([(t(q), t(a)) for q, a in FAQ]))
+        ctx = dict(ctx_base, page=key, path=path, key=key, title=title, desc=desc,
+                   alts=alternates(key), self_url=abs_url(key, lang),
+                   schemas=[json.dumps(s, ensure_ascii=False) for s in schemas],
+                   switch_url=abs_url(key, other_of(lang)), preload_img=PRELOAD.get(key),
+                   noindex=(key in NOINDEX))
+        written.append(write(path, env.get_template(tpl).render(**ctx)))
+
+    # models
     for m in MODELS:
         title = f"{m['name']} — {t(m['tagline'])}, {h['num'](m['area'])} m², {h['cnt'](m['bedrooms'], 'bedrooms')} | Frest"
-        ctx = dict(ctx_base, page='model', path=f"model/{m['slug']}/", m=m, title=title, desc=t(m['lead']),
+        path = ppath('model_dir', lang) + m['slug'] + '/'
+        mlv = f"{abs_url('model_dir', 'lv')}{m['slug']}/"
+        men = f"{abs_url('model_dir', 'en')}{m['slug']}/"
+        self_u = mlv if lang == 'lv' else men
+        prod = {"@context": "https://schema.org", "@type": "Product", "name": f"Frest {m['name']}",
+                "description": t(m['lead']), "brand": {"@type": "Brand", "name": "Frest Homes"},
+                "image": CAN + h['imgsrc'](m['hero'], 1600), "url": self_u,
+                "offers": {"@type": "AggregateOffer", "priceCurrency": "EUR",
+                           "lowPrice": m['price_base'], "highPrice": m['price_complete'], "offerCount": 2,
+                           "availability": "https://schema.org/PreOrder"}}
+        ctx = dict(ctx_base, page='model', path=path, key='model', m=m, title=title, desc=t(m['lead']),
+                   alts=[('lv', mlv), ('en', men), ('x-default', men)], self_url=self_u,
+                   schemas=[json.dumps(prod, ensure_ascii=False),
+                            json.dumps(breadcrumbs([home_crumb, (t(UI['nav_models']), abs_url('compare', lang)), (m['name'], self_u)]), ensure_ascii=False)],
+                   noindex=False, switch_url=abs_url('model_dir', other_of(lang)) + m['slug'] + '/',
+                   preload_img=m['hero'],
                    works=[w for w in WORKS if set(w['tags']) & set(m['works_tags'])], others=[x for x in MODELS if x is not m])
-        written.append(write(f"model/{m['slug']}/", env.get_template('model.html').render(**ctx)))
+        written.append(write(path, env.get_template('model.html').render(**ctx)))
+
+    # knowledge articles
+    for a in arts:
+        path = ppath('article_dir', lang) + a['slug'] + '/'
+        self_u = abs_url(None, lang, article=a['slug'])
+        schemas = [json.dumps(article_schema(a, lang, self_u, h), ensure_ascii=False),
+                   json.dumps(breadcrumbs([home_crumb, (META['knowledge'][lang][0].split(' | ')[0], abs_url('knowledge', lang)), (a['title'], self_u)]), ensure_ascii=False)]
+        fq = [b for b in a['body'] if b[0] == 'faq']
+        if fq:
+            schemas.append(json.dumps(faq_schema(fq[0][1]), ensure_ascii=False))
+        ctx = dict(ctx_base, page='article', path=path, key='knowledge', a=a,
+                   title=f"{a['title']} | Frest", desc=a['desc'],
+                   alts=[],   # LV and EN articles are different pieces, not translations
+                   self_url=self_u, schemas=schemas, noindex=False,
+                   switch_url=abs_url('knowledge', other_of(lang)), preload_img=a['hero'],
+                   more=[x for x in arts if x is not a][:3])
+        written.append(write(path, env.get_template('article.html').render(**ctx)))
+
     # 404
-    ctx = dict(ctx_base, page='404', path='404', title='404 | Frest', desc='')
+    ctx = dict(ctx_base, page='404', path='404', key='home', title='404 | Frest', desc='', alts=[], self_url='',
+               schemas=[], noindex=True, switch_url=abs_url('home', other_of(lang)), preload_img=None)
     out = env.get_template('404.html').render(**ctx)
     if lang == ROOT_LANG:
         open(os.path.join(OUT, '404.html'), 'w', encoding='utf-8').write(out)
     return written
 
+# ---------- redirect stubs for the language that lives on the sister domain ----------
+STUB = """<!DOCTYPE html><html lang="{lang}"><head><meta charset="utf-8">
+<title>{title}</title><link rel="canonical" href="{target}">
+<meta name="robots" content="noindex,follow">
+<meta http-equiv="refresh" content="0;url={target}">
+<style>body{{font:15px/1.6 system-ui,sans-serif;margin:0;display:grid;place-items:center;min-height:100vh;background:#f2f7f8;color:#0c2429}}
+a{{color:#0a7a88}}div{{text-align:center;max-width:34ch;padding:24px}}</style></head>
+<body><div><p>{msg}</p><p><a href="{target}">{target}</a></p></div>
+<script>location.replace({target_js});</script></body></html>"""
+
+def write_stub(rel_path, target, lang):
+    msg = {'lv': 'Šī lapa ir pārcelta uz frest.lv', 'en': 'This page has moved to fresthomes.com'}[lang]
+    full = os.path.join(OUT, rel_path, 'index.html')
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    open(full, 'w', encoding='utf-8').write(STUB.format(
+        lang=lang, title='Frest', target=html.escape(target), msg=msg, target_js=json.dumps(target)))
+
+def build_stubs():
+    """Everything in the non-root language becomes a stub to the sister domain."""
+    lang = OTHER_LANG
+    pre = lang + '/'
+    for _, key, _ in PAGES:
+        write_stub(pre + ppath(key, lang), abs_url(key, lang), lang)
+    for m in MODELS:
+        write_stub(pre + ppath('model_dir', lang) + m['slug'] + '/',
+                   abs_url('model_dir', lang) + m['slug'] + '/', lang)
+    for a in ARTICLES[lang]:
+        write_stub(pre + ppath('article_dir', lang) + a['slug'] + '/',
+                   abs_url(None, lang, article=a['slug']), lang)
+
+def build_aliases():
+    """Old English-slug paths kept alive after the Latvian slugs were localised."""
+    for lang, mapping in ALIASES.items():
+        pre = '' if lang == ROOT_LANG else lang + '/'
+        for old, new in mapping.items():
+            if old == new:
+                continue
+            target = abs_url(new if new not in PATHS else new, lang) if False else (
+                f"{CAN}{BASE}{new}" if lang == ROOT_LANG else abs_url_alias(new, lang))
+            write_stub(pre + old, target, lang)
+    # models used to live at /model/<slug>/ in both languages
+    if ROOT_LANG == 'lv':
+        for m in MODELS:
+            write_stub('model/' + m['slug'] + '/', f"{CAN}{BASE}{ppath('model_dir','lv')}{m['slug']}/", 'lv')
+
+def abs_url_alias(path, lang):
+    return f"{SIS}/{path}" if SIS else f"{BASE}{seg(lang)}{path}"
+
+# ---------- sitemap ----------
+def build_sitemap():
+    entries = []   # (loc, priority, changefreq, alts)
+    lang = ROOT_LANG
+    for _, key, _ in PAGES:
+        if key in NOINDEX:
+            continue
+        pri = {'home': '1.0', 'landing': '0.9', 'pricing': '0.9', 'knowledge': '0.8'}.get(key, '0.7')
+        entries.append((abs_url(key, lang), pri, 'weekly', alternates(key)))
+    for m in MODELS:
+        entries.append((abs_url('model_dir', lang) + m['slug'] + '/', '0.9', 'monthly',
+                        [('lv', abs_url('model_dir', 'lv') + m['slug'] + '/'),
+                         ('en', abs_url('model_dir', 'en') + m['slug'] + '/'),
+                         ('x-default', abs_url('model_dir', 'en') + m['slug'] + '/')]))
+    for a in ARTICLES[lang]:
+        entries.append((abs_url(None, lang, article=a['slug']), '0.7', 'monthly', []))
+    out = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for loc, pri, cf, alts in entries:
+        alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{k}" href="{html.escape(u)}"/>' for k, u in alts)
+        out.append(f'<url><loc>{html.escape(loc)}</loc><lastmod>{TODAY}</lastmod>'
+                   f'<changefreq>{cf}</changefreq><priority>{pri}</priority>{alt}</url>')
+    out.append('</urlset>')
+    open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('\n'.join(out))
+
 def main():
-    global ROOT_LANG
-    ROOT_LANG = args.root_lang
     os.makedirs(OUT, exist_ok=True)
-    # static
     os.makedirs(os.path.join(OUT, 'static'), exist_ok=True)
     for f in os.listdir('static'):
         shutil.copy(os.path.join('static', f), os.path.join(OUT, 'static', f))
     all_written = []
-    for lang in LANGS:
-        all_written += build_lang(lang)
-    # sitemap + robots
-    can = args.canonical.rstrip('/') if args.canonical else ''
-    urls = []
-    for lang in LANGS:
-        pre = ('/' + seg(lang).rstrip('/')) if seg(lang) else ''
-        for _, path, key in PAGES:
-            if key in ('privacy', 'terms'):
-                continue
-            urls.append(f"{pre}/{path}")
-        for m in MODELS:
-            urls.append(f"{pre}/model/{m['slug']}/")
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-    for u in urls:
-        loc = (can or '') + BASE.rstrip('/') + u
-        oth = 'en' if ROOT_LANG == 'lv' else 'lv'
-        op = '/' + oth
-        bare = u[len(op):] if u.startswith(op + '/') else u
-        alt_root = (can or '') + BASE.rstrip('/') + bare
-        alt_oth = (can or '') + BASE.rstrip('/') + op + bare
-        alt_lv, alt_en = (alt_root, alt_oth) if ROOT_LANG == 'lv' else (alt_oth, alt_root)
-        sm.append(f'<url><loc>{loc}</loc><xhtml:link rel="alternate" hreflang="lv" href="{alt_lv}"/><xhtml:link rel="alternate" hreflang="en" href="{alt_en}"/></url>')
-    sm.append('</urlset>')
-    open(os.path.join(OUT, 'sitemap.xml'), 'w').write('\n'.join(sm))
-    open(os.path.join(OUT, 'robots.txt'), 'w').write(f"User-agent: *\nAllow: /\nSitemap: {(can or '') + BASE.rstrip('/')}/sitemap.xml\n")
+    all_written += build_lang(ROOT_LANG)
+    build_stubs()
+    build_aliases()
+    build_sitemap()
+    root = (CAN or '') + BASE.rstrip('/')
+    open(os.path.join(OUT, 'robots.txt'), 'w').write(
+        "User-agent: *\n"
+        "Allow: /\n"
+        "\n"
+        "# The /%s/ tree is redirect stubs to the sister domain. They must stay crawlable\n"
+        "# so the canonical and the noindex on them can be read.\n"
+        "\n"
+        "User-agent: GPTBot\nAllow: /\n\n"
+        "User-agent: ClaudeBot\nAllow: /\n\n"
+        "User-agent: PerplexityBot\nAllow: /\n\n"
+        f"Sitemap: {root}/sitemap.xml\n" % OTHER_LANG)
     open(os.path.join(OUT, '.nojekyll'), 'w').write('')
     if args.cname:
         open(os.path.join(OUT, 'CNAME'), 'w').write(args.cname.strip() + '\n')
-    print(f'built {len(all_written)} pages -> {OUT} (base {BASE})')
+    print(f'built {len(all_written)} pages -> {OUT} (root lang {ROOT_LANG}, base {BASE}, canonical {CAN or "-"}, sister {SIS or "-"})')
 
 if __name__ == '__main__':
     main()
