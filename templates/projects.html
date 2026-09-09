@@ -5,20 +5,20 @@
 <header class="hero"><div class="wrap fadein">
   <div class="eyebrow">{{ t(UI.nav_projects) }} · {{ 'Dānija · Latvija · 2019–2024' }}</div>
   <h1 style="margin-top:18px">{{ ('Reālas mājas.<br>Ne renderi.' if lang=='lv' else 'Real houses.<br>Not renders.')|safe }}</h1>
-  <p class="lede" style="margin-top:22px">{{ t(UI.projects_lead) }} {{ 'Deviņi projekti, katrs ar saviem attēliem un aprakstu — ko redzat, kur tas ir un kāpēc tas ir tā uzbūvēts.' if lang=='lv' else 'Nine projects, each with its own pictures and description — what you see, where it is and why it was built that way.' }}</p>
+  <p class="lede" style="margin-top:22px">{{ t(UI.projects_lead) }} {{ 'Katram projektam savi attēli un apraksts — ko redzat, kur tas ir un kāpēc tas ir tā uzbūvēts.' if lang=='lv' else 'Each project with its own pictures and description — what you see, where it is and why it was built that way.' }}</p>
   <div class="cols4" style="margin-top:44px">
-    <div class="stat"><div class="n">{{ WORKS|length }}</div><div class="l">{{ 'Projekti' if lang=='lv' else 'Projects' }}</div><div class="d">2019–2024</div></div>
+    <div class="stat"><div class="n">2019</div><div class="l">{{ 'Pirmā māja' if lang=='lv' else 'First house' }}</div><div class="d">Kettingskov, DK</div></div>
     <div class="stat"><div class="n">8</div><div class="l">{{ 'Als mājas vienā ciematā' if lang=='lv' else 'Als homes in one village' }}</div><div class="d">Kettingskov, DK</div></div>
     <div class="stat"><div class="n">2</div><div class="l">{{ 'Valstis' if lang=='lv' else 'Countries' }}</div><div class="d">{{ 'Latvija · Dānija' if lang=='lv' else 'Latvia · Denmark' }}</div></div>
     <div class="stat"><div class="n">A</div><div class="l">{{ 'Energoklase' if lang=='lv' else 'Energy class' }}</div><div class="d">{{ '300 mm siltinājums' if lang=='lv' else '300 mm insulation' }}</div></div>
   </div>
-  <ul class="toc">{% for w in WORKS %}<li><span class="p">{{ '%02d'|format(loop.index) }}</span><a href="#{{ w.id }}">{{ t(w.title) }}</a><span>{{ t(w.location) }} · {{ w.year }}</span></li>{% endfor %}</ul>
+  <ul class="toc">{% for w in WORKS %}<li><a href="#{{ w.id }}">{{ t(w.title) }}</a><span>{{ t(w.location) }} · {{ w.year }}</span></li>{% endfor %}</ul>
 </div></header>
 
 {% for w in WORKS %}
 {% set first = w.images[0] %}
 <section class="s {{ 'alt' if loop.index is even }}" id="{{ w.id }}"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">{{ '%02d'|format(loop.index) }} — {{ t(w.location) }} · {{ w.year }}</div><h2>{{ t(w.title) }}</h2>
+  <div class="cols"><div><div class="eyebrow">{{ t(w.location) }} · {{ w.year }}</div><h2>{{ t(w.title) }}</h2>
     <div class="btn-row">{% for tg in w.tags %}{% if tg in ['als70','als110','aura'] %}<a class="pill ok" href="{{ url('model/'+ ('als-70' if tg=='als70' else 'als-110' if tg=='als110' else 'aura-70') +'/') }}">{{ 'Als 70' if tg=='als70' else 'Als 110' if tg=='als110' else 'Aura' }} →</a>{% endif %}{% endfor %}</div></div>
   <div><p class="lede">{{ t(w.text) }}</p></div></div>
   <div data-lb>

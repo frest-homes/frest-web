@@ -58,11 +58,36 @@
 
 {% if m.addons %}
 <section class="s alt" id="addons"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.addons_model) }}</div><h2>{{ 'Nojume. Piebūve. Dvīņu māja.' if lang=='lv' else 'Carport. Annex. Twin house.' }}</h2></div><div><p class="lede">{{ 'Izvēlieties un redziet kopējo platību un cenu Pilnajā paketē.' if lang=='lv' else 'Pick one and see the total area and the Complete-package price.' }}</p></div></div>
-  <div class="addons" data-addons data-base="{{ m.price_complete }}" data-area="{{ m.area }}" style="margin-top:36px">
-    <div><div class="stage">{% for a in m.addons %}<img data-id="{{ a.id }}" src="{{ imgsrc(a.img, 1600) }}" srcset="{{ srcset(a.img) }}" sizes="(max-width:900px) 100vw, 58vw" alt="{{ t(a.name) }}" loading="lazy">{% endfor %}</div><p class="cap">{{ 'Vizualizācijas — konceptuālas, novietojums tiek precizēts projektā' if lang=='lv' else 'Visualisations — conceptual, placement refined in the design' }}</p></div>
-    <div><div class="addon-list">{% for a in m.addons %}<button type="button" data-id="{{ a.id }}" data-price="{{ a.price }}" data-area="{{ a.area }}"><span><b>{{ t(a.name) }}</b><span>{{ t(a.text) }}{% if a.area %} · +{{ a.area }} m²{% endif %}</span></span><em>{{ '+'+eur(a.price) if a.price else '—' }}</em></button>{% endfor %}</div>
-      <div class="addon-sum"><div><span>{{ t(UI.addon_total) }} · {{ t(UI.complete_price) }}</span><b>—</b></div><div style="text-align:right"><span>{{ t(UI.living_area) }}</span><b data-area>—</b></div></div></div>
+  <div class="cols"><div><div class="eyebrow">04 — {{ t(UI.addons_model) }}</div><h2>{{ ('Nojume. Piebūve.<br>Dvīņu māja.' if lang=='lv' else 'Carport. Annex.<br>Twin house.')|safe }}</h2></div>
+  <div><p class="lede">{{ 'Als 110 aug kopā ar ģimeni. Katra piebūve ir tā pati karkasa sistēma un tā pati fasāde — pievienota vietā, ko projekts jau paredz, nevis pielikta klāt vēlāk.' if lang=='lv' else 'Als 110 grows with the family. Every extension is the same frame system and the same facade — added where the design already anticipates it, not bolted on later.' }}</p>
+    <p class="cap">{{ 'Izvēlieties variantu — platība un cena Pilnajā paketē pārrēķinās uzreiz.' if lang=='lv' else 'Pick a variant — area and the Complete-package price recalculate at once.' }}</p></div></div>
+
+  <div class="addons" data-addons data-base="{{ m.price_complete }}" data-area="{{ m.area }}" style="margin-top:40px">
+    <div class="addon-stage">
+      <div class="stage">{% for a in m.addons %}<img data-id="{{ a.id }}" src="{{ imgsrc(a.img, 1600) }}" srcset="{{ srcset(a.img) }}" sizes="(max-width:960px) 100vw, 62vw" alt="{{ t(a.name) }}" loading="lazy">{% endfor %}</div>
+      <div class="addon-now"><div><span class="eyebrow">{{ 'Izvēlētais variants' if lang=='lv' else 'Selected variant' }}</span><b data-addon-name>—</b><span class="small" data-addon-text></span></div></div>
+    </div>
+    <div class="addon-side">
+      <div class="addon-list">{% for a in m.addons %}
+        <button type="button" data-id="{{ a.id }}" data-price="{{ a.price }}" data-area="{{ a.area }}" data-name="{{ t(a.name) }}" data-text="{{ t(a.text) }}">
+          <i>{{ img(a.img, '', '120px', '', 'lazy')|safe }}</i>
+          <span><b>{{ t(a.name) }}</b><span>{% if a.area %}+{{ a.area }} m²{% else %}{{ num(m.area) }} m² · {{ 'standarts' if lang=='lv' else 'standard' }}{% endif %}</span></span>
+          <em>{{ '+'+eur(a.price) if a.price else ('iekļauts' if lang=='lv' else 'included') }}</em>
+        </button>{% endfor %}
+      </div>
+      <div class="addon-sum">
+        <div><span>{{ t(UI.addon_total) }} · {{ t(UI.complete_price) }}</span><b>—</b></div>
+        <div style="text-align:right"><span>{{ t(UI.living_area) }}</span><b data-area>—</b></div>
+      </div>
+      <div class="btn-row" style="margin-top:18px"><a class="btn" href="#contact" data-open-contact="{{ m.name }}">{{ t(UI.request) }}</a><a class="btn ghost" href="{{ url('catalogue/') }}">{{ t(UI.nav_catalogue) }}</a></div>
+    </div>
+  </div>
+
+  <div class="cols eq" style="margin-top:44px;align-items:start">
+    <div data-lb>{{ M.fig('als-carport-dusk', ('Als ar nojumi — vakarā' if lang=='lv' else 'Als with a carport — evening'), 'h', '(max-width:900px) 100vw, 50vw') }}</div>
+    <div><div class="eyebrow">{{ 'Kāpēc modulis' if lang=='lv' else 'Why a module' }}</div>
+      <ul class="list" style="margin-top:14px">{% for h,p in ADDON_WHY %}<li><span class="no">{{ loop.index }}</span><div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div></li>{% endfor %}</ul>
+      <p class="small" style="margin-top:16px">{{ 'Vizualizācijas ir konceptuālas: novietojumu, ieejas pusi un dārza risinājumu precizējam projektā pēc zemesgabala. Cenas ar PVN, Pilnajā paketē.' if lang=='lv' else 'The visualisations are conceptual: placement, entrance side and garden layout are refined in the design once the plot is known. Prices incl. VAT, in the Complete package.' }}</p></div>
   </div>
 </div></section>
 {% endif %}
