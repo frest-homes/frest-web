@@ -28,10 +28,12 @@ jobs:
           key: img-${{ hashFiles('assets/src/**', 'images.py', 'focal.py') }}
       - run: python3 images.py
       - run: python3 focal.py
-      - run: python3 build.py --base "${BASE}" --canonical "${CANONICAL}"
+      - run: python3 build.py --base "${BASE}" --canonical "${CANONICAL}" --root-lang "${ROOTLANG}" ${CNAME:+--cname "$CNAME"}
         env:
           BASE: ${{ vars.SITE_BASE || '/frest-web/' }}
           CANONICAL: ${{ vars.SITE_CANONICAL || 'https://frest-homes.github.io' }}
+          ROOTLANG: ${{ vars.SITE_ROOT_LANG || 'lv' }}
+          CNAME: ${{ vars.SITE_CNAME }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
