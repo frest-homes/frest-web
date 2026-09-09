@@ -28,7 +28,7 @@
     <div class="stat"><div class="n">{{ num(m.area) }} m²</div><div class="l">{{ t(UI.living_area) }}</div><div class="d">{{ t(UI.total_area) }} {{ num(m.total_area) }} m²</div></div>
     <div class="stat"><div class="n">{{ num(m.terrace) }} m²</div><div class="l">{{ t(UI.terrace) }}</div><div class="d">{{ t(UI.loft) }}: {{ (num(m.loft)+' m²') if m.loft else '—' }}</div></div>
     <div class="stat"><div class="n">{{ num(m.ceiling) }} m</div><div class="l">{{ t(UI.ceiling) }}</div><div class="d">{{ t(UI.width) }} {{ num(m.width) }} m{% if m.length %} × {{ num(m.length) }} m{% endif %}</div></div>
-    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(UI.delivery) }} {{ SITE.delivery_weeks }} {{ t(UI.weeks) }}</div></div>
+    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(TIMING.kit_l) }} {{ t(TIMING.kit) }}</div></div>
   </div>
   {% if m.params %}
   <div class="cols" style="margin-top:44px"><div><div class="eyebrow">{{ t(UI.params) }}</div></div><div class="tbl"><table style="min-width:0">{% for k,v in m.params %}<tr><td>{{ t(k) }}</td><td class="num">{{ t(v) }}</td></tr>{% endfor %}</table></div></div>
@@ -87,7 +87,7 @@
   <div class="cols3" style="margin-top:34px">
     <div class="stat"><div class="n">{{ eur((m.price_complete/m.area)|round) }}</div><div class="l">€ / m² · {{ t(PACKAGES.complete.name) }}</div><div class="d">{{ num(m.area) }} m² {{ t(UI.living_area)|lower }}</div></div>
     <div class="stat"><div class="n">{{ eur(m.price_complete - m.price_base) }}</div><div class="l">{{ 'Apdare, elektrība, apkure' if lang=='lv' else 'Finishes, electrics, heating' }}</div><div class="d">{{ 'Starpība starp paketēm' if lang=='lv' else 'Difference between packages' }}</div></div>
-    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(UI.delivery) }} {{ SITE.delivery_weeks }} {{ t(UI.weeks) }}</div></div>
+    <div class="stat"><div class="n">{{ m.warranty }} {{ t(UI.years) }}</div><div class="l">{{ t(UI.warranty) }}</div><div class="d">{{ t(TIMING.kit_l) }} {{ t(TIMING.kit) }}</div></div>
   </div>
 </div></section>
 
