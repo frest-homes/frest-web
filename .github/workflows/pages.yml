@@ -25,8 +25,9 @@ jobs:
           path: |
             site/img
             assets/manifest.json
-          key: img-${{ hashFiles('assets/src/**', 'images.py') }}
+          key: img-${{ hashFiles('assets/src/**', 'images.py', 'focal.py') }}
       - run: python3 images.py
+      - run: python3 focal.py
       - run: python3 build.py --base "${BASE}" --canonical "${CANONICAL}"
         env:
           BASE: ${{ vars.SITE_BASE || '/frest-web/' }}
