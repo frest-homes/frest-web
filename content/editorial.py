@@ -97,17 +97,25 @@ AUDIENCES = [
 
 # Magazine spreads (full-bleed image + folio + kicker)
 SPREADS = {
-    'cover': {'img': 'als-kettingskov-aerial', 'folio': (T('Pirmais ciemats', 'The first village'), T('Kettingskov · Dānija · 2022', 'Kettingskov · Denmark · 2022')),
+    'cover': {'img': 'kettingskov-render-day', 'folio': (T('Pirmais ciemats', 'The first village'), T('Kettingskov · Dānija · 2022', 'Kettingskov · Denmark · 2022')),
               'kicker': T('Viena forma. <em>Astoņas mājas.</em> Viena sezona.', 'One form. <em>Eight houses.</em> One season.')},
     'factory': {'img': 'factory-roof-installation', 'folio': (T('Rūpnīca', 'The factory'), T('Sienas · jumts · dažas dienas', 'Walls · roof · a few days')),
                 'kicker': T('Sienas top sausumā. <em>Māja top dažās dienās.</em>', 'Walls are made indoors. <em>The house takes days.</em>'),
                 'text': T('Katrs Frest sienu panelis tiek ražots rūpnīcā ar siltinājumu, tvaika barjeru un apšuvumu jau iekšā. Objektā paliek tikai montāža: celtnis, trīs cilvēki, nedēļa līdz jumtam. Tāpēc darbs objektā ir īss un cena ir zināma pirms pirmā rakuma.',
                           'Every Frest wall panel is made in the factory with insulation, vapour barrier and cladding already in it. On site only assembly remains: a crane, three people, a week to the roof. That is why the work on site is short and the price is known before the first dig.'),
                 'stats': [('300 mm', T('Siltinājums sienās', 'Wall insulation')), ('A', T('Energoklase', 'Energy class')), ('1', T('Līgums visam ceļam', 'One contract all the way')), ('2', T('Valstis: LV · DK', 'Countries: LV · DK')), ('2019', T('Pirmā māja', 'First house')), ('4', T('Standarta modeļi', 'Standard models'))]},
-    'word': {'img': 'als110-photo-lv-exterior-forest', 'pos': 'b', 'folio': (T('Vārds', 'The word'), 'Frest'),
+    'word': {'img': 'kettingskov-render-evening', 'folio': (T('Vārds un zīme', 'The name and the mark'), 'Frest'),
              'kicker': T('Frest ir <em>fresh</em> un <em>forest</em>.', 'Frest is <em>fresh</em> and <em>forest</em>.'),
-             'text': T('Nosaukums savieno svaigu gaisu un mežu — koku, no kura māja ir būvēta, un vietu, kur tā visbiežāk stāv. Frest mājas ir Dānijas dizaina skola, ražota Latvijā.',
-                       'The name joins fresh air and forest — the wood the house is built from and the place it most often stands. Frest homes are the Danish design school, made in Latvia.')},  # CHECK etymology with Janis
+             'text': T('Nosaukums savieno svaigu gaisu un mežu — koku, no kura māja ir būvēta, un vietu, kur tā visbiežāk stāv. '
+                       'Zīmē tas pats: divi rūpnīcas paneļi blakus, starp tiem jumta kore, un dzeltens punkts — logs, kurā deg gaisma. '
+                       'Divi paneļi ir tas, kā māja top; kore ir tas, ko cilvēks atpazīst no ceļa; gaisma logā ir tas, kāpēc mēs to darām. '
+                       'Zilā krāsa ir ziemeļu gaiss un jūra, dzeltenā — silta istaba ziemā. '
+                       'Frest mājas ir Dānijas dizaina skola, projektētas un uzbūvētas no Latvijas.',
+                       'The name joins fresh air and forest — the wood the house is built from and the place it most often stands. '
+                       'The mark says the same: two factory panels side by side, a roof ridge between them, and a yellow dot — a window with the light on. '
+                       'The two panels are how the house is made; the ridge is what you recognise from the road; the light in the window is why we do it. '
+                       'The blue is northern air and sea, the yellow a warm room in winter. '
+                       'Frest homes are the Danish design school, designed and built out of Latvia.')}
 }
 
 KICKERS = {
@@ -118,13 +126,11 @@ KICKERS = {
 
 # Focal point per image for object-fit crops: 'b' = keep bottom, 't' = keep top, 'c' = contain (plans/drawings)
 POS = {
-    'als110-photo-lv-exterior-forest': 'b', 'als110-plus-latvia-construction': 'b', 'als110-plus-latvia-exterior': 'b',
-    'als110-plus-latvia-terrace': 'b', 'als110-photo-lv-kitchen': 'b', 'als110-photo-lv-metal-roof': 'b',
-    'als70-photo-solar-entrance': 'b', 'als70-photo-solar-front': 'b', 'als70-photo-solar-terrace': 'b', 'als70-photo-solar-detail': 'b',
-    'factory-kit-assembly': 'b', 'factory-roof-installation': 'b', 'energy-house-solar-panels': 'b', 'aura-latvia-detail-1': 'b',
-    'als110-evening-dk': 'b', 'als110-evening2-dk': 'b', 'als110-day-dk': 'b',
+    # Only drawings and plans need special handling — they are contained on white, never cropped.
+    # Photographic crops are driven by the computed focal point in assets/manifest.json (focal.py).
     'als110-plan-ground': 'c', 'als110-interior-ground': 'c', 'als110-interior-loft': 'c', 'als110-loft-layout': 'c',
     'als70-plan-ground': 'c', 'als70-loft-layout': 'c', 'aura70-plan-ground': 'c', 'aura110-plan-ground': 'c', 'aura110-loft-layout': 'c',
     'aura70-3d-ground': 'c', 'aura70-3d-loft': 'c', 'aura110-3d-ground': 'c', 'aura110-3d-loft': 'c',
-    'als110-base-config': 'c', 'als110-with-carport': 'c', 'als110-carport-right': 'c', 'als110-with-annex': 'c', 'als110-annex-garden': 'c', 'als110-dual': 'c',
+    'als110-base-config': 'c', 'als110-with-carport': 'c', 'als110-carport-right': 'c', 'als110-with-annex': 'c',
+    'als110-annex-garden': 'c', 'als110-dual': 'c',
 }

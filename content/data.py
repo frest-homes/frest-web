@@ -248,10 +248,10 @@ MODELS = [
         'variants': [],
         'catalogue_url': 'https://als110.fresthomes.com/',
         'addons': [
-            {'id': 'base', 'name': T('Bāze', 'Base'), 'area': 0, 'price': 0, 'img': 'als110-base-config', 'text': T('Standarta Als 110.', 'Standard Als 110.')},
+            {'id': 'base', 'name': T('Bāze', 'Base'), 'area': 0, 'price': 0, 'img': 'als110-with-annex', 'text': T('Standarta Als 110.', 'Standard Als 110.')},
             {'id': 'carport-left', 'name': T('Nojume kreisajā pusē', 'Carport left'), 'area': 18, 'price': 13500, 'img': 'als110-with-carport', 'text': T('Piebūvēta auto nojume ar papildu noliktavas vietu.', 'Attached carport with extra storage.')},
             {'id': 'carport-right', 'name': T('Nojume labajā pusē', 'Carport right'), 'area': 18, 'price': 13500, 'img': 'als110-carport-right', 'text': T('Tā pati nojume spoguļattēlā.', 'The same carport mirrored.')},
-            {'id': 'annex', 'name': T('Dzīvojamā piebūve', 'Living annex'), 'area': 35, 'price': 55000, 'img': 'als110-with-annex', 'text': T('Modulāra piebūve viesiem, birojam vai īrei.', 'Modular annex for guests, an office or rental.')},
+            {'id': 'annex', 'name': T('Dzīvojamā piebūve', 'Living annex'), 'area': 35, 'price': 55000, 'img': 'als110-base-config', 'text': T('Modulāra piebūve viesiem, birojam vai īrei.', 'Modular annex for guests, an office or rental.')},
             {'id': 'annex-garden', 'name': T('Piebūve un dārzs', 'Annex and garden'), 'area': 35, 'price': 58000, 'img': 'als110-annex-garden', 'text': T('Piebūve ar paplašinātu dārza izkārtojumu.', 'Annex with an extended garden layout.')},
             {'id': 'dual', 'name': T('Dvīņu mājas', 'Dual homes'), 'area': 110, 'price': 179000, 'img': 'als110-dual', 'text': T('Divas Als 110 vairāku paaudžu ģimenei vai investīcijai.', 'Two Als 110 for a multi-generational family or investment.')},
         ],
@@ -302,6 +302,18 @@ WORKS = [
 ]
 
 CUSTOM_PROJECTS = [
+    {'name': 'Rindu mājas · koka fasāde', 'size': 640, 'task': T('Projekts un būvniecība', 'Design and construction'),
+     'img': 'apartments-wood-green-roof',
+     'text': T('Sešas rindu mājas ar zaļo jumtu un pelēkas priedes fasādi; katrai savs dārzs un jumta terase.',
+               'Six terraced homes with a green roof and grey pine cladding; each with its own garden and roof terrace.')},
+    {'name': 'Rindu mājas · ķieģeļu fasāde', 'size': 640, 'task': T('Fasādes alternatīva', 'Facade alternative'),
+     'img': 'apartments-brick',
+     'text': T('Tas pats korpuss ar gaišu ķieģeļu fasādi un falcētu metāla jumtu — divi ceļi vienam projektam.',
+               'The same volume in pale brick with a standing-seam metal roof — two routes for one project.')},
+    {'name': 'Ciemats ar plakaniem jumtiem', 'size': 1400, 'task': T('Apbūves koncepts', 'Development concept'),
+     'img': 'neighbourhood-aerial-night',
+     'text': T('Divpadsmit mājas gar vienu ielu: plakanie jumti ar saules paneļiem, koka fasādes, kopīga zaļā ass.',
+               'Twelve houses along one street: flat roofs with solar panels, timber facades, a shared green spine.')},
     {'name': 'Ģimnastikas 41', 'size': 195, 'task': T('Tikai projekts', 'Design only'), 'img': 'custom-gimnastikas-41', 'text': T('Mūsdienīgs fasādes dizains ar vertikālām koka lameļu detaļām', 'Contemporary facade design with vertical timber slat details')},
     {'name': 'Avotkalna 12, Engure', 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'custom-avotkalna-12', 'text': T('Moderna vienstāva māja ar pagarinātu paviljona tipa auto nojumi', 'A modern single-storey house with an extended pavilion-style carport')},
     {'name': 'Juglasciema bulvāris, Rīga', 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'juglas-bulvaris-completed', 'text': T('Uzbūvēta individuāla māja ar 115 m² dzīvojamo platību un koka fasādi', 'A completed custom home with 115 m² of living space and a wood facade')},
