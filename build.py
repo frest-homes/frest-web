@@ -6,7 +6,7 @@ Reads content/data.py + content/ui.py, images from assets/manifest.json (run ima
 import os, sys, json, shutil, argparse, datetime, html
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from content.data import SITE, MODELS, PACKAGES, FACADE_COLORS, ROOF_TYPES, ADDONS, ADDON_WHY, WORKS, CUSTOM_PROJECTS, PROCESS, FAQ, TEAM, VALUES, QUIZ
+from content.data import TIMING, SITE, MODELS, PACKAGES, FACADE_COLORS, ROOF_TYPES, ADDONS, ADDON_WHY, WORKS, CUSTOM_PROJECTS, PROCESS, FAQ, TEAM, VALUES, QUIZ
 from content.ui import UI
 from content.editorial import DESC as IMGDESC, AUDIENCES, SPREADS, KICKERS, POS as IMGPOS
 
@@ -115,7 +115,7 @@ def build_lang(lang):
     h = make_helpers(lang)
     t, url = h['t'], h['url']
     ctx_base = dict(h, SITE=SITE, UI=UI, MODELS=MODELS, PACKAGES=PACKAGES, COLORS=FACADE_COLORS, ROOFS=ROOF_TYPES, ADDONS=ADDONS, ADDON_WHY=ADDON_WHY,
-                    WORKS=WORKS, CUSTOM=CUSTOM_PROJECTS, PROCESS=PROCESS, FAQ=FAQ, TEAM=TEAM, VALUES=VALUES, QUIZ=QUIZ, year=datetime.date.today().year,
+                    WORKS=WORKS, CUSTOM=CUSTOM_PROJECTS, PROCESS=PROCESS, TIMING=TIMING, FAQ=FAQ, TEAM=TEAM, VALUES=VALUES, QUIZ=QUIZ, year=datetime.date.today().year,
                     canonical=args.canonical, TITLES=TITLES, IMGDESC=IMGDESC, IMGPOS=IMGPOS, AUDIENCES=AUDIENCES, SPREADS=SPREADS, KICKERS=KICKERS)
     # personaliser data (JSON for JS)
     def pz_data(models):
