@@ -87,6 +87,10 @@ def make_helpers(lang):
         fb = f"{BASE}img/{m['fallback']}"
         ratio_w, ratio_h = m['w'], m['h']
         attrs = f'alt="{html.escape(str(alt))}" width="{ratio_w}" height="{ratio_h}" loading="{loading}" decoding="async"'
+        # magazine crop: never cut through the subject — the focal point comes from focal.py
+        fp = m.get('focal')
+        if fp and IMGPOS.get(name) not in ('c',):
+            attrs += f' style="object-position:{fp[0]}% {fp[1]}%"'
         if fetchpriority:
             attrs += f' fetchpriority="{fetchpriority}"'
         if cls:
