@@ -57,8 +57,8 @@ TITLES = {
     'terms': {'lv': 'Noteikumi | Frest', 'en': 'Terms | Frest'},
 }
 DESC = {
-    'home': {'lv': 'Aura un Als sērijas mājas: projektēšana, saskaņošana, ražošana un būvniecība ar vienu atbildīgo. Energoklase A. Uzbūvētas Dānijā un Latvijā. Cenas no 92 000 €.',
-             'en': 'Aura and Als series homes: design, permitting, manufacturing and construction with one responsible partner. Energy class A. Built in Denmark and Latvia. Prices from €92,000.'},
+    'home': {'lv': 'Aura un Als sērijas mājas: projektēšana, saskaņošana, ražošana un būvniecība ar vienu atbildīgo. Energoklase A. Uzbūvētas Dānijā un Latvijā. Rūpnīcas komplekts ar montāžu no 92 000 € ar PVN, bez pamatiem un apdares.',
+             'en': 'Aura and Als series homes: design, permitting, manufacturing and construction with one responsible partner. Energy class A. Built in Denmark and Latvia. Factory kit with assembly from €92,000 incl. VAT, excl. foundation and interior.'},
 }
 
 env = Environment(loader=FileSystemLoader('templates'), autoescape=select_autoescape(['html']), trim_blocks=True, lstrip_blocks=True)
@@ -116,7 +116,15 @@ def make_helpers(lang):
             return s.replace('.', ',') if lang == 'lv' else s
         return str(n)
 
-    return dict(t=t, url=url, url_other=url_other, img=img, imgsrc=imgsrc, srcset=srcset, eur=eur, num=num, lang=lang, other=other, BASE=BASE)
+    SING = {'bedrooms': {'lv': 'guļamistaba', 'en': 'bedroom'}, 'bathrooms': {'lv': 'vannasistaba', 'en': 'bathroom'},
+            'rooms': {'lv': 'istaba', 'en': 'room'}}
+
+    def cnt(n, key):
+        """'1 bathroom' / '2 bathrooms' — UI holds the plural, the singular is derived here."""
+        w = SING[key][lang] if n == 1 and key in SING else t(UI[key]).lower()
+        return f"{n} {w}"
+
+    return dict(t=t, url=url, url_other=url_other, img=img, imgsrc=imgsrc, srcset=srcset, eur=eur, num=num, cnt=cnt, lang=lang, other=other, BASE=BASE)
 
 def model_by_slug(slug):
     return next(m for m in MODELS if m['slug'] == slug)
@@ -135,7 +143,7 @@ def build_lang(lang):
                                       'facades': {r: {c: {'src': h['imgsrc'](n, 1600), 'srcset': h['srcset'](n)} for c, n in cols.items()} for r, cols in m['facades'].items()}}
         return json.dumps(d, ensure_ascii=False)
     quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': url(f"model/{m['slug']}/"), 'img': h['imgsrc'](m['card'], 960), 'srcset': h['srcset'](m['card']),
-                               'facts': f"{h['num'](m['area'])} m² · {m['bedrooms']} {t(UI['bedrooms']).lower()} · {t(UI['from'])} {h['eur'](m['price_complete'])}"} for m in MODELS}
+                               'facts': f"{h['num'](m['area'])} m² · {h['cnt'](m['bedrooms'], 'bedrooms')} · {h['cnt'](m['bathrooms'], 'bathrooms')}"} for m in MODELS}
     ctx_base['pz_data'] = pz_data
     ctx_base['aud_data'] = json.dumps({k: {'h': t(h), 'p': t(p), 'href': url(href), 'link': t(link)} for k, lab, h, p, href, link in AUDIENCES}, ensure_ascii=False)
     ctx_base['quiz_data'] = json.dumps(quiz_models, ensure_ascii=False)
@@ -153,8 +161,7 @@ def build_lang(lang):
         out = env.get_template(tpl).render(**ctx)
         written.append(write(path, out))
     for m in MODELS:
-        title = {'lv': f"{m['name']} — {t(m['tagline'])}, {h['num'](m['area'])} m², {t(UI['from'])} {h['eur'](m['price_base'])} | Frest",
-                 'en': f"{m['name']} — {t(m['tagline'])}, {h['num'](m['area'])} m², {t(UI['from'])} {h['eur'](m['price_base'])} | Frest"}[lang]
+        title = f"{m['name']} — {t(m['tagline'])}, {h['num'](m['area'])} m², {h['cnt'](m['bedrooms'], 'bedrooms')} | Frest"
         ctx = dict(ctx_base, page='model', path=f"model/{m['slug']}/", m=m, title=title, desc=t(m['lead']),
                    works=[w for w in WORKS if set(w['tags']) & set(m['works_tags'])], others=[x for x in MODELS if x is not m])
         written.append(write(f"model/{m['slug']}/", env.get_template('model.html').render(**ctx)))
