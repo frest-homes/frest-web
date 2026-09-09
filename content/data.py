@@ -102,7 +102,7 @@ MODELS = [
                    'Aura 70 is a compact, efficient model for small families. A factory-built structure with high insulation standards, an open kitchen–living area, two bedrooms and a loft that works as a study or guest space.'),
         'area': 72, 'total_area': 70, 'loft': 15, 'terrace': 17, 'width': 7, 'length': None,  # CHECK
         'rooms': 3, 'bedrooms': 2, 'bathrooms': 1, 'ceiling': 2.5,
-        'price_base': 95000, 'price_complete': 135000, 'warranty': 2,  # CHECK warranty 2 vs 3
+        'price_base': 95000, 'price_complete': 135000, 'warranty': None,  # stated as 'pēc līguma' — no fixed year figure is published
         'style': T('Mūsdienīgs', 'Contemporary'),
         'hero': 'aura70-hero', 'card': 'aura70-facade',
         'facades': {'tile': {'nordic-gray': 'aura70-facade', 'charcoal-black': 'aura70-tile-charcoal-black', 'warm-wood': 'aura70-tile-warm-wood', 'natural-pine': 'aura70-tile-natural-pine'},
@@ -138,7 +138,7 @@ MODELS = [
                    'Aura 110 extends the Aura series with a third bedroom, a second bathroom and a larger shared zone. The same factory precision, bigger windows and more room for everyday life.'),
         'area': 110, 'total_area': 112, 'loft': 17, 'terrace': 17, 'width': 8, 'length': None,  # CHECK
         'rooms': 4, 'bedrooms': 3, 'bathrooms': 2, 'ceiling': 2.5,
-        'price_base': 125000, 'price_complete': 175000, 'warranty': 2,
+        'price_base': 125000, 'price_complete': 195000, 'warranty': None,
         'style': T('Mūsdienīgs', 'Contemporary'),
         'hero': 'aura110-hero', 'card': 'aura110-facade',
         'facades': {'tile': {'nordic-gray': 'aura110-tile-nordic-gray', 'charcoal-black': 'aura110-facade', 'warm-wood': 'aura110-tile-warm-wood', 'natural-pine': 'aura110-tile-natural-pine'},
@@ -168,7 +168,7 @@ MODELS = [
                    'Als 70 is the Frest classic: a single-storey house with a 25° roof, 2.7 m wall height and an open 37 m² kitchen–living room. Two bedrooms, a bathroom, a utility room and a 17 m² covered terrace. Energy class A.'),
         'area': 68.4, 'total_area': 105.6, 'loft': None, 'terrace': 16.8, 'width': 8.5, 'length': 12.4,
         'rooms': 3, 'bedrooms': 2, 'bathrooms': 1, 'ceiling': 2.7,
-        'price_base': 92000, 'price_complete': 129000, 'warranty': 3,
+        'price_base': 92000, 'price_complete': 129000, 'warranty': None,
         'style': T('Skandināvu', 'Scandinavian'),
         'hero': 'als70-hero', 'card': 'als-facade',
         'facades': {'tile': {'nordic-gray': 'als-facade', 'charcoal-black': 'als-tile-charcoal-black', 'warm-wood': 'als-tile-warm-wood', 'natural-pine': 'als-tile-natural-pine'},
@@ -209,7 +209,7 @@ MODELS = [
                    'Als 110 extends the Als philosophy: a 16.7 m long body, 2.7 m walls, a 25° roof and a 17 m² mezzanine deck above the bedrooms. 290 mm insulation in the walls, 250 mm in the roof. Energy class A.'),
         'area': 103.3, 'total_area': 143.6, 'loft': 17, 'terrace': 18.3, 'width': 8.6, 'length': 16.7,
         'rooms': 4, 'bedrooms': 3, 'bathrooms': 2, 'ceiling': 2.7,
-        'price_base': 128000, 'price_complete': 179000, 'warranty': 3,
+        'price_base': 128000, 'price_complete': 179000, 'warranty': None,
         'style': T('Skandināvu', 'Scandinavian'),
         'hero': 'als110-hero', 'card': 'als-tile-charcoal-black',
         'facades': {'tile': {'nordic-gray': 'als-facade', 'charcoal-black': 'als-tile-charcoal-black', 'warm-wood': 'als-tile-warm-wood', 'natural-pine': 'als-tile-natural-pine'},

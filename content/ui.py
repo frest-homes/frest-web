@@ -18,7 +18,7 @@ UI = {
     'request': T('Pieprasīt piedāvājumu', 'Request an offer'), 'request_short': T('Pieprasīt', 'Enquire'), 'register': T('Reģistrēties un skatīt cenas', 'Register and see prices'),
     'living_area': T('Telpu platība', 'Living area'), 'total_area': T('Apbūves laukums', 'Building footprint'), 'rooms': T('Istabas', 'Rooms'), 'bedrooms': T('Guļamistabas', 'Bedrooms'),
     'bathrooms': T('Vannasistabas', 'Bathrooms'), 'terrace': T('Terase', 'Terrace'), 'loft': T('Bēniņi / mezanīns', 'Loft / mezzanine'), 'width': T('Platums', 'Width'), 'length': T('Garums', 'Length'),
-    'ceiling': T('Griestu augstums', 'Ceiling height'), 'style': T('Stils', 'Style'), 'delivery': T('Piegāde', 'Delivery'), 'warranty': T('Garantija', 'Warranty'), 'years': T('gadi', 'years'),
+    'ceiling': T('Griestu augstums', 'Ceiling height'), 'style': T('Stils', 'Style'), 'delivery': T('Piegāde', 'Delivery'), 'warranty_terms': T('Pēc līguma', 'Per contract'), 'warranty': T('Garantija', 'Warranty'), 'years': T('gadi', 'years'),
     'base_price': T('Pamata pakete', 'Base package'), 'complete_price': T('Pilnā pakete', 'Complete package'),
     'm2': 'm²', 'with_vat': T('ar PVN', 'incl. VAT'),
 
