@@ -58,7 +58,7 @@ $$('[data-plan]').forEach(pl=>{const imgs=$$('.stage img',pl),tabs=$$('.tabs but
 
 /* add-ons */
 $$('[data-addons]').forEach(ad=>{const base=+ad.dataset.base,btns=$$('.addon-list button',ad),imgs=$$('.stage img',ad),sum=$('.addon-sum b',ad),area=$('.addon-sum [data-area]',ad),baseArea=+ad.dataset.area;
-  const pick=id=>{btns.forEach(b=>b.classList.toggle('on',b.dataset.id===id));imgs.forEach(i=>i.classList.toggle('on',i.dataset.id===id));const b=btns.find(x=>x.dataset.id===id);sum.textContent=fmtEur(base+(+b.dataset.price));if(area)area.textContent=(baseArea+(+b.dataset.area))+' m²'};
+  const pick=id=>{btns.forEach(b=>b.classList.toggle('on',b.dataset.id===id));imgs.forEach(i=>i.classList.toggle('on',i.dataset.id===id));const b=btns.find(x=>x.dataset.id===id);sum.textContent=fmtEur(base+(+b.dataset.price));if(area)area.textContent=(baseArea+(+b.dataset.area))+' m²';const nm=$('[data-addon-name]',ad),tx=$('[data-addon-text]',ad);if(nm)nm.textContent=b.dataset.name||'';if(tx)tx.textContent=b.dataset.text||''};
   btns.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.id)));pick(btns[0].dataset.id);});
 
 /* quiz */
