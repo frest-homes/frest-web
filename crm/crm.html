@@ -1,0 +1,340 @@
+<div class="crm" id="crm">
+<style>
+.crm{--ink:#0c2429;--ink2:#3f5a60;--ash:#6b8085;--line:#dfeaec;--bg:#f2f7f8;--paper:#fff;--acc:#50d1e0;--acc-ink:#0a7a88;--hi:#fbb900;font-size:14px;color:var(--ink)}
+.crm *{box-sizing:border-box}
+.crm h2{font-size:22px;font-weight:400;letter-spacing:-.01em;margin:0}
+.crm .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 20px}
+.crm input,.crm select,.crm textarea{font:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;color:var(--ink)}
+.crm input:focus,.crm select:focus,.crm textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(80,209,224,.2)}
+.crm button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 15px;color:var(--ink);transition:.15s}
+.crm button:hover{border-color:var(--acc)}
+.crm button.pri{background:var(--acc);border-color:var(--acc);color:#04333a;font-weight:600}
+.crm button.gh{background:transparent}
+.crm .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.crm .kpi{background:var(--paper);border-radius:16px;padding:14px 16px}
+.crm .kpi b{display:block;font-size:26px;font-weight:300;letter-spacing:-.02em}
+.crm .kpi span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ash)}
+.crm .board{display:grid;grid-template-columns:repeat(6,minmax(160px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
+.crm .col{background:var(--bg);border-radius:14px;padding:10px;min-height:120px}
+.crm .col h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ash);margin:2px 0 10px;display:flex;justify-content:space-between}
+.crm .card{background:var(--paper);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;border:1px solid transparent;transition:.15s}
+.crm .card:hover{border-color:var(--acc);transform:translateY(-1px)}
+.crm .card b{display:block;font-weight:500;font-size:13.5px}
+.crm .card small{display:block;color:var(--ash);font-size:11.5px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crm .tag{display:inline-block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg);border-radius:999px;padding:2px 7px;margin-top:6px;color:var(--acc-ink)}
+.crm table{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden}
+.crm th{text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);padding:10px 12px;background:#eaf3f5;font-weight:600}
+.crm td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+.crm tr:hover td{background:#fafdfd;cursor:pointer}
+.crm .pill{display:inline-block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 9px;background:var(--bg);color:var(--acc-ink)}
+.crm .pill.New{background:#e0f7fa}.crm .pill.Contacted{background:#fff3d1}.crm .pill.Qualified{background:#e6f4e6}
+.crm .pill.Quoted{background:#ede4ff}.crm .pill.Won{background:#cdeccd;color:#1d5c1d}.crm .pill.Lost{background:#f0e3e3;color:#8a5252}
+.crm .panel{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--paper);box-shadow:-20px 0 60px rgba(12,36,41,.22);padding:26px;overflow:auto;z-index:60;transform:translateX(102%);transition:transform .28s}
+.crm .panel.on{transform:none}
+.crm .panel .x{position:absolute;top:16px;right:18px}
+.crm .panel label{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin:14px 0 5px}
+.crm .panel input,.crm .panel select,.crm .panel textarea{width:100%}
+.crm .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px;margin-top:14px}
+.crm .kv dt{color:var(--ash)}.crm .kv dd{margin:0;word-break:break-word}
+.crm .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.crm .tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.crm .note{background:#fdf7e7;border-left:3px solid var(--hi);border-radius:0 10px 10px 0;padding:12px 14px;margin:14px 0;font-size:13px;line-height:1.55}
+.crm .tpl{background:var(--paper);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.crm .tpl pre{white-space:pre-wrap;font:13px/1.6 ui-monospace,Menlo,monospace;background:var(--bg);border-radius:10px;padding:12px;margin:10px 0 0;max-height:260px;overflow:auto}
+.crm .muted{color:var(--ash);font-size:12.5px}
+@media(max-width:900px){.crm .board{grid-template-columns:repeat(6,minmax(150px,1fr))}}
+</style>
+
+<div class="tabs">
+  <button data-tab="board" class="on">Pipeline</button>
+  <button data-tab="table">Lead list</button>
+  <button data-tab="stats">Campaigns</button>
+  <button data-tab="templates">Templates</button>
+  <button data-tab="setup">Setup</button>
+</div>
+
+<!-- ============ PIPELINE ============ -->
+<section data-p="board">
+  <div class="kpis" id="kpis"></div>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search name, email, campaign…" style="min-width:220px">
+    <select id="fSource"><option value="">All sources</option></select>
+    <select id="fCampaign"><option value="">All campaigns</option></select>
+    <select id="fSite"><option value="">Both sites</option><option>www.frest.lv</option><option>www.fresthomes.com</option></select>
+    <button id="reload" class="gh">Reload</button>
+    <button id="exportCsv" class="gh">Export CSV</button>
+    <span class="muted" id="status"></span>
+  </div>
+  <div class="board" id="board"></div>
+</section>
+
+<!-- ============ TABLE ============ -->
+<section data-p="table" hidden>
+  <div class="bar"><span class="muted">Newest first. Click a row to open it.</span></div>
+  <table><thead><tr><th>Received</th><th>Name</th><th>Contact</th><th>Where</th><th>Campaign</th><th>Status</th></tr></thead><tbody id="tbody"></tbody></table>
+</section>
+
+<!-- ============ STATS ============ -->
+<section data-p="stats" hidden>
+  <h2>Where the leads come from</h2>
+  <p class="muted" style="margin:6px 0 18px">Counted on first touch, so a lead that arrived from a Facebook ad and came back through Google still belongs to the ad.</p>
+  <div id="stats"></div>
+</section>
+
+<!-- ============ TEMPLATES ============ -->
+<section data-p="templates" hidden>
+  <h2>Reply templates</h2>
+  <p class="muted" style="margin:6px 0 18px">Merge fields: <code>{name}</code> <code>{first}</code> <code>{region}</code> <code>{timing}</code> <code>{code}</code>. Open a lead and press “Copy reply” to fill them automatically.</p>
+  <div id="templates"></div>
+</section>
+
+<!-- ============ SETUP ============ -->
+<section data-p="setup" hidden>
+  <h2>Connect the pipeline</h2>
+  <div class="note"><b>Status:</b> <span id="setupState">checking…</span></div>
+  <label style="display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b8085;margin:14px 0 5px">Apps Script web-app URL (/exec)</label>
+  <input id="cfgUrl" style="width:100%;max-width:620px" placeholder="https://script.google.com/macros/s/…/exec">
+  <label style="display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b8085;margin:14px 0 5px">API token (CONFIG.API_TOKEN in Code.gs)</label>
+  <input id="cfgToken" style="width:100%;max-width:420px" placeholder="CHANGE-ME-frest-crm-2026">
+  <div class="bar"><button class="pri" id="cfgSave">Save and connect</button><button class="gh" id="cfgDemo">Load demo data</button></div>
+  <div class="note">
+    <b>How the pieces fit.</b> Every form on frest.lv and fresthomes.com posts to the Apps Script,
+    which writes a row in the Leads sheet, emails the person their catalogue code, and emails
+    info@frest.lv a copy. FormSubmit still sends its own copy, so nothing is lost if the script is down.
+    This page reads the same sheet and writes status, owner, notes and next action back to it.
+    Settings are kept in this browser only.
+  </div>
+</section>
+
+<div class="panel" id="panel"><button class="x gh" id="closePanel">Close</button><div id="panelBody"></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var STAGES=['New','Contacted','Qualified','Quoted','Won','Lost'];
+var LS='frest_crm_cfg';
+var cfg={url:'',token:''};
+try{cfg=JSON.parse(localStorage.getItem(LS)||'{}')||{};}catch(e){}
+var leads=[],cur=null;
+var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
+
+/* ---------- demo data so the page is useful before the endpoint exists ---------- */
+function demo(){
+  var now=Date.now(),d=[];
+  var seed=[['Anna Liepiņa','anna.liepina@inbox.lv','+371 26 555 011','Rīga un Pierīga','Šogad','Zemesgabals ir','lv','www.frest.lv','facebook','cpc','lv-modulu-majas-sep','New'],
+  ['Kristaps Ozols','k.ozols@gmail.com','+371 29 110 233','Vidzeme','Nākamgad','Vēl meklēju zemesgabalu','lv','www.frest.lv','facebook','cpc','lv-modulu-majas-sep','Contacted'],
+  ['Declan Murphy','declan.murphy@eircom.net','+353 87 220 4411','Ireland — Munster','This year','I have planning permission','en','www.fresthomes.com','meta','cpc','ie-timber-frame-sep','Qualified'],
+  ['Siobhán Byrne','sbyrne@gmail.com','+353 86 771 9922','Ireland — Leinster','Next year','I have the site','en','www.fresthomes.com','google','organic','','New'],
+  ['Māris Bērziņš','maris@buvfirma.lv','+371 22 004 771','Zemgale','Šogad','Esmu būvnieks vai arhitekts','lv','www.frest.lv','google','organic','','Quoted'],
+  ['Eoin Kelly','eoin.kelly@outlook.ie','+353 85 442 0088','Ireland — Connacht','Still researching','Still looking for a site','en','www.fresthomes.com','instagram','cpc','ie-timber-frame-sep','Lost'],
+  ['Ilze Kalniņa','ilze.kalnina@apollo.lv','+371 26 889 004','Kurzeme','Šogad','Zemesgabals ir','lv','www.frest.lv','facebook','cpc','lv-modulu-majas-sep','Won']];
+  seed.forEach(function(s,i){
+    d.push({id:'DEMO-'+i,received_at:new Date(now-(i*7+2)*3600*1000).toISOString(),status:s[11],owner:i%2?'Jānis':'Anna',
+      next_action:'First contact',next_action_at:new Date(now+(i-2)*86400000).toISOString(),notes:'',
+      name:s[0],email:s[1],phone:s[2],region:s[3],timing:s[4],stage_of_project:s[5],lang:s[6],site:s[7],
+      source:'landing',page:'/',page_title:'',utm_source:s[8],utm_medium:s[9],utm_campaign:s[10],
+      first_landing:s[6]==='lv'?'/modulu-majas/':'/ireland/',first_referrer:'',catalogue_code:'ritausma-koks-862'});
+  });
+  return d;
+}
+
+/* ---------- data ---------- */
+function api(params){
+  var u=cfg.url; if(!u) return Promise.reject(new Error('not configured'));
+  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k])}).join('&');
+  return fetch(u+'?token='+encodeURIComponent(cfg.token||'')+'&'+qs).then(function(r){return r.json()});
+}
+function load(){
+  setStatus('loading…');
+  if(!cfg.url){ leads=demo(); setStatus('demo data — connect the endpoint in Setup'); render(); return; }
+  api({action:'list'}).then(function(res){
+    if(!res.ok) throw new Error(res.error||'error');
+    leads=res.leads||[]; setStatus(leads.length+' leads'); render();
+  }).catch(function(e){ leads=demo(); setStatus('could not reach the endpoint ('+e.message+') — showing demo data'); render(); });
+}
+function save(id,field,value){
+  var l=leads.filter(function(x){return x.id===id})[0]; if(l) l[field]=value;
+  if(!cfg.url||String(id).indexOf('DEMO')===0){ setStatus('saved locally (demo)'); return Promise.resolve(); }
+  return api({action:'update',id:id,field:field,value:value}).then(function(r){
+    setStatus(r.ok?'saved':'save failed: '+(r.error||'')); }).catch(function(e){ setStatus('save failed: '+e.message); });
+}
+function setStatus(s){ $('#status').textContent=s; }
+
+/* ---------- filters ---------- */
+function filtered(){
+  var q=($('#q').value||'').toLowerCase(), s=$('#fSource').value, c=$('#fCampaign').value, si=$('#fSite').value;
+  return leads.filter(function(l){
+    if(s&&(l.utm_source||'(direct)')!==s) return false;
+    if(c&&(l.utm_campaign||'(none)')!==c) return false;
+    if(si&&l.site!==si) return false;
+    if(!q) return true;
+    return [l.name,l.email,l.phone,l.utm_campaign,l.region,l.notes].join(' ').toLowerCase().indexOf(q)>=0;
+  }).sort(function(a,b){return new Date(b.received_at)-new Date(a.received_at)});
+}
+function fillFilters(){
+  var src={},cam={};
+  leads.forEach(function(l){src[l.utm_source||'(direct)']=1;cam[l.utm_campaign||'(none)']=1});
+  [['#fSource',src,'All sources'],['#fCampaign',cam,'All campaigns']].forEach(function(f){
+    var el=$(f[0]),v=el.value;
+    el.innerHTML='<option value="">'+f[2]+'</option>'+Object.keys(f[1]).sort().map(function(k){return '<option>'+esc(k)+'</option>'}).join('');
+    el.value=v;
+  });
+}
+function esc(s){return String(s==null?'':s).replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]})}
+function fmt(d){ if(!d) return '—'; var x=new Date(d); return isNaN(x)?String(d):x.toLocaleDateString(undefined,{day:'2-digit',month:'short'})+' '+x.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}); }
+
+/* ---------- render ---------- */
+function render(){
+  fillFilters();
+  var f=filtered();
+  // KPIs
+  var open=f.filter(function(l){return ['Won','Lost'].indexOf(l.status)<0}).length;
+  var week=f.filter(function(l){return new Date(l.received_at)>Date.now()-7*86400000}).length;
+  var due=f.filter(function(l){return l.next_action_at&&new Date(l.next_action_at)<=Date.now()&&['Won','Lost'].indexOf(l.status)<0}).length;
+  var won=f.filter(function(l){return l.status==='Won'}).length;
+  var rate=f.length?Math.round(won/f.length*100):0;
+  $('#kpis').innerHTML=[[f.length,'Leads'],[week,'Last 7 days'],[open,'Open'],[due,'Action due'],[won,'Won'],[rate+'%','Win rate']]
+    .map(function(k){return '<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'}).join('');
+  // board
+  $('#board').innerHTML=STAGES.map(function(st){
+    var items=f.filter(function(l){return (l.status||'New')===st});
+    return '<div class="col"><h3>'+st+'<span>'+items.length+'</span></h3>'+items.map(function(l){
+      var over=l.next_action_at&&new Date(l.next_action_at)<=Date.now()&&['Won','Lost'].indexOf(st)<0;
+      return '<div class="card" data-id="'+esc(l.id)+'"><b>'+esc(l.name||l.email)+'</b>'+
+        '<small>'+esc(l.region||l.site||'')+'</small>'+
+        '<small>'+fmt(l.received_at)+(over?' · <span style="color:#b5651d">due</span>':'')+'</small>'+
+        (l.utm_campaign?'<span class="tag">'+esc(l.utm_campaign)+'</span>':'')+'</div>';
+    }).join('')+'</div>';
+  }).join('');
+  // table
+  $('#tbody').innerHTML=f.map(function(l){
+    return '<tr data-id="'+esc(l.id)+'"><td>'+fmt(l.received_at)+'</td><td><b>'+esc(l.name)+'</b><br><span class="muted">'+esc(l.stage_of_project||'')+'</span></td>'+
+      '<td>'+esc(l.email)+'<br><span class="muted">'+esc(l.phone||'')+'</span></td>'+
+      '<td>'+esc(l.region||'')+'<br><span class="muted">'+esc(l.site||'')+'</span></td>'+
+      '<td>'+esc(l.utm_source||'(direct)')+'<br><span class="muted">'+esc(l.utm_campaign||'')+'</span></td>'+
+      '<td><span class="pill '+esc(l.status||'New')+'">'+esc(l.status||'New')+'</span></td></tr>';
+  }).join('')||'<tr><td colspan="6" class="muted" style="padding:20px">No leads match.</td></tr>';
+  renderStats(f);
+}
+
+function renderStats(f){
+  function group(key){
+    var g={};
+    f.forEach(function(l){ var k=l[key]||'(none)'; g[k]=g[k]||{n:0,won:0}; g[k].n++; if(l.status==='Won') g[k].won++; });
+    return Object.keys(g).sort(function(a,b){return g[b].n-g[a].n}).map(function(k){return [k,g[k].n,g[k].won]});
+  }
+  function tbl(title,rows){
+    if(!rows.length) return '';
+    var max=Math.max.apply(null,rows.map(function(r){return r[1]}));
+    return '<h3 style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#6b8085;margin:22px 0 10px">'+title+'</h3>'+
+      '<table><thead><tr><th>'+title+'</th><th style="width:46%">Leads</th><th>Won</th></tr></thead><tbody>'+
+      rows.map(function(r){
+        return '<tr><td>'+esc(r[0])+'</td><td><div style="display:flex;align-items:center;gap:8px"><div style="height:8px;border-radius:4px;background:#50d1e0;width:'+Math.round(r[1]/max*100)+'%;min-width:6px"></div>'+r[1]+'</div></td><td>'+r[2]+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  $('#stats').innerHTML=tbl('Source',group('utm_source'))+tbl('Campaign',group('utm_campaign'))+
+    tbl('Medium',group('utm_medium'))+tbl('Landing page',group('first_landing'))+tbl('Site',group('site'))+tbl('Region',group('region'));
+}
+
+/* ---------- lead panel ---------- */
+var TEMPLATES=[
+ {id:'lv-first',name:'LV · Pirmā atbilde',subject:'Frest — jūsu jautājums par māju',
+  body:'Sveiki, {first}!\n\nPaldies par pieteikumu. Katalogs ar cenām ir šeit: https://catalogue.fresthomes.com, kods {code}.\n\nLai varētu nosaukt konkrētu skaitli tieši jūsu situācijai, man vajag zināt trīs lietas:\n1. Vai zemesgabals jau ir un kur tas atrodas?\n2. Cik liela māja jums vajadzīga — istabu skaits, aptuvenā platība?\n3. Kad gribētu ievākties?\n\nAtrakstiet vienā rindā par katru, un es sagatavošu piedāvājumu ar tāmi pa sadaļām.\n\nJānis Bērziņš\nFrest Homes · +371 2062 2020'},
+ {id:'lv-followup',name:'LV · Atgādinājums pēc 5 dienām',subject:'Vai katalogs atvērās?',
+  body:'Sveiki, {first}!\n\nPārbaudu, vai katalogs atvērās un vai kaut kas palika neskaidrs. Ja kods nestrādāja, atrakstiet — nosūtīšu jaunu.\n\nBiežākais jautājums šajā posmā: kas tieši ir un nav iekļauts cenā. Īsā atbilde — rūpnīcas komplektā ir sienas, jumts, logi, ārdurvis, fasāde un montāža; pamati, apdare, pieslēgumi un būvatļauja nav.\n\nJānis'},
+ {id:'en-first',name:'EN/IE · First reply',subject:'Frest — your timber frame enquiry',
+  body:'Hello {first},\n\nThank you for your enquiry. The catalogue is at https://catalogue.fresthomes.com with the code {code}. Note that it is written for the Latvian market — the specifications apply, the delivered price for Ireland differs.\n\nTo give you a real figure I need three things:\n1. What county is the site in, and do you have planning permission yet?\n2. Which model, or roughly what floor area and how many bedrooms?\n3. When would you want the frame on site?\n\nOne thing to be clear about from the start: we manufacture in Latvia and erect on your prepared foundation. Foundation, services, fit-out and certification stay with your Irish team, and we supply the structural documentation they need.\n\nJanis Berzins\nFrest Homes · +371 2062 2020'},
+ {id:'en-builder',name:'EN/IE · Builder or architect',subject:'Frest timber frame — trade enquiry',
+  body:'Hello {first},\n\nThanks for getting in touch. For a professional enquiry the fastest route is usually the documentation set, so here is what we supply with every kit:\n\n· structural design calculations for the specific house, to Eurocode 5 with the Irish National Annex\n· timber and board specifications with declarations of performance\n· wall, roof and junction build-ups with U-values and condensation risk analysis\n· the drawn airtightness strategy\n· setting-out and tolerance drawings for the foundation\n· erection method statement\n\nWe do not certify compliance with the Irish Building Regulations — your engineer and assigned certifier do that, and this is the pack they work from.\n\nHappy to price a specific project. Send me the drawings or the accommodation schedule.\n\nJanis Berzins\nFrest Homes'},
+ {id:'lv-quote',name:'LV · Pēc tikšanās, pirms tāmes',subject:'Nākamie soļi',
+  body:'Sveiki, {first}!\n\nPaldies par sarunu. Kā vienojāmies, nākamie soļi:\n1. Sagatavoju tāmi pa sadaļām jūsu izvēlētajam modelim un komplektācijai — {timing}.\n2. Jūs atsūtāt zemesgabala kadastra numuru, lai varam pārbaudīt apbūves noteikumus.\n3. Pēc tāmes apstiprināšanas parakstām projektēšanas līgumu, un sākas topogrāfija un ģeotehnika.\n\nJānis'}
+];
+
+function openLead(id){
+  cur=leads.filter(function(l){return l.id===id})[0]; if(!cur) return;
+  var l=cur;
+  var opt=function(v,sel){return '<option'+(v===sel?' selected':'')+'>'+esc(v)+'</option>'};
+  $('#panelBody').innerHTML=
+    '<div style="margin-top:6px"><span class="pill '+esc(l.status||'New')+'">'+esc(l.status||'New')+'</span></div>'+
+    '<h2 style="margin:10px 0 2px">'+esc(l.name||'—')+'</h2>'+
+    '<p class="muted" style="margin:0">'+fmt(l.received_at)+' · '+esc(l.site||'')+'</p>'+
+    '<div class="bar" style="margin:16px 0 4px">'+
+      '<a class="pill" href="mailto:'+esc(l.email)+'" style="text-decoration:none">'+esc(l.email)+'</a>'+
+      (l.phone?'<a class="pill" href="tel:'+esc(String(l.phone).replace(/\s/g,''))+'" style="text-decoration:none">'+esc(l.phone)+'</a>':'')+
+    '</div>'+
+    '<label>Status</label><select id="pStatus">'+STAGES.map(function(s){return opt(s,l.status||'New')}).join('')+'</select>'+
+    '<label>Owner</label><select id="pOwner">'+['','Jānis','Anna'].map(function(s){return opt(s,l.owner||'')}).join('')+'</select>'+
+    '<label>Next action</label><input id="pAction" value="'+esc(l.next_action||'')+'">'+
+    '<label>Next action date</label><input id="pDate" type="date" value="'+(l.next_action_at?String(l.next_action_at).slice(0,10):'')+'">'+
+    '<label>Notes</label><textarea id="pNotes" rows="5">'+esc(l.notes||'')+'</textarea>'+
+    '<div class="bar"><button class="pri" id="pSave">Save</button>'+
+      '<select id="pTpl">'+['<option value="">Choose a reply…</option>'].concat(TEMPLATES.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>'})).join('')+'</select>'+
+      '<button id="pCopy" class="gh">Copy reply</button><button id="pMail" class="gh">Open in mail</button></div>'+
+    '<dl class="kv">'+
+      [['Region',l.region],['Timing',l.timing],['Project stage',l.stage_of_project],['Language',l.lang],
+       ['Form',l.source],['Landing page',l.first_landing],['Referrer',l.first_referrer],
+       ['Source',l.utm_source],['Medium',l.utm_medium],['Campaign',l.utm_campaign],
+       ['Content',l.utm_content],['Click id',l.click_id],['Catalogue code',l.catalogue_code],['ID',l.id]]
+      .filter(function(r){return r[1]}).map(function(r){return '<dt>'+r[0]+'</dt><dd>'+esc(r[1])+'</dd>'}).join('')+
+    '</dl>';
+  $('#panel').classList.add('on');
+
+  $('#pSave').onclick=function(){
+    var m={status:$('#pStatus').value,owner:$('#pOwner').value,next_action:$('#pAction').value,
+           next_action_at:$('#pDate').value,notes:$('#pNotes').value};
+    Promise.all(Object.keys(m).map(function(k){return save(l.id,k,m[k])})).then(function(){render()});
+  };
+  function filled(){
+    var t=TEMPLATES.filter(function(x){return x.id===$('#pTpl').value})[0]; if(!t) return null;
+    var first=(l.name||'').split(' ')[0];
+    var body=t.body.replace(/{first}/g,first).replace(/{name}/g,l.name||'')
+      .replace(/{region}/g,l.region||'').replace(/{timing}/g,l.timing||'')
+      .replace(/{code}/g,l.catalogue_code||'ritausma-koks-862');
+    return {subject:t.subject,body:body};
+  }
+  $('#pCopy').onclick=function(){ var t=filled(); if(!t) return; navigator.clipboard.writeText(t.body).then(function(){setStatus('reply copied')}); };
+  $('#pMail').onclick=function(){ var t=filled(); if(!t) return;
+    location.href='mailto:'+encodeURIComponent(l.email)+'?subject='+encodeURIComponent(t.subject)+'&body='+encodeURIComponent(t.body); };
+}
+
+/* ---------- wiring ---------- */
+document.addEventListener('click',function(e){
+  var c=e.target.closest('.card,[data-id]');
+  if(c&&c.dataset.id){ openLead(c.dataset.id); return; }
+});
+$('#closePanel').onclick=function(){ $('#panel').classList.remove('on'); };
+$$('.tabs button').forEach(function(b){ b.onclick=function(){
+  $$('.tabs button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
+  $$('[data-p]').forEach(function(s){ s.hidden = s.getAttribute('data-p')!==b.dataset.tab; });
+};});
+['q','fSource','fCampaign','fSite'].forEach(function(id){ var el=$('#'+id); el.oninput=el.onchange=render; });
+$('#reload').onclick=load;
+$('#exportCsv').onclick=function(){
+  var f=filtered(); if(!f.length) return;
+  var cols=Object.keys(f[0]);
+  var csv=[cols.join(',')].concat(f.map(function(l){return cols.map(function(c){
+    return '"'+String(l[c]==null?'':l[c]).replace(/"/g,'""')+'"'}).join(',')})).join('\n');
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent('\ufeff'+csv);
+  a.download='frest-leads-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+};
+$('#cfgSave').onclick=function(){
+  cfg={url:$('#cfgUrl').value.trim(),token:$('#cfgToken').value.trim()};
+  try{localStorage.setItem(LS,JSON.stringify(cfg));}catch(e){}
+  checkSetup(); load();
+};
+$('#cfgDemo').onclick=function(){ leads=demo(); setStatus('demo data'); render(); };
+function checkSetup(){
+  $('#cfgUrl').value=cfg.url||''; $('#cfgToken').value=cfg.token||'';
+  if(!cfg.url){ $('#setupState').textContent='not connected — the CRM is showing demo data. Paste the /exec URL below.'; return; }
+  fetch(cfg.url+'?ping=1').then(function(r){return r.json()}).then(function(j){
+    $('#setupState').textContent=j.ok?'connected — endpoint answered at '+j.time:'endpoint answered but reported an error';
+  }).catch(function(e){ $('#setupState').textContent='cannot reach the endpoint: '+e.message; });
+}
+$('#templates').innerHTML=TEMPLATES.map(function(t){
+  return '<div class="tpl"><b>'+esc(t.name)+'</b><div class="muted">Subject: '+esc(t.subject)+'</div><pre>'+esc(t.body)+'</pre></div>';
+}).join('');
+checkSetup(); load();
+})();
+</script>
