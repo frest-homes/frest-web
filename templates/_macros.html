@@ -51,3 +51,70 @@
   {{ caller() if caller }}
 </div></section>
 {% endmacro %}
+
+{# ---------------------------------------------------------------------------------------
+   The house finder. A dark, self-contained panel: three questions, one recommendation.
+   Icons are inline so the panel needs nothing but this markup; option values are the keys
+   the decision function in site.js reads, so the two must stay in step.
+   --------------------------------------------------------------------------------------- #}
+{% set QZ_ICONS = {
+  'couple':      '<circle cx="8.5" cy="8" r="3.2"/><circle cx="16" cy="9" r="2.6"/><path d="M3 20c0-3.2 2.5-5.3 5.5-5.3S14 16.8 14 20"/><path d="M14.4 20c0-2.6 1.7-4.3 3.8-4.3S22 17.4 22 20"/>',
+  'family-small':'<circle cx="6" cy="8" r="2.8"/><circle cx="18" cy="8" r="2.8"/><circle cx="12" cy="13.4" r="2.1"/><path d="M1.6 19.6c0-2.8 2-4.6 4.4-4.6"/><path d="M22.4 19.6c0-2.8-2-4.6-4.4-4.6"/><path d="M8.4 21c0-2 1.6-3.4 3.6-3.4S15.6 19 15.6 21"/>',
+  'family-big':  '<circle cx="5" cy="7.6" r="2.5"/><circle cx="19" cy="7.6" r="2.5"/><circle cx="9.6" cy="12.6" r="1.9"/><circle cx="14.4" cy="12.6" r="1.9"/><circle cx="12" cy="7.4" r="1.9"/><path d="M1.4 18.6c0-2.4 1.7-4 3.6-4"/><path d="M22.6 18.6c0-2.4-1.7-4-3.6-4"/><path d="M6 21.2c0-1.9 1.6-3.2 3.6-3.2M18 21.2c0-1.9-1.6-3.2-3.6-3.2M9.6 21.2c0-1.5 1.1-2.5 2.4-2.5s2.4 1 2.4 2.5"/>',
+  'aura':        '<path d="M2.5 11.2 12 6.4l9.5 4.8"/><path d="M4.6 12.2V19h14.8v-6.8"/><path d="M9.6 19v-4.6h4.8V19"/>',
+  'als':         '<path d="M3 12.6 12 4l9 8.6"/><path d="M5.2 11.6V20h13.6v-8.4"/><path d="M9.4 20v-5.6h5.2V20"/><path d="M12 4v3.4"/>',
+  'lt140':       '<path d="M14.8 8.4a4.6 4.6 0 1 0 0 7.2"/><path d="M6.6 10.6h6.6M6.6 13.4h6.6"/><circle cx="12" cy="12" r="9.2"/>',
+  'gt140':       '<circle cx="12" cy="12" r="9.2"/><path d="M14.8 8.4a4.6 4.6 0 1 0 0 7.2"/><path d="M6.6 10.6h6.6M6.6 13.4h6.6"/><path d="M17.6 5.6 19.6 3M20 7.4h3"/>'
+} %}
+
+{% macro quiz(eyebrow='', heading='', lead='') %}
+<div class="qz" data-qz='{{ quiz_data }}'>
+  <div class="qz-head">
+    {% if eyebrow %}<div class="eyebrow">{{ eyebrow }}</div>{% endif %}
+    <h2>{{ heading or t(UI.quiz_title) }}</h2>
+    <p class="qz-lead">{{ lead or t(UI.quiz_lead) }}</p>
+  </div>
+
+  <ol class="qz-rail">
+    {% for q in QUIZ.q %}<li><button type="button" class="{{ 'on' if loop.first }}" data-qz-go="{{ loop.index0 }}" {{ 'disabled' if not loop.first }}>
+      <i>{{ loop.index }}</i><span>{{ t(q.short) }}</span><em data-qz-ans></em></button></li>{% endfor %}
+  </ol>
+
+  <div class="qz-stage">
+    {% for q in QUIZ.q %}
+    <fieldset class="qz-step {{ 'on' if loop.first }}" data-qz-step="{{ loop.index0 }}">
+      <legend>{{ t(q.label) }}</legend>
+      <div class="qz-opts n{{ q.opts|length }}">
+        {% for v, lab in q.opts %}
+        <button type="button" class="qz-opt" data-q="{{ q.id }}" data-v="{{ v }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{{ QZ_ICONS.get(v,'')|safe }}</svg>
+          <b>{{ t(lab) }}</b><span class="qz-tick" aria-hidden="true">→</span>
+        </button>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="qz-res" aria-live="polite">
+      <div class="qz-res-img"><img alt="" loading="lazy"></div>
+      <div class="qz-res-body">
+        <div class="eyebrow">{{ t(UI.quiz_result) }}</div>
+        <h3 data-r-name></h3>
+        <p class="qz-tag" data-r-tag></p>
+        <div class="qz-pills" data-r-pills></div>
+        <p class="qz-why" data-r-why></p>
+        <div class="btn-row">
+          <a class="btn" data-r-link href="#">{{ t(UI.view_model) }}</a>
+          <a class="btn ghost on-dark" href="{{ url('catalogue') }}">{{ t(UI.nav_catalogue) }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="qz-foot">
+    <button type="button" class="qz-back" data-qz-back hidden>← {{ 'Atpakaļ' if lang=='lv' else 'Back' }}</button>
+    <button type="button" class="qz-back" data-qz-restart hidden>↺ {{ t(UI.quiz_restart) }}</button>
+    <p class="qz-fine">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlamies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p>
+  </div>
+</div>
+{% endmacro %}

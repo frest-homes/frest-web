@@ -128,7 +128,7 @@
   {% for n,hh,p in steps %}<div class="p"><div class="n">{{ n }}</div><b>{{ hh }}</b><p>{{ p }}</p></div>{% endfor %}
   </div>
   {% if not L %}
-  <aside class="anote" style="margin-top:28px">We are honest about the shape of this: Frest manufactures in Latvia and erects on your prepared foundation. We do not have an Irish office, and we do not carry out foundations, services, fit-out or certification in Ireland — those stay with your local team, and we give them the drawings and calculations they need.</aside>
+  <aside class="anote" style="margin-top:28px">The shape of this is simple: Frest manufactures in Latvia and erects on your prepared foundation. We do not have an Irish office, and we do not carry out foundations, services, fit-out or certification in Ireland — those stay with your local team, and we give them the drawings and calculations they need.</aside>
   {% endif %}
 </div></section>
 
@@ -145,7 +145,7 @@
 
 {# ---------------- FAQ ---------------- #}
 <section class="s"><div class="wrap"><div class="cols">
-  <div><div class="eyebrow">05 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if L else 'The honest version.' }}</h2>
+  <div><div class="eyebrow">05 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Biežākie jautājumi.' if L else 'The questions that come up.' }}</h2>
     <p class="small"><a href="{{ url('resources') }}">{{ t(UI.all_faq) }} →</a></p></div>
   <div>{{ M.faq_list(FAQ, 5) }}</div>
 </div></div></section>

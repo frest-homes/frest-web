@@ -20,6 +20,13 @@
   <div class="hs-dots">{% for m in ms %}<button type="button" class="{{ 'on' if loop.first }}" aria-label="{{ m.name }}"></button>{% endfor %}</div>
 </header>
 
+{# ---- audience selector ---- #}
+<section class="s" id="you"><div class="wrap"><div class="cols">
+  <div><div class="eyebrow">{{ 'Izvēlieties, kas jūs esat' if lang=='lv' else 'Choose who you are' }}</div><h2>{{ ('Viena māja. <br>Septiņi veidi, kā to lasīt.' if lang=='lv' else 'One house. <br>Seven ways to read it.')|safe }}</h2><p class="small" style="margin-top:-6px">{{ 'Izvēlieties skatpunktu — teksts zemāk mainās jums.' if lang=='lv' else 'Pick an angle — the text below changes for you.' }}</p></div>
+  <div><div class="aud" id="aud" data-aud='{{ aud_data }}'><div class="aud-hint">{{ 'Izvēlieties vienu' if lang=='lv' else 'Pick one' }}</div>{% for k, lab, h, p, href, link in AUDIENCES %}<button type="button" data-aud="{{ k }}" class="{{ 'on' if k=='all' }}">{{ t(lab) }}</button>{% endfor %}</div>
+  <div class="audpanel" id="audpanel"><h3 id="audh"></h3><p id="audp"></p><div class="cap2" id="audl"></div></div></div>
+</div></div></section>
+
 {# ---- the promise: design & build, one responsibility ---- #}
 <section class="s"><div class="wrap">
   <div class="eyebrow">{{ t(UI.hero_eyebrow) }} · Als · Aura · Latvija · Danmark</div>
@@ -34,24 +41,13 @@
       <div class="stat"><div class="n">{{ eur((MODELS|selectattr('slug','equalto','als-110')|first).price_base) }}</div><div class="l">Als 110 · {{ t(PACKAGES.base.sub) }}</div><div class="d">{{ t(UI.with_vat) }} · {{ t(UI.kit_excl)|lower }}<br><a href="{{ url('pricing') }}">{{ t(UI.see_packages) }}</a></div></div>
     </div></div>
   </div>
-  <div class="promise">
-    {% for n, h, p in ([('01','Projektēšana un saskaņošana','Arhitektūra, novietojums, topogrāfija un būvatļauja — kārtojam mēs, jūs parakstāt.'),('02','Ražošana ar precizitāti','Sienu un jumta paneļi top sausumā, ar siltinājumu un apšuvumu jau iekšā.'),('03','Būvniecība līdz atslēgām','Montāža, inženierkomunikācijas, apdare un nodošana ar pieņemšanas aktu.'),('04','Viens līgums, viena atbildība','Cena tāmē pa sadaļām, garantija un viens kontaktpunkts visam ceļam.')] if lang=='lv' else [('01','Design and permitting','Architecture, siting, topography and the building permit — we handle it, you sign.'),('02','Manufacturing precision','Wall and roof panels are built indoors, insulation and cladding already inside.'),('03','Construction to the keys','Assembly, services, finishing and handover with an acceptance report.'),('04','One contract, one responsibility','The price in an estimate by section, a warranty and one point of contact.')]) %}
-    <div class="p"><div class="n">{{ n }}</div><b>{{ h }}</b><p>{{ p }}</p></div>{% endfor %}
-  </div>
 </div></section>
-
-{# ---- audience selector ---- #}
-<section class="s" id="you"><div class="wrap"><div class="cols">
-  <div><div class="eyebrow">{{ 'Izvēlieties, kas jūs esat' if lang=='lv' else 'Choose who you are' }}</div><h2>{{ ('Viena māja. <br>Septiņi veidi, kā to lasīt.' if lang=='lv' else 'One house. <br>Seven ways to read it.')|safe }}</h2><p class="small" style="margin-top:-6px">{{ 'Izvēlieties skatpunktu — teksts zemāk mainās jums.' if lang=='lv' else 'Pick an angle — the text below changes for you.' }}</p></div>
-  <div><div class="aud" id="aud" data-aud='{{ aud_data }}'>{% for k, lab, h, p, href, link in AUDIENCES %}<button type="button" data-aud="{{ k }}" class="{{ 'on' if k=='all' }}">{{ t(lab) }}</button>{% endfor %}</div>
-  <div class="audpanel" id="audpanel"><h3 id="audh"></h3><p id="audp"></p><div class="cap2" id="audl"></div></div></div>
-</div></div></section>
 
 {# ---- cover spread ---- #}
 {% call M.spread(SPREADS.cover, 'l', 'top') %}{% endcall %}
 <section class="s" style="padding-top:44px"><div class="wrap"><div class="cols eq" style="align-items:start">
   <p class="lede" style="margin:0">{{ 'Kettingskovā, Dienviddānijā, 2022. gadā vienā sezonā uzbūvējām astoņas Als mājas: Als 70 un Als 110 ar melnu, pelēku un koka fasādi. Katrai savs zemesgabals, sava terase pret sauli un tas pats rūpnīcas komplekts.' if lang=='lv' else 'In Kettingskov, southern Denmark, we built eight Als homes in one season of 2022: Als 70 and Als 110 with black, gray and wood facades. Each with its own plot, its own terrace facing the sun and the same factory kit.' }}</p>
-  <div class="sidebar"><b>{{ 'Skaitļi, godīgi' if lang=='lv' else 'The numbers, honestly' }}</b><p class="small" style="color:var(--ink2)">{{ 'Publicējam vienu cenu: rūpnīcas komplektu ar montāžu, ar PVN — Als 110 no 128 000 €. Tajā nav pamatu darbu, iekšējās apdares, zemes, pieslēgumu un atļaujas. Pilnā pakete ar apdari, elektrību un apkuri un visu paku salīdzinājums ir sadaļā Cenas, precīza cena — tāmē pēc zemesgabala.' if lang=='lv' else 'We publish one headline price: the factory kit with assembly, incl. VAT — Als 110 from €128,000. It does not include foundation works, interior finishing, land, connections or the permit. The Complete package and the full package comparison are on the Pricing page; the exact price comes in an estimate once the plot is known.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('pricing') }}">{{ t(UI.see_packages) }}</a></p></div>
+  <div class="sidebar"><b>{{ 'Kas ir cenā' if lang=='lv' else 'What the price covers' }}</b><p class="small" style="color:var(--ink2)">{{ 'Publicējam vienu cenu: rūpnīcas komplektu ar montāžu, ar PVN — Als 110 no 128 000 €. Tajā nav pamatu darbu, iekšējās apdares, zemes, pieslēgumu un atļaujas. Pilnā pakete ar apdari, elektrību un apkuri un visu paku salīdzinājums ir sadaļā Cenas, precīza cena — tāmē pēc zemesgabala.' if lang=='lv' else 'We publish one headline price: the factory kit with assembly, incl. VAT — Als 110 from €128,000. It does not include foundation works, interior finishing, land, connections or the permit. The Complete package and the full package comparison are on the Pricing page; the exact price comes in an estimate once the plot is known.' }}</p><p class="cap2" style="color:var(--ash)"><a href="{{ url('pricing') }}">{{ t(UI.see_packages) }}</a></p></div>
 </div></div></section>
 
 {# ---- the four models ---- #}
@@ -66,9 +62,14 @@
   </div>
 </div></section>
 
+{# ---- house finder: sits right after the models, where the choosing happens ---- #}
+<section class="s tight" id="which"><div class="wrap">
+  {{ M.quiz('02 — ' + t(UI.nav_which)) }}
+</div></section>
+
 {# ---- personalise ---- #}
 <section class="s alt" id="personalise"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">02 — {{ t(UI.personalise_title) }}</div><h2>{{ ('Četras krāsas. Divi jumti. <br>Viens klikšķis.' if lang=='lv' else 'Four colours. Two roofs. <br>One click.')|safe }}</h2></div><div><p class="lede">{{ t(UI.personalise_lead) }}</p></div></div>
+  <div class="cols"><div><div class="eyebrow">03 — {{ t(UI.personalise_title) }}</div><h2>{{ ('Četras krāsas. Divi jumti. <br>Viens klikšķis.' if lang=='lv' else 'Four colours. Two roofs. <br>One click.')|safe }}</h2></div><div><p class="lede">{{ t(UI.personalise_lead) }}</p></div></div>
   <div style="margin-top:36px">{{ M.personaliser(MODELS, 'pz-home', 'als-110', 'charcoal-black') }}</div>
 </div></section>
 
@@ -81,18 +82,6 @@
     <div class="sidebar"><b>{{ 'Kas ir rūpnīcas komplekts' if lang=='lv' else 'What the factory kit is' }}</b><p class="small">{{ 'Siltināti sienu paneļi ar tvaika barjeru un apšuvumu, jumta konstrukcija un segums, logi un ārdurvis, pabeigta fasāde un montāža objektā. Pamatu plātne — standarts, ko liek vietējais būvnieks pēc mūsu rasējuma.' if lang=='lv' else 'Insulated wall panels with vapour barrier and cladding, roof structure and covering, windows and exterior doors, a finished facade and assembly on site. The concrete slab is the standard, laid by a local builder to our drawing.' }}</p></div>
   </div>
 {% endcall %}
-
-{# ---- which house (quiz) ---- #}
-<section class="s" id="which"><div class="wrap">
-  <div class="quiz" data-quiz='{{ quiz_data }}'>
-    <div><div class="eyebrow">03 — {{ t(UI.nav_which) }}</div><h2>{{ t(UI.quiz_title) }}</h2><p class="lede">{{ t(UI.quiz_lead) }}</p><p class="small">{{ 'Ieteikums ir orientējošs — precīzu modeli un komplektāciju izvēlēsimies kopā konsultācijā.' if lang=='lv' else 'The recommendation is indicative — we choose the exact model and specification together in a consultation.' }}</p></div>
-    <div>
-      <div class="prog">{% for q in QUIZ.q %}<i></i>{% endfor %}</div>
-      {% for q in QUIZ.q %}<div class="step"><h3 style="font-weight:300;font-size:26px">{{ t(q.label) }}</h3><div class="opts">{% for v,lab in q.opts %}<button type="button" data-q="{{ q.id }}" data-v="{{ v }}">{{ t(lab) }}</button>{% endfor %}</div></div>{% endfor %}
-      <div class="res"><div class="eyebrow">{{ t(UI.quiz_result) }}</div><h3 style="font-size:36px;font-weight:300;margin-top:6px" data-r-name></h3><div class="fig h"><img alt="" loading="lazy"></div><p class="lede" data-r-why></p><p class="small" data-r-facts></p><div class="btn-row" style="margin-top:18px"><a class="btn" data-r-link href="#">{{ t(UI.view_model) }}</a><button type="button" class="btn ghost" data-restart>{{ t(UI.quiz_restart) }}</button></div></div>
-    </div>
-  </div>
-</div></section>
 
 {# ---- completed projects (editorial figures) ---- #}
 <section class="s alt" id="works"><div class="wrap">
@@ -116,10 +105,10 @@
 
 {# ---- process road ---- #}
 <section class="s" id="process"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">05 — {{ t(UI.nav_process) }}</div><h2>{{ ('Pieci soļi —<br>un godīgs grafiks.' if lang=='lv' else 'Five steps —<br>and an honest schedule.')|safe }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
+  <div class="cols"><div><div class="eyebrow">05 — {{ t(UI.nav_process) }}</div><h2>{{ ('Pieci soļi —<br>un skaidrs grafiks.' if lang=='lv' else 'Five steps —<br>and a clear schedule.')|safe }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
   <div class="road">{% for h,p in PROCESS %}<div><div class="y">0{{ loop.index }}</div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div>{% endfor %}</div>
   <div class="timing">
-    {% for v,l,d in [(TIMING.design,TIMING.design_l,TIMING.design_d),(TIMING.build,TIMING.build_l,TIMING.build_d),(TIMING.kit,TIMING.kit_l,TIMING.kit_d)] %}
+    {% for v,l,d in [(TIMING.design,TIMING.design_l,TIMING.design_d),(TIMING.kit,TIMING.kit_l,TIMING.kit_d),(TIMING.build,TIMING.build_l,TIMING.build_d)] %}
     <div class="t"><div class="v">{{ t(v) }}</div><div class="l">{{ t(l) }}</div><div class="d">{{ t(d) }}</div></div>{% endfor %}
   </div>
   <p class="small" style="margin-top:18px;max-width:78ch">{{ t(TIMING.note) }}</p>
@@ -135,7 +124,7 @@
 
 {# ---- FAQ + CTA ---- #}
 <section class="s"><div class="wrap">
-  <div class="cols"><div><div class="eyebrow">07 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Godīgā versija.' if lang=='lv' else 'The honest version.' }}</h2><p class="small"><a href="{{ url('resources') }}">{{ t(UI.all_faq) }} →</a></p></div><div>{{ M.faq_list(FAQ, 4) }}</div></div>
+  <div class="cols"><div><div class="eyebrow">07 — {{ t(UI.nav_faq) }}</div><h2>{{ 'Biežākie jautājumi.' if lang=='lv' else 'The questions that come up.' }}</h2><p class="small"><a href="{{ url('resources') }}">{{ t(UI.all_faq) }} →</a></p></div><div>{{ M.faq_list(FAQ, 4) }}</div></div>
   {{ M.cta_band() }}
   {{ M.next_cards([(t(UI.nav_projects), t(UI.projects_title), url('projects')), (t(UI.nav_custom), t(UI.custom_title), url('custom'))]) }}
 </div></section>

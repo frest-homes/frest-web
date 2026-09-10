@@ -4,7 +4,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for q,a in FAQ %}{"@type":"Question","name":{{ t(q)|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ t(a)|tojson }}}}{{ ',' if not loop.last }}{% endfor %}]}</script>
 {% endblock %}
 {% block content %}
-<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_resources) }}</div><h1 style="margin-top:18px">{{ 'Godīgā versija.' if lang=='lv' else 'The honest version.' }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.resources_lead) }}</p></div></header>
+<header class="hero"><div class="wrap fadein"><div class="eyebrow">{{ t(UI.nav_resources) }}</div><h1 style="margin-top:18px">{{ 'Viss, kas jāzina.' if lang=='lv' else 'Everything worth knowing.' }}</h1><p class="lede" style="margin-top:22px">{{ t(UI.resources_lead) }}</p></div></header>
 <section class="s"><div class="wrap"><div class="cols"><div><div class="eyebrow">01 — {{ t(UI.nav_faq) }}</div><h2>{{ t(UI.faq_title) }}</h2></div><div>{{ M.faq_list(FAQ) }}</div></div></div></section>
 <section class="s alt" id="process"><div class="wrap"><div class="cols"><div><div class="eyebrow">02 — {{ t(UI.nav_process) }}</div><h2>{{ 'Pieci soļi no sarunas līdz atslēgām.' if lang=='lv' else 'Five steps from conversation to keys.' }}</h2></div><div><p class="lede">{{ t(UI.process_lead) }}</p></div></div>
   <div class="road">{% for h,p in PROCESS %}<div><div class="y">0{{ loop.index }}</div><b>{{ t(h) }}</b><p>{{ t(p) }}</p></div>{% endfor %}</div>
