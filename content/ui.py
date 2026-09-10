@@ -4,7 +4,7 @@ from content.data import T
 UI = {
     # navigation
     'nav_models': T('Modeļi', 'Models'), 'nav_als': 'ALS', 'nav_aura': 'AURA',
-    'nav_compare': T('Salīdzināt', 'Compare'), 'nav_which': T('Kura māja man?', 'Which house?'),
+    'nav_compare': T('Salīdzināt', 'Compare'), 'nav_which': T('Atrodiet savu māju', 'Find your house'),
     'nav_pricing': T('Cenas', 'Pricing'), 'nav_gallery': T('Galerija', 'Gallery'), 'nav_projects': T('Realizētie projekti', 'Completed projects'),
     'nav_custom': T('Individuāli projekti', 'Custom design'), 'nav_resources': T('Resursi', 'Resources'), 'nav_faq': T('BUJ', 'FAQ'),
     'nav_team': T('Par mums', 'About us'), 'nav_contact': T('Kontakti', 'Contact'), 'nav_catalogue': T('Katalogs ar cenām', 'Catalogue with prices'),
@@ -38,7 +38,7 @@ UI = {
     ],
     'models_title': T('Četri modeļi. Divas sērijas.', 'Four models. Two series.'),
     'models_lead': T('Aura — mūsdienīga, ar zemu siluetu. Als — skandināvu, ar augstu kori un koka fasādi. Katra pieejama kā rūpnīcas komplekts vai atslēgas risinājums.', 'Aura — contemporary with a low silhouette. Als — Scandinavian with a high ridge and wood facade. Each available as a factory kit or turnkey.'),
-    'quiz_title': T('Kura māja man?', 'Which house is mine?'), 'quiz_lead': T('Trīs jautājumi — un mēs ieteiksim modeli.', 'Three questions and we recommend a model.'),
+    'quiz_title': T('Atrodiet savu māju 3 atbildēs', 'Find your house in 3 answers'), 'quiz_lead': T('Trīs jautājumi — un mēs ieteiksim modeli.', 'Three questions and we recommend a model.'),
     'quiz_result': T('Mūsu ieteikums', 'Our recommendation'), 'quiz_restart': T('Sākt no jauna', 'Start over'), 'quiz_next': T('Tālāk', 'Next'),
     'quiz_why': {
         'aura-70': T('Kompakta, mūsdienīga un ekonomiska — vislabākā pirmā māja.', 'Compact, contemporary and economical — the best first home.'),

@@ -35,7 +35,8 @@ TIMING = {
     'build_d': T('atkarībā no projekta apjoma un zemesgabala', 'depending on the scope of the project and the plot'),
     'kit': T('16–20 nedēļas', '16–20 weeks'),
     'kit_l': T('Komplekts un montāža', 'Kit and assembly'),
-    'kit_d': T('šī laika ietvaros — ražošana rit paralēli pamatiem', 'within that time — production runs in parallel with the foundations'),
+    'kit_d': T('Rūpnīcas komplekta izgatavošana un montāža uz gataviem pamatiem. Šis laiks ietilpst būvniecības periodā — ražošana rit paralēli pamatu darbiem.',
+               'Manufacturing the factory kit and erecting it on your finished foundation. This sits inside the construction period — production runs in parallel with the foundation works.'),
     'note': T('Katrs projekts ir mazliet unikāls: zemesgabals, būvvalde un jūsu izvēles maina grafiku. Gan jūs, gan mēs esam ieinteresēti ātrā realizācijā bez kompromisiem kvalitātē — precīzu grafiku vienojamies kopā ar piedāvājumu.',
               'Every project is a little different: the plot, the building authority and your choices all move the schedule. You and we share the same interest — fast delivery without compromising quality; the exact schedule is agreed together with the offer.'),
 }
@@ -278,7 +279,7 @@ ADDON_WHY = [
 WORKS = [
     {'id': 'kettingskov', 'title': T('Als ciemats Kettingskovā', 'Als village in Kettingskov'), 'location': T('Kettingskov, Dānija', 'Kettingskov, Denmark'), 'year': 2022, 'tags': ['als70', 'als110', 'kettingskov'],
      'text': T('Pirmās astoņas Als mājas vienā apbūvē: Als 70 un Als 110 ar melnu, pelēku un koka fasādi.', 'The first eight Als homes in one development: Als 70 and Als 110 with black, gray and wood facades.'),
-     'images': [('als-kettingskov-aerial', T('Skats no gaisa', 'Aerial view')), ('als70-front-dk', T('Als 70 ar terasi', 'Als 70 with terrace')), ('als70-side-dk', T('Als 70 sānu skats', 'Als 70 side view')), ('als110-day-dk', T('Als 110 dienā', 'Als 110 by day')), ('als110-evening-dk', T('Als 110 vakarā', 'Als 110 at dusk')), ('als110-evening2-dk', T('Als 110 vakarā', 'Als 110 at dusk')), ('als70-black', T('Als 70 melna fasāde', 'Als 70 black facade')), ('als-kettingskov-development', T('Būvlaukums', 'Development site')), ('als-kettingskov-framing', T('Koka karkass', 'Timber framing')), ('als-kettingskov-modular-assembly', T('Paneļu montāža', 'Panel assembly'))]},
+     'images': [('als-kettingskov-aerial', T('Skats no gaisa', 'Aerial view')), ('als70-front-dk', T('Als 70 ar terasi', 'Als 70 with terrace')), ('als70-side-dk', T('Als 70 sānu skats', 'Als 70 side view')), ('als110-day-dk', T('Als 110 dienā', 'Als 110 by day')), ('als110-evening-dk', T('Als 110 vakarā', 'Als 110 at dusk')), ('als110-evening2-dk', T('Als 110 — gaisma logos', 'Als 110 lit from inside')), ('als70-black', T('Als 70 melna fasāde', 'Als 70 black facade')), ('als-kettingskov-development', T('Būvlaukums', 'Development site')), ('als-kettingskov-framing', T('Koka karkass', 'Timber framing')), ('als-kettingskov-modular-assembly', T('Paneļu montāža', 'Panel assembly'))]},
     {'id': 'als110-latvia', 'title': T('Als 110 Latvijā', 'Als 110 in Latvia'), 'location': T('Latvija', 'Latvia'), 'year': 2024, 'tags': ['als110'],
      'text': T('Standarta Als 110 ar metāla jumtu mežā: virtuve, guļamistabas, vannasistaba un kāpnes uz mezanīnu.', 'A standard Als 110 with a metal roof in the forest: kitchen, bedrooms, bathroom and stairs to the mezzanine.'),
      'images': [('als110-photo-lv-exterior-forest', T('Māja mežā', 'House in the forest')), ('als110-photo-lv-metal-roof', T('Metāla jumts', 'Metal roof')), ('als110-photo-lv-kitchen', T('Virtuve', 'Kitchen')), ('als110-photo-lv-bedroom', T('Guļamistaba', 'Bedroom')), ('als110-photo-lv-bathroom', T('Vannasistaba', 'Bathroom')), ('als110-photo-lv-staircase', T('Kāpnes', 'Staircase')), ('als110-latvia-hallway', T('Gaitenis', 'Hallway'))]},
@@ -306,21 +307,21 @@ WORKS = [
 ]
 
 CUSTOM_PROJECTS = [
-    {'name': 'Rindu mājas · koka fasāde', 'size': 640, 'task': T('Projekts un būvniecība', 'Design and construction'),
+    {'name': T('Rindu mājas · koka fasāde', 'Terraced homes · timber facade'), 'size': 640, 'task': T('Projekts un būvniecība', 'Design and construction'),
      'img': 'apartments-wood-green-roof',
      'text': T('Sešas rindu mājas ar zaļo jumtu un pelēkas priedes fasādi; katrai savs dārzs un jumta terase.',
                'Six terraced homes with a green roof and grey pine cladding; each with its own garden and roof terrace.')},
-    {'name': 'Rindu mājas · ķieģeļu fasāde', 'size': 640, 'task': T('Fasādes alternatīva', 'Facade alternative'),
+    {'name': T('Rindu mājas · ķieģeļu fasāde', 'Terraced homes · brick facade'), 'size': 640, 'task': T('Fasādes alternatīva', 'Facade alternative'),
      'img': 'apartments-brick',
      'text': T('Tas pats korpuss ar gaišu ķieģeļu fasādi un falcētu metāla jumtu — divi ceļi vienam projektam.',
                'The same volume in pale brick with a standing-seam metal roof — two routes for one project.')},
-    {'name': 'Ciemats ar plakaniem jumtiem', 'size': 1400, 'task': T('Apbūves koncepts', 'Development concept'),
+    {'name': T('Ciemats ar plakaniem jumtiem', 'A village of flat-roofed houses'), 'size': 1400, 'task': T('Apbūves koncepts', 'Development concept'),
      'img': 'neighbourhood-aerial-night',
      'text': T('Divpadsmit mājas gar vienu ielu: plakanie jumti ar saules paneļiem, koka fasādes, kopīga zaļā ass.',
                'Twelve houses along one street: flat roofs with solar panels, timber facades, a shared green spine.')},
-    {'name': 'Ģimnastikas 41', 'size': 195, 'task': T('Tikai projekts', 'Design only'), 'img': 'custom-gimnastikas-41', 'text': T('Mūsdienīgs fasādes dizains ar vertikālām koka lameļu detaļām', 'Contemporary facade design with vertical timber slat details')},
-    {'name': 'Avotkalna 12, Engure', 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'custom-avotkalna-12', 'text': T('Moderna vienstāva māja ar pagarinātu paviljona tipa auto nojumi', 'A modern single-storey house with an extended pavilion-style carport')},
-    {'name': 'Juglasciema bulvāris, Rīga', 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'juglas-bulvaris-completed', 'text': T('Uzbūvēta individuāla māja ar 115 m² dzīvojamo platību un koka fasādi', 'A completed custom home with 115 m² of living space and a wood facade')},
+    {'name': T('Ģimnastikas 41', 'Ģimnastikas 41'), 'size': 195, 'task': T('Tikai projekts', 'Design only'), 'img': 'custom-gimnastikas-41', 'text': T('Mūsdienīgs fasādes dizains ar vertikālām koka lameļu detaļām', 'Contemporary facade design with vertical timber slat details')},
+    {'name': T('Avotkalna 12, Engure', 'Avotkalna 12, Engure'), 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'custom-avotkalna-12', 'text': T('Moderna vienstāva māja ar pagarinātu paviljona tipa auto nojumi', 'A modern single-storey house with an extended pavilion-style carport')},
+    {'name': T('Juglasciema bulvāris, Rīga', 'Juglasciema bulvāris, Riga'), 'size': 115, 'task': T('Projekts + būvniecība', 'Design + build'), 'img': 'juglas-bulvaris-completed', 'text': T('Uzbūvēta individuāla māja ar 115 m² dzīvojamo platību un koka fasādi', 'A completed custom home with 115 m² of living space and a wood facade')},
 ]
 
 PROCESS = [
@@ -369,15 +370,15 @@ TEAM = [
 VALUES = [
     (T('Kvalitāte', 'Quality'), T('Katra detaļa — mājai, kas kalpo desmitgadēm', 'Every detail, for a home that lasts decades')),
     (T('Ilgtspēja', 'Sustainability'), T('Energoefektīvi risinājumi un koka konstrukcijas', 'Energy-efficient solutions and timber structures')),
-    (T('Caurskatāmība', 'Transparency'), T('Skaidras cenas un godīga komunikācija katrā solī', 'Clear prices and honest communication at every step')),
+    (T('Caurskatāmība', 'Transparency'), T('Skaidras cenas un skaidra saruna katrā solī', 'Clear prices and a clear conversation at every step')),
     (T('Attīstība', 'Innovation'), T('Nepārtraukti uzlabojam mūsdienu dzīvei', 'Continuously improving for modern living')),
 ]
 
 # "Which house is mine?" recommender
 QUIZ = {
     'q': [
-        {'id': 'who', 'label': T('Kas dzīvos mājā?', 'Who will live in the house?'), 'opts': [('couple', T('Pāris vai viens cilvēks', 'A couple or one person')), ('family-small', T('Ģimene ar 1–2 bērniem', 'Family with 1–2 children')), ('family-big', T('Ģimene ar 3+ bērniem vai vairākas paaudzes', 'Family with 3+ children or several generations'))]},
-        {'id': 'style', 'label': T('Kāds stils jums tuvāks?', 'Which style is closer to you?'), 'opts': [('aura', T('Mūsdienīgs — vienkāršas līnijas, plakans siluets', 'Contemporary — simple lines, low silhouette')), ('als', T('Skandināvu — augsta kore, koka fasāde, vitrīnu logi', 'Scandinavian — high ridge, wood facade, full-height glazing'))]},
-        {'id': 'budget', 'label': T('Kāds ir budžets mājai bez zemes?', 'What is the budget for the house, excluding land?'), 'opts': [('lt140', T('Līdz 140 000 €', 'Up to €140,000')), ('gt140', T('Virs 140 000 €', 'Over €140,000'))]},
+        {'id': 'who', 'short': T('Kas', 'Who'), 'label': T('Kas dzīvos mājā?', 'Who will live in the house?'), 'opts': [('couple', T('Pāris vai viens cilvēks', 'A couple or one person')), ('family-small', T('Ģimene ar 1–2 bērniem', 'Family with 1–2 children')), ('family-big', T('Ģimene ar 3+ bērniem vai vairākas paaudzes', 'Family with 3+ children or several generations'))]},
+        {'id': 'style', 'short': T('Stils', 'Style'), 'label': T('Kāds stils jums tuvāks?', 'Which style is closer to you?'), 'opts': [('aura', T('Mūsdienīgs — vienkāršas līnijas, plakans siluets', 'Contemporary — simple lines, low silhouette')), ('als', T('Skandināvu — augsta kore, koka fasāde, vitrīnu logi', 'Scandinavian — high ridge, wood facade, full-height glazing'))]},
+        {'id': 'budget', 'short': T('Budžets', 'Budget'), 'label': T('Kāds ir budžets mājai bez zemes?', 'What is the budget for the house, excluding land?'), 'opts': [('lt140', T('Līdz 140 000 €', 'Up to €140,000')), ('gt140', T('Virs 140 000 €', 'Over €140,000'))]},
     ],
 }

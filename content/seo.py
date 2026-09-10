@@ -68,11 +68,11 @@ META = {
                'price of each package. Find the kit that suits your site.'),
     },
     'which': {
-        'lv': ('Kura māja jums der? Moduļu mājas konfigurators | Frest',
-               'Atbildiet uz pieciem jautājumiem par ģimeni, zemesgabalu un budžetu, un mēs pasakām, kurš '
+        'lv': ('Atrodiet savu māju 3 atbildēs — moduļu mājas konfigurators | Frest',
+               'Atbildiet uz trim jautājumiem par ģimeni, stilu un budžetu, un mēs pasakām, kurš '
                'Frest modelis jums der vislabāk — ar platību, plānojumu un cenu paketēm.'),
-        'en': ('Which House Kit Suits You? Self-Build Configurator | Frest',
-               'Five questions about your family, your site and your budget, and we tell you which Frest '
+        'en': ('Find Your House in 3 Answers — Self-Build Configurator | Frest',
+               'Three questions about your household, your taste and your budget, and we tell you which Frest '
                'model fits — with floor area, layout and what each package costs.'),
     },
     'pricing': {
@@ -109,11 +109,11 @@ META = {
     },
     'resources': {
         'lv': ('Biežāk uzdotie jautājumi par moduļu mājām | Frest',
-               'Cik maksā, cik ilgi būvē, kādi pamati, kāda garantija, vai der kredītam — godīgas atbildes '
+               'Cik maksā, cik ilgi būvē, kādi pamati, kāda garantija, vai der kredītam — skaidras atbildes '
                'uz jautājumiem, ko klienti uzdod pirms mājas pasūtīšanas.'),
         'en': ('Timber Frame House Kit FAQ — Cost, Time, Foundations | Frest',
                'What it costs, how long it takes, which foundation, what the warranty covers and what an '
-               'Irish self-builder has to arrange locally. Honest answers, no sales talk.'),
+               'Irish self-builder has to arrange locally. Clear answers, no sales talk.'),
     },
     'team': {
         'lv': ('Par SIA Frest — kas mēs esam | Frest Homes',

@@ -449,7 +449,7 @@ A(
 
 A(
  slug='timber-frame-vs-block-ireland',
- title='Timber Frame vs Cavity Block in Ireland: An Honest Comparison',
+ title='Timber Frame vs Cavity Block in Ireland: A Practical Comparison',
  desc='Programme, cost, thermal performance, acoustics, moisture, resale and lender attitude — how the two '
       'dominant Irish construction methods really compare in 2026.',
  topic='Technology', read=8, date='2026-09-09', hero='als70-front-dk',

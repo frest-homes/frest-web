@@ -177,7 +177,7 @@ A(
           'Vai piedāvājumā ir tāme pa sadaļām, vai viena summa?']),
   ('note', 'Ja uz septīto jautājumu atbilde ir “viena summa”, palūdziet tāmi pa sadaļām. Ražotājs, kuram '
            'nav ko slēpt, to iedod. Frest tāme ir sadalīta pa sadaļām, un katrai izvēlei ir sava rinda.'),
-  ('h2', 'Kā salīdzināt godīgi'),
+  ('h2', 'Kā salīdzināt pēc būtības'),
   ('p', 'Uztaisiet vienkāršu tabulu ar rindām no saraksta augstāk un aizpildiet to katram piedāvājumam. '
         'Tas aizņem stundu un parasti maina lēmumu. Divas lietas, kas gandrīz vienmēr atklājas: lētākais '
         'piedāvājums nav lētākais, kad tam pieskaita trūkstošo, un dārgākais piedāvājums bieži ir vienīgais, '
@@ -387,7 +387,7 @@ A(
 
 A(
  slug='cik-ilgi-buve-maju',
- title='Cik ilgi būvē māju: godīgs grafiks no lēmuma līdz atslēgām',
+ title='Cik ilgi būvē māju: reāls grafiks no lēmuma līdz atslēgām',
  desc='Reāls laika grafiks privātmājas būvniecībai Latvijā — projektēšana, saskaņošana, pamati, '
       'konstrukcija, apdare un nodošana, ar to, kas visbiežāk kavējas.',
  topic='Process', read=6, date='2026-09-09', hero='als-kettingskov-modular-assembly',
