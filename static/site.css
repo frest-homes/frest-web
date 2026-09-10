@@ -43,20 +43,6 @@ h1{font-weight:300}h2{font-weight:300}
 .cfg-now b{display:block;font-size:20px;font-weight:400}
 
 /* ---------- quiz ---------- */
-.quiz{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start}
-@media(max-width:900px){.quiz{grid-template-columns:1fr}}
-.quiz .step{display:none}.quiz .step.on{display:block}
-.quiz .opts{display:grid;gap:8px;margin-top:18px}
-.quiz .opts button{text-align:left;padding:16px 18px;border:1px solid var(--line2);font-size:17px;font-weight:300;transition:border-color .15s}
-.quiz .opts button:hover{border-color:var(--acc)}
-.quiz .prog{display:flex;gap:6px;margin-bottom:18px}
-.quiz .prog i{height:2px;flex:1;background:var(--line2)}
-.quiz .prog i.on{background:var(--acc)}
-.quiz .res{display:none}.quiz .res.on{display:block}
-.quiz .res .fig{margin:14px 0}
-.sp .quiz .opts button{color:var(--on-dark);border-color:rgba(255,255,255,.3)}.sp .quiz .opts button:hover{border-color:var(--acc)}
-.sp .quiz .prog i{background:rgba(255,255,255,.25)}.sp .quiz .prog i.on{background:var(--acc)}
-.sp .quiz h3{color:var(--on-dark)}
 
 /* ---------- plan viewer ---------- */
 .plan{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:start}
@@ -165,7 +151,7 @@ body{background:var(--bg)}
 .hero{padding:64px 0 34px}
 
 /* --- paper panels ------------------------------------------------------------------ */
-.tile,.sidebar,.audpanel,.cbox,.next a,.trio a,.mcard,.toc,.quiz,.pz,.addons,.cmp,.road,.tbl,.aud{
+.tile,.sidebar,.audpanel,.cbox,.next a,.trio a,.mcard,.toc,.pz,.addons,.cmp,.road,.tbl,.aud{
   background:var(--paper);border-radius:var(--r2);border:1px solid var(--line);box-shadow:var(--sh)}
 .tile{padding:28px}
 .tbl{padding:6px 20px 10px;overflow-x:auto}
@@ -177,6 +163,14 @@ body{background:var(--bg)}
 .road div{padding:22px 22px 24px;border-right:1px solid var(--line);border-top:0}
 .road div:last-child{border-right:0}
 .sidebar{padding:24px 26px;border-left:1px solid var(--line)}
+/* On a full-bleed spread the page ink flips to light, but the panel kept the white paper
+   background from the card rule above — light text on white, effectively invisible. The panel
+   becomes a deep Frest teal there instead, so the same light text reads. */
+.sp .sidebar,.sp .island .sidebar{background:rgba(10,32,37,.90);border:1px solid rgba(238,247,248,.18);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 18px 50px rgba(4,16,19,.34)}
+.sp .sidebar b{color:var(--on-dark)}
+.sp .sidebar .small,.sp .sidebar p{color:var(--on-dark2)}
+.sp .sidebar::before{background:var(--acc)}
 .sidebar::before{content:"";display:block;width:34px;height:3px;border-radius:2px;background:var(--acc);margin-bottom:14px}
 .next a,.trio a{padding:22px 24px;transition:transform .25s,box-shadow .25s}
 .next a:hover,.trio a:hover,.mcard:hover{transform:translateY(-3px);box-shadow:var(--sh2);text-decoration:none}
@@ -201,9 +195,14 @@ input,select,textarea{border-radius:var(--r)!important;background:var(--paper);b
 input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-tint)}
 .cta{border-radius:var(--r3);border:0;background:var(--paper);box-shadow:var(--sh);padding:38px 40px}
 .cta.dark{background:linear-gradient(135deg,var(--dark),var(--dark2));box-shadow:var(--sh2)}
-.aud{padding:10px;display:flex;flex-wrap:wrap;gap:8px}
-.aud button{border:1px solid transparent;padding:9px 16px}
-.aud button.on{background:var(--acc-tint);color:var(--acc-ink)}
+.aud{padding:12px;display:flex;flex-wrap:wrap;gap:9px}
+.aud button{border:1px solid var(--line);background:var(--bg);padding:13px 20px;font-size:12.5px;letter-spacing:.13em;
+  transition:background .16s,border-color .16s,color .16s,transform .16s}
+.aud button:hover{background:var(--acc-tint);border-color:var(--acc);color:var(--acc-ink);transform:translateY(-1px)}
+.aud button.on{background:var(--acc-ink);border-color:var(--acc-ink);color:#fff;transform:none}
+.aud button:focus-visible{outline:2px solid var(--acc-ink);outline-offset:2px}
+.aud .aud-hint{width:100%;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ash);padding:4px 8px 6px;font-weight:600}
 .audpanel{padding:26px 28px;margin-top:16px}
 .foot{background:var(--bg2);border-top:1px solid var(--line)}
 .sp{border-radius:0}
@@ -281,13 +280,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
 @media(prefers-reduced-motion:reduce){.hs-slide,.hs-cap.on{transition:none;animation:none}}
 
 /* --- promise band ------------------------------------------------------------------- */
-.promise{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:38px}
-@media(max-width:900px){.promise{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.promise{grid-template-columns:1fr}.road{grid-template-columns:1fr!important}.road div{border-right:0;border-bottom:1px solid var(--line)}}
-.promise .p{background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:24px;box-shadow:var(--sh)}
-.promise .p .n{width:34px;height:34px;border-radius:50%;background:var(--acc-tint);color:var(--acc-ink);display:grid;place-items:center;font-size:13px;font-weight:600;margin-bottom:14px}
-.promise .p b{display:block;font-size:19px;font-weight:400;margin-bottom:6px}
-.promise .p p{margin:0;font-size:15px;color:var(--ink2);line-height:1.5}
+@media(max-width:560px){.road{grid-template-columns:1fr!important}.road div{border-right:0;border-bottom:1px solid var(--line)}}
 .timing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:34px}
 @media(max-width:860px){.timing{grid-template-columns:1fr}}
 .timing .t{background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:24px 26px;box-shadow:var(--sh)}
@@ -522,7 +515,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
   .sp .in{min-height:0;padding:24px 22px 40px}
   .sp .folio{margin-bottom:22px;padding-bottom:9px;font-size:10px;letter-spacing:.18em}
   .sp .dk,.sp .dk.md{font-size:clamp(32px,9.5vw,46px);max-width:none}
-  .sp .sidebar{padding-left:18px;max-width:none}
+  .sp .sidebar{padding:20px 18px;max-width:none}
 
   /* ---- model page hero: the same two bands ---- */
   .mhero{display:block;min-height:0}
@@ -565,3 +558,128 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
    lands where focal.py said it should. */
 .fig picture,.cbox .cimg picture{position:absolute;inset:0;display:block}
 .fig img,.cbox .cimg img{width:100%;height:100%}
+
+/* ============================================================================================
+   The house finder (.qz) — replaces the old two-column .quiz.
+   A dark panel so it reads as a tool rather than another band of copy; the questions are
+   large targets, the rail shows where you are and lets you go back, and the result arrives
+   as a card with the render, not as a line of text.
+   ============================================================================================ */
+.qz{position:relative;background:var(--dark);color:var(--on-dark);border-radius:var(--r3);
+  padding:clamp(26px,3.4vw,52px);overflow:hidden;box-shadow:0 30px 80px rgba(4,16,19,.22)}
+/* a soft field of colour behind the panel so it does not read as a flat black box */
+.qz::before{content:"";position:absolute;inset:-40% -10% auto auto;width:70%;aspect-ratio:1;
+  background:radial-gradient(circle at 60% 40%,rgba(80,209,224,.20),rgba(80,209,224,0) 62%);pointer-events:none}
+.qz::after{content:"";position:absolute;inset:auto auto -45% -12%;width:60%;aspect-ratio:1;
+  background:radial-gradient(circle at 40% 60%,rgba(251,185,0,.13),rgba(251,185,0,0) 60%);pointer-events:none}
+.qz>*{position:relative;z-index:1}
+
+.qz-head{max-width:60ch}
+.qz-head .eyebrow{color:var(--acc)}
+.qz-head h2{margin:14px 0 0;font-size:clamp(30px,3.4vw,46px);line-height:1.05;font-weight:300;
+  letter-spacing:-.02em;color:#fff}
+.qz-lead{margin:12px 0 0;font-size:clamp(16px,1.3vw,19px);line-height:1.55;color:var(--on-dark2)}
+
+/* ---- the rail: where you are, and a way back ---- */
+.qz-rail{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+  margin:clamp(24px,2.6vw,36px) 0 0;padding:0;counter-reset:none}
+.qz-rail>li{min-width:0}
+.qz-rail button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:13px 15px;
+  border:1px solid rgba(238,247,248,.16);border-radius:var(--r);background:rgba(238,247,248,.04);
+  color:var(--on-dark2);font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  cursor:pointer;transition:border-color .18s,background .18s,color .18s}
+.qz-rail button[disabled]{cursor:default;opacity:.42}
+.qz-rail button:not([disabled]):hover{border-color:var(--acc);color:#fff}
+.qz-rail button.on{background:rgba(80,209,224,.12);border-color:var(--acc);color:#fff}
+.qz-rail button.done{border-color:rgba(238,247,248,.30);color:var(--on-dark)}
+.qz-rail i{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(238,247,248,.10);font-style:normal;font-size:11px;letter-spacing:0;color:var(--on-dark)}
+.qz-rail button.on i{background:var(--acc);color:var(--dark)}
+.qz-rail button.done i{background:rgba(80,209,224,.28);color:#fff}
+.qz-rail span{flex:0 0 auto}
+.qz-rail em{flex:1 1 auto;min-width:0;font-style:normal;font-weight:400;letter-spacing:.02em;
+  text-transform:none;font-size:12.5px;color:var(--acc2);text-align:right;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---- the stage ---- */
+.qz-stage{margin-top:clamp(22px,2.4vw,34px);min-height:clamp(196px,17vw,250px)}
+.qz-step{display:none;border:0;padding:0;margin:0;min-width:0}
+.qz-step.on{display:block;animation:qz-in .34s cubic-bezier(.22,.61,.36,1) both}
+@keyframes qz-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.qz-step legend{padding:0;font-size:clamp(21px,2.1vw,29px);font-weight:300;line-height:1.2;color:#fff;
+  letter-spacing:-.01em;margin-bottom:18px}
+.qz-opts{display:grid;gap:12px}
+.qz-opts.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qz-opts.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:820px){.qz-opts.n2,.qz-opts.n3{grid-template-columns:1fr}}
+
+.qz-opt{display:flex;align-items:center;gap:15px;text-align:left;width:100%;
+  padding:20px 20px;border:1px solid rgba(238,247,248,.20);border-radius:var(--r2);
+  background:rgba(238,247,248,.05);color:var(--on-dark);cursor:pointer;
+  transition:border-color .18s,background .18s,transform .18s,box-shadow .18s}
+.qz-opt:hover,.qz-opt:focus-visible{border-color:var(--acc);background:rgba(80,209,224,.12);
+  transform:translateY(-2px);box-shadow:0 14px 34px rgba(4,16,19,.34);outline:none}
+.qz-opt.picked{border-color:var(--acc);background:rgba(80,209,224,.18)}
+.qz-opt svg{flex:0 0 auto;width:34px;height:34px;color:var(--acc)}
+.qz-opt b{flex:1 1 auto;font-size:16.5px;font-weight:400;line-height:1.35;letter-spacing:-.005em}
+.qz-tick{flex:0 0 auto;color:var(--acc);opacity:0;transform:translateX(-6px);transition:opacity .18s,transform .18s}
+.qz-opt:hover .qz-tick,.qz-opt:focus-visible .qz-tick{opacity:1;transform:none}
+@media(max-width:820px){.qz-opt{padding:16px 17px;gap:13px}.qz-opt svg{width:28px;height:28px}.qz-opt b{font-size:15.5px}}
+
+/* ---- the answer ---- */
+.qz-res{display:none}
+.qz-res.on{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,2.6vw,40px);
+  align-items:center;animation:qz-in .4s cubic-bezier(.22,.61,.36,1) both}
+@media(max-width:820px){.qz-res.on{grid-template-columns:1fr}}
+.qz-res-img{position:relative;aspect-ratio:4/3;border-radius:var(--r2);overflow:hidden;
+  background:rgba(238,247,248,.06)}
+.qz-res-img img{width:100%;height:100%;object-fit:cover;display:block}
+.qz-res-body .eyebrow{color:var(--acc)}
+.qz-res-body h3{margin:10px 0 0;font-size:clamp(34px,4vw,54px);font-weight:300;line-height:1;
+  letter-spacing:-.025em;color:#fff}
+.qz-tag{margin:8px 0 0;font-size:17px;color:var(--on-dark2)}
+.qz-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.qz-pills span{border:1px solid rgba(238,247,248,.22);border-radius:var(--rp);padding:7px 14px;
+  font-size:12.5px;color:var(--on-dark);background:rgba(238,247,248,.06)}
+.qz-why{margin:16px 0 0;font-size:16px;line-height:1.6;color:var(--on-dark2);max-width:52ch}
+.qz-res-body .btn-row{margin-top:22px}
+
+/* ---- foot ---- */
+.qz-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:clamp(20px,2.2vw,30px);
+  padding-top:18px;border-top:1px solid rgba(238,247,248,.14)}
+.qz-back{background:none;border:0;padding:0;cursor:pointer;color:var(--acc2);
+  font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.qz-back:hover{color:#fff}
+.qz-fine{margin:0;flex:1 1 260px;font-size:12.5px;line-height:1.5;color:rgba(238,247,248,.55)}
+
+@media(max-width:640px){
+  .qz{border-radius:var(--r2)}
+  .qz-rail{grid-template-columns:1fr;gap:7px}
+  .qz-rail button{padding:11px 13px}
+  .qz-stage{min-height:0}
+  /* In column flow `flex-basis` sizes the HEIGHT, so the row-mode `flex:1 1 260px` on the
+     fine print was reserving 260px of empty panel below it. */
+  .qz-foot{flex-direction:column;align-items:flex-start}
+  .qz-fine{flex:0 0 auto}
+}
+@media(prefers-reduced-motion:reduce){
+  .qz-step.on,.qz-res.on{animation:none}
+  .qz-opt:hover,.qz-opt:focus-visible{transform:none}
+}
+
+/* ---- custom-design hero: a fast rotation through the strongest work ---- */
+.chero{position:relative;border-radius:var(--r2);overflow:hidden;background:var(--dark)}
+.chero-track{position:relative;aspect-ratio:16/9;width:100%}
+@media(max-width:760px){.chero-track{aspect-ratio:4/3}}
+.chero-slide{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .7s ease}
+.chero-slide.on{opacity:1}
+.chero-slide picture{position:absolute;inset:0;display:block}
+.chero-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.chero-slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 24px 18px;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--on-dark);
+  background:linear-gradient(to top,rgba(6,20,24,.78),rgba(6,20,24,0))}
+.chero-dots{position:absolute;right:20px;bottom:18px;display:flex;gap:7px;z-index:2}
+.chero-dots button{width:24px;height:3px;border:0;padding:0;border-radius:2px;cursor:pointer;
+  background:rgba(238,247,248,.42);transition:background .2s,width .2s}
+.chero-dots button.on{background:var(--acc);width:36px}
+@media(max-width:560px){.chero-dots{right:14px;bottom:12px}.chero-slide figcaption{padding:36px 16px 14px;font-size:10px}}

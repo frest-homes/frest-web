@@ -61,12 +61,63 @@ $$('[data-addons]').forEach(ad=>{const base=+ad.dataset.base,btns=$$('.addon-lis
   const pick=id=>{btns.forEach(b=>b.classList.toggle('on',b.dataset.id===id));imgs.forEach(i=>i.classList.toggle('on',i.dataset.id===id));const b=btns.find(x=>x.dataset.id===id);sum.textContent=fmtEur(base+(+b.dataset.price));if(area)area.textContent=(baseArea+(+b.dataset.area))+' m²';const nm=$('[data-addon-name]',ad),tx=$('[data-addon-text]',ad);if(nm)nm.textContent=b.dataset.name||'';if(tx)tx.textContent=b.dataset.text||''};
   btns.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.id)));pick(btns[0].dataset.id);});
 
-/* quiz */
-$$('[data-quiz]').forEach(q=>{const models=JSON.parse(q.dataset.quiz);const steps=$$('.step',q),prog=$$('.prog i',q),res=$('.res',q);let ans={},n=0;
-  const show=k=>{n=k;steps.forEach((s,i)=>s.classList.toggle('on',i===k));prog.forEach((p,i)=>p.classList.toggle('on',i<=k));res.classList.remove('on')};
-  const decide=()=>{const big=ans.who==='family-big',small=ans.who==='couple';let series=ans.style||'aura';let size=big?'110':small?'70':(ans.budget==='gt140'?'110':'70');if(ans.budget==='lt140')size='70';return series+'-'+size};
-  $$('.opts button',q).forEach(b=>b.addEventListener('click',()=>{ans[b.dataset.q]=b.dataset.v;if(n<steps.length-1)show(n+1);else{const slug=decide(),mm=models[slug];steps.forEach(s=>s.classList.remove('on'));prog.forEach(p=>p.classList.add('on'));$('[data-r-name]',res).textContent=mm.name;$('[data-r-why]',res).textContent=mm.why;$('[data-r-facts]',res).textContent=mm.facts;const im=$('img',res);im.src=mm.img;im.srcset=mm.srcset;$('a[data-r-link]',res).href=mm.url;res.classList.add('on')}}));
-  $('[data-restart]',q).addEventListener('click',()=>{ans={};show(0)});show(0);});
+/* ---- house finder -------------------------------------------------------------------
+   Three questions, one recommendation. The rail doubles as a back control: an answered
+   step stays clickable so a visitor can change their mind without starting over. */
+$$('[data-qz]').forEach(qz=>{
+  const models=JSON.parse(qz.dataset.qz);
+  const steps=$$('.qz-step',qz), rails=$$('.qz-rail button',qz), res=$('.qz-res',qz);
+  const back=$('[data-qz-back]',qz), again=$('[data-qz-restart]',qz);
+  const ids=steps.map(s=>$('.qz-opt',s).dataset.q);
+  let ans={}, n=0;
+
+  const label=(i)=>{const b=$('.qz-opt[data-v="'+ans[ids[i]]+'"]',steps[i]);return b?$('b',b).textContent:''};
+  const paint=()=>{
+    steps.forEach((s,i)=>s.classList.toggle('on',i===n && !res.classList.contains('on')));
+    rails.forEach((r,i)=>{
+      const answered=ans[ids[i]]!==undefined;
+      r.classList.toggle('on',i===n && !res.classList.contains('on'));
+      r.classList.toggle('done',answered && i!==n);
+      r.disabled = !answered && i!==n;
+      $('[data-qz-ans]',r).textContent = answered ? label(i) : '';
+    });
+    steps.forEach((s,i)=>$$('.qz-opt',s).forEach(b=>b.classList.toggle('picked',b.dataset.v===ans[ids[i]])));
+    back.hidden = res.classList.contains('on') || n===0;
+    again.hidden = !res.classList.contains('on');
+  };
+  const go=k=>{res.classList.remove('on');n=Math.max(0,Math.min(steps.length-1,k));paint()};
+
+  const decide=()=>{const big=ans.who==='family-big',small=ans.who==='couple';
+    let series=ans.style||'aura';
+    let size=big?'110':small?'70':(ans.budget==='gt140'?'110':'70');
+    if(ans.budget==='lt140')size='70';
+    return series+'-'+size};
+
+  const finish=()=>{
+    const m=models[decide()]; if(!m)return;
+    $('[data-r-name]',res).textContent=m.name;
+    $('[data-r-tag]',res).textContent=m.tagline||'';
+    $('[data-r-why]',res).textContent=m.why||'';
+    $('[data-r-pills]',res).innerHTML=(m.pills||[]).map(x=>'<span>'+x+'</span>').join('');
+    const im=$('img',res); im.src=m.img; im.srcset=m.srcset||''; im.alt=m.name;
+    $('a[data-r-link]',res).href=m.url;
+    steps.forEach(s=>s.classList.remove('on'));
+    res.classList.add('on');
+    rails.forEach(r=>{r.classList.remove('on');r.classList.add('done')});
+    paint();
+  };
+
+  $$('.qz-opt',qz).forEach(b=>b.addEventListener('click',()=>{
+    ans[b.dataset.q]=b.dataset.v;
+    if(n<steps.length-1 && ids.slice(0,n+2).some(id=>ans[id]===undefined)) go(n+1);
+    else if(ids.some(id=>ans[id]===undefined)) go(ids.findIndex(id=>ans[id]===undefined));
+    else finish();
+  }));
+  rails.forEach((r,i)=>r.addEventListener('click',()=>{if(!r.disabled)go(i)}));
+  back.addEventListener('click',()=>go(n-1));
+  again.addEventListener('click',()=>{ans={};res.classList.remove('on');go(0)});
+  paint();
+});
 
 /* compare */
 const diff=$('#diffOnly');if(diff){diff.addEventListener('change',()=>$$('.cmp tr.same').forEach(r=>r.classList.toggle('hide',diff.checked)))}
@@ -121,5 +172,23 @@ $$('[data-hs]').forEach(hs=>{
   hs.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>44){show(i+(dx<0?1:-1));play()}x0=null},{passive:true});
   show(0);play();
 });
-})();
 
+
+
+/* ---- custom-design hero rotation: quick enough that a visitor notices it move ---- */
+$$('[data-chero]').forEach(el=>{
+  const slides=$$('.chero-slide',el), dots=$$('.chero-dots button',el);
+  if(slides.length<2)return;
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i=0,timer=null,paused=false;
+  const show=n=>{i=(n+slides.length)%slides.length;
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i))};
+  const start=()=>{if(reduce||paused)return;clearInterval(timer);timer=setInterval(()=>show(i+1),3400)};
+  dots.forEach((d,k)=>d.addEventListener('click',()=>{show(k);start()}));
+  el.addEventListener('pointerenter',()=>{paused=true;clearInterval(timer)});
+  el.addEventListener('pointerleave',()=>{paused=false;start()});
+  document.addEventListener('visibilitychange',()=>document.hidden?clearInterval(timer):start());
+  start();
+});
+})();
