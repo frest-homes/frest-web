@@ -683,3 +683,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
   background:rgba(238,247,248,.42);transition:background .2s,width .2s}
 .chero-dots button.on{background:var(--acc);width:36px}
 @media(max-width:560px){.chero-dots{right:14px;bottom:12px}.chero-slide figcaption{padding:36px 16px 14px;font-size:10px}}
+
+/* Shown only when the form backend is unreachable from the visitor's network. */
+.cform .f-err{border:1px solid var(--line2);border-radius:var(--r2);padding:22px 24px;background:var(--hi-tint)}
+.cform .f-err b{display:block;font-size:18px;font-weight:500;margin-bottom:6px}
+.cform .f-err p.small{margin:0 0 16px;color:var(--ink2)}
+.cform .f-err .btn-row{margin:0}

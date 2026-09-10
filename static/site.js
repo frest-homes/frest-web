@@ -143,7 +143,17 @@ $$('.strip').forEach(s=>{let down=false,x,sl;s.addEventListener('pointerdown',e=
 const cf=m&&$('form',m);
 if(cf){cf.addEventListener('submit',async e=>{e.preventDefault();const btn=$('button[type=submit]',cf);btn.disabled=true;const fd=new FormData(cf);
   try{const r=await fetch(cf.action.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',headers:{'Accept':'application/json'},body:fd});if(!r.ok)throw 0;$('.cform .f-body',m).hidden=true;$('.cform .f-thanks',m).hidden=false;try{localStorage.setItem('frest_lead',JSON.stringify({name:fd.get('name'),email:fd.get('email')}))}catch(_){}}
-  catch(err){cf.submit()}btn.disabled=false});
+  catch(err){
+    /* The old fallback was cf.submit() — a full-page POST to the form backend. On a network that
+       blocks that host (an ISP filter, a DNS blocklist) it navigates to a browser error page and
+       the visitor loses everything they typed. Stay on the page and offer the same text by mail. */
+    const body=['name','email','phone','model','message'].map(k=>{const v=fd.get(k);return v?k+': '+v:''}).filter(Boolean).join('\n');
+    const box=$('.cform .f-err',m), a=box&&$('[data-mailto]',box);
+    if(a){const to=a.getAttribute('href').split('?')[0].replace('mailto:','');
+      a.href='mailto:'+to+'?subject='+encodeURIComponent(L==='lv'?'Jautājums no frest.lv':'Enquiry from fresthomes.com')+'&body='+encodeURIComponent(body)}
+    if(box)box.hidden=false;
+  }
+  btn.disabled=false});
   try{const prev=JSON.parse(localStorage.getItem('frest_lead')||'null');if(prev){$('input[name=name]',cf).value=prev.name||'';$('input[name=email]',cf).value=prev.email||''}}catch(_){}}
 /* ---- hero slideshow ---------------------------------------------------------------- */
 $$('[data-hs]').forEach(hs=>{
