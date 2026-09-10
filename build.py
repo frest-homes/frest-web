@@ -232,11 +232,49 @@ def build_lang(lang):
             d['models'][m['slug']] = {'name': m['name'], 'url': h['murl'](m['slug']),
                                       'facades': {r: {c: {'src': h['imgsrc'](n, 1600), 'srcset': h['srcset'](n)} for c, n in cols.items()} for r, cols in m['facades'].items()}}
         return json.dumps(d, ensure_ascii=False)
-    quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': h['murl'](m['slug']), 'img': h['imgsrc'](m['card'], 960), 'srcset': h['srcset'](m['card']),
+    quiz_models = {m['slug']: {'name': m['name'], 'why': t(UI['quiz_why'][m['slug']]), 'url': h['murl'](m['slug']),
+                               'img': h['imgsrc'](m['hero'], 1600), 'srcset': h['srcset'](m['hero']),
+                               'series': m['series'], 'tagline': t(m['tagline']),
+                               'pills': [f"{h['num'](m['area'])} m²", h['cnt'](m['bedrooms'], 'bedrooms'), h['cnt'](m['bathrooms'], 'bathrooms')],
                                'facts': f"{h['num'](m['area'])} m² · {h['cnt'](m['bedrooms'], 'bedrooms')} · {h['cnt'](m['bathrooms'], 'bathrooms')}"} for m in MODELS}
     ctx_base['pz_data'] = pz_data
     ctx_base['aud_data'] = json.dumps({k: {'h': t(hh), 'p': t(p), 'href': url(href), 'link': t(link)} for k, lab, hh, p, href, link in AUDIENCES}, ensure_ascii=False)
     ctx_base['quiz_data'] = json.dumps(quiz_models, ensure_ascii=False)
+
+    def gallery_items():
+        """Every gallery frame, ordered so two shots of the same subject never sit next to each
+        other. `als110-evening-dk` and `als110-evening2-dk` are the same house from nearly the
+        same spot; side by side they read as a mistake. The key strips trailing digits from each
+        name segment, so variants of one shot collapse to one family, and a greedy pass pulls the
+        next frame from a different family forward."""
+        items = []
+        for w in WORKS:
+            for im, cap in w['images']:
+                items.append({'img': im, 'cap': f"{t(w['title'])} — {t(cap)}",
+                              'full': f"{t(w['title'])} — {t(cap)} · {t(w['location'])} {w['year']}",
+                              'tags': 'built ' + ' '.join(w['tags'])
+                                      + (' als-70' if 'als70' in w['tags'] else '')
+                                      + (' als-110' if 'als110' in w['tags'] else '')
+                                      + (' aura-70 aura-110' if 'aura' in w['tags'] else '')})
+        for m in MODELS:
+            for g in m['gallery'][:4]:
+                items.append({'img': g['img'], 'cap': f"{m['name']} — {t(g['cap'])}",
+                              'full': f"{m['name']} — {t(g['cap'])}", 'tags': 'models ' + m['slug']})
+
+        def family(name):
+            return '-'.join(re.sub(r'\d+$', '', part) for part in name.split('-'))
+
+        out, pool = [], list(items)
+        while pool:
+            i = 0
+            if out:
+                last = family(out[-1]['img'])
+                nxt = next((k for k, it in enumerate(pool) if family(it['img']) != last), 0)
+                i = nxt
+            out.append(pool.pop(i))
+        return out
+    ctx_base['gallery_items'] = gallery_items
+
 
     def write(path, html_out):
         sub = seg(lang).rstrip('/')
