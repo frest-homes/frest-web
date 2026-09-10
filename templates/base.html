@@ -83,6 +83,12 @@
       <p class="note">{{ 'Bez jaunumu vēstulēm, bez sarakstiem. Ziņa nonāk vienā pastkastē — info@frest.lv — un atbild cilvēks. Datus glabājam tikai, lai atbildētu.' if lang=='lv' else 'No newsletter, no list. Your message goes to one inbox — info@frest.lv — and a person answers it. We keep your details only to reply.' }}</p>
     </form></div>
     <div class="f-thanks" hidden><div class="eyebrow">Frest</div><h3>{{ t(UI.thanks_title) }}</h3><p class="lede">{{ t(UI.thanks_text) }}</p></div>
+    {# Some networks block the form backend outright — an ISP filter, a DNS blocklist, a corporate
+       resolver. Rather than navigating away to a browser error page and losing what the visitor
+       typed, the form stays put and offers to send the same text by mail instead. #}
+    <div class="f-err" hidden><b>{{ 'Ziņu neizdevās nosūtīt.' if lang=='lv' else 'The message could not be sent.' }}</b>
+      <p class="small">{{ 'Iespējams, jūsu tīkls bloķē formu. Nekas nav pazudis — nosūtiet to pašu tekstu e-pastā vai zvaniet.' if lang=='lv' else 'Your network may be blocking the form. Nothing is lost — send the same text by email, or call us.' }}</p>
+      <p class="btn-row"><a class="btn" data-mailto href="mailto:{{ SITE.email }}">{{ 'Rakstīt e-pastu' if lang=='lv' else 'Send it by email' }}</a><a class="btn ghost" href="tel:{{ SITE.phone|replace(' ','') }}">{{ SITE.phone }}</a></p></div>
   </div>
 </div></div>
 <div class="lb" id="lb" role="dialog" aria-modal="true"><button class="x" aria-label="{{ t(UI.close) }}">✕</button><button class="pv" aria-label="previous">‹</button><img alt=""><div class="cap"></div><button class="nx" aria-label="next">›</button></div>
