@@ -28,8 +28,12 @@
     return q;
   }
 
-  function store(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
-  function load(key) { try { return localStorage.getItem(key) || ''; } catch (e) { return ''; } }
+  /* Campaign attribution is marketing, not something the visitor asked for, so it lives behind
+     the same consent as the session recording. Without consent nothing is written and nothing is
+     read back — the lead still sends, it simply arrives without a campaign attached. */
+  function mayTrack() { return !!(window.frestConsent && window.frestConsent.analytics()); }
+  function store(key, val) { if (!mayTrack()) return; try { localStorage.setItem(key, val); } catch (e) {} }
+  function load(key) { if (!mayTrack()) return ''; try { return localStorage.getItem(key) || ''; } catch (e) { return ''; } }
 
   var now = readParams();
   var hasNow = Object.keys(now).length > 0;
