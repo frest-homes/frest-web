@@ -18,6 +18,7 @@ Reads content/*.py, images from assets/manifest.json (run images.py then focal.p
 """
 import os, sys, json, shutil, argparse, datetime, html, re
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from markupsafe import Markup
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content.data import TIMING, SITE, MODELS, PACKAGES, FACADE_COLORS, ROOF_TYPES, ADDONS, ADDON_WHY, WORKS, CUSTOM_PROJECTS, PROCESS, FAQ, TEAM, VALUES, QUIZ
 from content.ui import UI
@@ -33,8 +34,64 @@ ap.add_argument('--root-lang', default='lv', choices=['lv', 'en'])
 ap.add_argument('--cname', default='')
 ap.add_argument('--canonical', default='')          # this site's own origin
 ap.add_argument('--sister', default='')             # the other language's origin
+ap.add_argument('--market', default='', choices=['', 'LV', 'IE'])
+ap.add_argument('--prices-endpoint', default=os.environ.get('SITE_PRICES_ENDPOINT', ''))
 args = ap.parse_args()
 BASE = args.base if args.base.endswith('/') else args.base + '/'
+
+# ---------------------------------------------------------------- prices ----------
+# Every euro figure comes from frest-pricing: content/published_prices.json holds the
+# computed table per market, and static/prices.js refreshes it in the browser without a
+# rebuild. The market follows the domain — frest.lv publishes Latvian figures,
+# fresthomes.com publishes the ones the Lab pricing room set for Ireland and the EU.
+MARKET = args.market or ('LV' if args.root_lang == 'lv' else 'IE')
+try:
+    with open('content/published_prices.json', encoding='utf-8') as _f:
+        PUBLISHED = json.load(_f)
+    PRICES = PUBLISHED['markets'].get(MARKET, {})
+except Exception:
+    PUBLISHED, PRICES = {'version': 0, 'source': 'none'}, {}
+
+
+# The tax wording has to follow the market, not the language. Latvia publishes with VAT
+# in the number; every other market publishes without it, because the rate is the buyer's
+# own. Getting this wrong is worse than getting the number wrong: it is a price that reads
+# 21 % cheaper than it is.
+if PRICES.get('vat_display') == 'excluded':
+    UI['with_vat'] = {'lv': 'bez PVN', 'en': 'excl. VAT'}
+    PACKAGES['note'] = {
+        'lv': PACKAGES['note']['lv'],
+        'en': ('Every price on this site excludes VAT and always refers to a named package. VAT is '
+               'charged at the rate of the country of delivery; inside the EU a VAT-registered buyer '
+               'normally accounts for it under reverse charge. No price includes foundation works, '
+               'land, utility connections, planning permission or landscaping, and none includes '
+               'transport to a site outside Latvia — those are quoted once the site is known. The '
+               'final price is confirmed in a detailed estimate.')}
+    UI['terms_body'] = {
+        'lv': UI['terms_body']['lv'],
+        'en': ('Prices on this site are indicative, exclude VAT, apply to the standard specification '
+               'and exclude foundation works, land, utility connections, the planning application and '
+               'transport to site. Only a written offer from SIA Frest, valid for 30 days, is binding. '
+               'Images are renders or photographs of built houses; the actual finish may differ '
+               'depending on the chosen specification.')}
+
+
+def price_of(key):
+    """key: model:<slug>:<field> · addon:<id> · module:<id> · min:<field>"""
+    bits = str(key).split(':')
+    try:
+        if bits[0] == 'model':
+            return PRICES['models'][bits[1]][bits[2] if len(bits) > 2 else 'base']
+        if bits[0] == 'addon':
+            return PRICES['addons'][bits[1]]
+        if bits[0] == 'module':
+            return PRICES['modules'][bits[1]]
+        if bits[0] == 'min':
+            f = bits[1] if len(bits) > 1 else 'base'
+            return min(v[f] for v in PRICES['models'].values())
+    except Exception:
+        return None
+    return None
 OUT = args.out
 MANIFEST = json.load(open('assets/manifest.json'))
 LANGS = ['lv', 'en']
@@ -106,10 +163,21 @@ def make_helpers(lang):
     other = 'en' if lang == 'lv' else 'lv'
     prefix = BASE + seg(lang)
 
+    TOKEN = re.compile(r'\[\[p:([a-z0-9:_-]+)\]\]')
+
+    def _expand(text):
+        """Prose carries prices too — a sentence that says "from €128,000 incl. VAT" on a page
+        whose table says €193,600 excl. VAT is a contradiction the reader will find before we do.
+        So the copy holds a token, not a number, and the token resolves per market at build time."""
+        if '[[' not in text:
+            return text
+        text = TOKEN.sub(lambda m: eur(price_of(m.group(1)) or 0), text)
+        return text.replace('[[vat]]', t(UI['with_vat']) if isinstance(UI['with_vat'], dict) else UI['with_vat'])
+
     def t(x):
         if isinstance(x, dict) and lang in x:
-            return x[lang]
-        return x
+            x = x[lang]
+        return _expand(x) if isinstance(x, str) else x
 
     def url(path=''):
         """Internal link. Accepts a page key (preferred) or a raw path."""
@@ -155,6 +223,20 @@ def make_helpers(lang):
         s = f"{int(n):,}".replace(',', ' ')
         return f"{s} €" if lang == 'lv' else f"€{int(n):,}"
 
+    def pr(key, fallback=None):
+        """A published price, tagged so static/prices.js can refresh it without a rebuild."""
+        v = price_of(key)
+        if v is None:
+            v = fallback
+        if v is None:
+            return Markup('&mdash;')
+        return Markup(f'<span class="price" data-p="{html.escape(str(key))}">{eur(v)}</span>')
+
+    def prn(key, fallback=None):
+        """The same number, unwrapped — for titles, meta descriptions and JSON-LD."""
+        v = price_of(key)
+        return v if v is not None else fallback
+
     def num(n):
         if n is None:
             return '—'
@@ -172,7 +254,8 @@ def make_helpers(lang):
         return f"{n} {w}"
 
     return dict(t=t, url=url, murl=murl, aurl=aurl, url_other=url_other, img=img, imgsrc=imgsrc, srcset=srcset,
-                eur=eur, num=num, cnt=cnt, lang=lang, other=other, BASE=BASE)
+                eur=eur, num=num, cnt=cnt, lang=lang, other=other, BASE=BASE, pr=pr, prn=prn,
+                MARKET=MARKET, PRICE_VERSION=PUBLISHED.get('version', 0), expand=_expand)
 
 def model_by_slug(slug):
     return next(m for m in MODELS if m['slug'] == slug)
@@ -277,6 +360,10 @@ def build_lang(lang):
 
 
     def write(path, html_out):
+        # Final sweep. Most copy passes through t(), but meta descriptions, FAQ JSON-LD and
+        # article bodies take other routes to the page — and a token left unexpanded in a
+        # <meta> tag is worse than a wrong price, because Google prints it verbatim.
+        html_out = h['expand'](html_out)
         sub = seg(lang).rstrip('/')
         full = os.path.join(OUT, sub, path, 'index.html') if (path or sub) else os.path.join(OUT, 'index.html')
         os.makedirs(os.path.dirname(full), exist_ok=True)
@@ -298,7 +385,10 @@ def build_lang(lang):
                    alts=alternates(key), self_url=abs_url(key, lang),
                    schemas=[json.dumps(s, ensure_ascii=False) for s in schemas],
                    switch_url=abs_url(key, other_of(lang)), preload_img=PRELOAD.get(key),
-                   og_image=PRELOAD.get(key, 'als110-day-dk'), noindex=(key in NOINDEX))
+                   og_image=PRELOAD.get(key, 'als110-day-dk'), noindex=(key in NOINDEX),
+                   # Kampaņas lapa ir vienīgā, kuras tekstu vada Lab. Pārējām šis
+                   # skripts nav vajadzīgs, tāpēc tas tur arī netiek ielādēts.
+                   page_has_variants=(key == 'landing'))
         written.append(write(path, env.get_template(tpl).render(**ctx)))
 
     # models

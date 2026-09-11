@@ -11,10 +11,10 @@
   <div class="lp-bg">{{ img('als110-day-dk', 'Als 110', '100vw', '', 'eager', 'high')|safe }}<div class="lp-tint"></div></div>
   <div class="wrap lp-grid">
     <div class="lp-copy">
-      <div class="lp-kicker">{{ 'Als un Aura sērija · Latvija' if L else 'Als and Aura series · shipped and erected in Ireland' }}</div>
-      <h1 class="lp-h1">{{ ('Rūpnīcā ražota māja.<br>Cena zināma pirms <br class="opt">pirmās lāpstas.' if L else 'A factory-built home.<br>Priced before <br class="opt">the first dig.')|safe }}</h1>
-      <p class="lp-lede">{{ 'Siltinātas sienas, jumts, logi un fasāde top rūpnīcā un tiek uzceltas uz jūsu pamatiem dažās dienās. Als 110 rūpnīcas komplekts ar montāžu — 128 000 € ar PVN.' if L else 'Insulated walls, roof, windows and facade are built indoors and erected on your prepared foundation in days. The Als 110 kit, supplied and erected, is €128,000 including VAT.' }}</p>
-      <ul class="lp-chips">
+      <div class="lp-kicker" data-cv="kicker">{{ 'Als un Aura sērija · Latvija' if L else 'Als and Aura series · shipped and erected in Ireland' }}</div>
+      <h1 class="lp-h1" data-cv="h1" data-cv-html="1">{{ ('Rūpnīcā ražota māja.<br>Cena zināma pirms <br class="opt">pirmās lāpstas.' if L else 'A factory-built home.<br>Priced before <br class="opt">the first dig.')|safe }}</h1>
+      <p class="lp-lede" data-cv="lede">{{ 'Siltinātas sienas, jumts, logi un fasāde top rūpnīcā un tiek uzceltas uz jūsu pamatiem dažās dienās. Als 110 rūpnīcas komplekts ar montāžu — 128 000 € ar PVN.' if L else 'Insulated walls, roof, windows and facade are built indoors and erected on your prepared foundation in days. The Als 110 kit, supplied and erected, is €128,000 including VAT.' }}</p>
+      <ul class="lp-chips" data-cv-chips>
         <li><b>{{ '4' }}</b> {{ 'modeļi 68–110 m²' if L else 'models, 68–110 m²' }}</li>
         <li><b>{{ '290–300 mm' }}</b> {{ 'siltinājuma sienā' if L else 'wall insulation' }}</li>
         <li><b>{{ 'A' if L else 'A0-ready' }}</b> {{ 'energoklase' if L else 'fabric' }}</li>
@@ -25,8 +25,8 @@
     <div class="lp-form" id="get">
       <form class="leadform" data-lead data-source="landing">
         <div class="lf-head">
-          <b>{{ 'Saņemiet katalogu ar cenām' if L else 'Get the catalogue with prices' }}</b>
-          <span class="small">{{ 'Pilnā komplektācija, cena katrai izvēlei un konfigurators ar summu. Piekļuvi atsūtām uzreiz uz e-pastu.' if L else 'Full specification, a price for every option and a configurator with a running total. Access is emailed to you straight away.' }}</span>
+          <b data-cv="form_h">{{ 'Saņemiet katalogu ar cenām' if L else 'Get the catalogue with prices' }}</b>
+          <span class="small" data-cv="form_sub">{{ 'Pilnā komplektācija, cena katrai izvēlei un konfigurators ar summu. Piekļuvi atsūtām uzreiz uz e-pastu.' if L else 'Full specification, a price for every option and a configurator with a running total. Access is emailed to you straight away.' }}</span>
         </div>
         <label>{{ 'Vārds' if L else 'Name' }}<input type="text" name="name" required autocomplete="name" placeholder="{{ 'Jūsu vārds' if L else 'Your name' }}"></label>
         <label>{{ 'E-pasts' if L else 'Email' }}<input type="email" name="email" required autocomplete="email" placeholder="{{ 'jusu@epasts.lv' if L else 'you@example.ie' }}"></label>
@@ -57,7 +57,7 @@
             <option>{{ 'Esmu būvnieks vai arhitekts' if L else 'I am a builder or architect' }}</option>
           </select></label>
         <input type="text" name="_company" class="lf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="btn" type="submit">{{ 'Saņemt katalogu' if L else 'Send me the catalogue' }}</button>
+        <button class="btn" type="submit" data-cv="cta">{{ 'Saņemt katalogu' if L else 'Send me the catalogue' }}</button>
         <p class="lf-fine">{{ 'Nosūtot, jūs piekrītat, ka sazināmies par jūsu projektu. Datus nenododam trešajām personām.' if L else 'By sending this you agree that we may contact you about your project. We never pass your details to anyone else.' }} <a href="{{ url('privacy') }}">{{ t(UI.privacy) }}</a></p>
         <div class="lf-done" hidden>
           <b>{{ 'Paldies — katalogs ceļā.' if L else 'Thank you — the catalogue is on its way.' }}</b>
@@ -82,8 +82,8 @@
     {% for m in MODELS %}<tr>
       <td><b>{{ m.name }}</b> <span class="small">· {{ t(m.tagline) }}</span></td>
       <td>{{ num(m.area) }} m²</td><td>{{ m.bedrooms }}</td>
-      <td class="num">{{ eur(m.price_base) }}</td>
-      {% if L %}<td class="num">{{ eur(m.price_complete) }}</td>{% endif %}
+      <td class="num">{{ pr('model:' + m.slug + ':base', m.price_base) }}</td>
+      {% if L %}<td class="num">{{ pr('model:' + m.slug + ':complete', m.price_complete) }}</td>{% endif %}
       <td><a class="pill ok" href="{{ murl(m.slug) }}">{{ t(UI.view_model) }} →</a></td></tr>{% endfor %}
   </table></div>
 

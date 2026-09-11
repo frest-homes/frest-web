@@ -24,6 +24,11 @@
 <script>window.FREST_PRIVACY_URL = "{{ url('privacy') }}";</script>
 <script src="{{ BASE }}static/analytics-config.js"></script><script src="{{ BASE }}static/consent.js"></script>
 <script src="{{ BASE }}static/leads-config.js"></script><script src="{{ BASE }}static/leads.js" defer></script>
+<script>window.FREST_PRICES={market:"{{ MARKET }}",lang:"{{ lang }}",version:{{ PRICE_VERSION }}};</script>
+<script src="{{ BASE }}static/prices-config.js"></script><script src="{{ BASE }}static/prices.js" defer></script>
+{# Kampaņas varianti. Tikai tur, kur ir ko mainīt — pārējām lapām šis fails nav vajadzīgs. #}
+{% if page_has_variants %}<script>window.FREST_CAMPAIGN={lang:"{{ lang }}"};</script>
+<script src="{{ BASE }}static/campaign-config.js"></script><script src="{{ BASE }}static/campaign.js" defer></script>{% endif %}
 {% block head %}{% endblock %}
 {% for s in schemas %}<script type="application/ld+json">{{ s|safe }}</script>
 {% endfor %}
